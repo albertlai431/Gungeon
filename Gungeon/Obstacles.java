@@ -3,10 +3,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class Obstacles here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Albert Lai
+ * @version January 2020
  */
-public class Obstacles extends Actor
+public abstract class Obstacles extends Actor
 {
     /**
      * Act - do whatever the Obstacles wants to do. This method is called whenever

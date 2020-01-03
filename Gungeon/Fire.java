@@ -3,8 +3,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class Fire here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Albert Lai
+ * @version January 2020
  */
 public class Fire extends Obstacles
 {
