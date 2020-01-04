@@ -3,7 +3,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
- * GameWorld is the world where the game takes place. It holds the player, elements of the * game, 2D array of actors, and game data. 
+ * GameWorld is the world where the game takes place. It holds the player, elements of the 
+ * game, 2D array of actors, and game data. 
  * 
  * 
  * @author Albert Lai
@@ -13,15 +14,20 @@ public class GameWorld extends World
 {
     private Actor [][] arr;
     private Player player;
+    private PlayerData playerData;
+    private WorldData worldData;
     private int curLevel;
-    private File txtFile;
+    private File playerTxtFile;
+    private File worldTxtFile;
+    private Menu menu;
     private enum State{
         PLAYING,
         PAUSE,
         STORE
     }    
     private State state;
-    
+    //private int actCount = 0;
+
     public int height;
     public int width;
     private boolean isPaused = false;
@@ -38,12 +44,14 @@ public class GameWorld extends World
         width = this.getWidth();
         state = State.PLAYING;
     }
+    
+    
 
     /**
      * gameOver - checks if player is dead and ends the game
      */
-    private void gameOver(){
-        
+    public void gameOver(){
+
     }
 
     /**
@@ -52,39 +60,50 @@ public class GameWorld extends World
      */
     public void act(){
         keyboardInput();
-        gameOver();
     }
-    
+
     private void keyboardInput(){
-        if(Greenfoot.getKey()=="escape"){
+        String key = Greenfoot.getKey();
+        if("escape".equals(key)){
             if(isPaused){
-                if(state==State.STORE) removeObjects(getObjects(StoreMenu.class));
-                else if(state==State.PAUSE) removeObjects(getObjects(PauseMenu.class));
                 play();
-                state = State.PLAYING;
             }
             else{
                 pause();
-                addObject(new PauseMenu(),width/2,height/2);
+                menu = new PauseMenu();
+                addObject(menu,width/2,height/2);
                 state = State.PAUSE;
             }
         }    
-        else if(Greenfoot.getKey()=="s" && state==State.PLAYING){
-            pause();
-            addObject(new StoreMenu(),width/2,height/2);
-            state = State.STORE;
+        else if("s".equals(key) && state!=State.PAUSE){
+            if(isPaused){
+                play();
+            }
+            else{
+                pause();
+                menu = new StoreMenu();
+                addObject(menu,width/2,height/2);
+                state = State.STORE;
+            }
         }    
     }    
 
     private void loadTextFile(){
         
     }
+    
+    public void saveData(){
+        playerData.saveData(player);
+        
+    }    
 
     public void pause(){
         isPaused = true;
     }
 
     public void play(){
+        if(menu!=null && menu.getWorld()!=null) menu.closeMenu();
+        state = State.PLAYING;
         isPaused = false;
     }
 }

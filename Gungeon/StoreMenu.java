@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Albert Lai
  * @version January 2020
  */
-public class StoreMenu extends Actor
+public class StoreMenu extends Menu
 {
     /**
      * Act - do whatever the StoreMenu wants to do. This method is called whenever
@@ -26,4 +26,9 @@ public class StoreMenu extends Actor
     private boolean equip(){
         return true;
     }
+    
+    public void closeMenu(){
+        GameWorld world = (GameWorld) getWorld();
+        world.removeObject(this);
+    }   
 }

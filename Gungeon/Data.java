@@ -12,8 +12,6 @@ public abstract class Data
     public Data()
     {
     }
-
-    public abstract void saveData();
     
     public abstract void parseData();
 }
