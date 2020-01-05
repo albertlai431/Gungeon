@@ -1,3 +1,5 @@
+import java.io.File;
+
 /**
  * Write a description of class WorldData here.
  * 
@@ -6,11 +8,14 @@
  */
 public class WorldData extends Data 
 {
+    private File txtFile;
+    
     /**
      * Constructor for objects of class WorldData
      */
-    public WorldData()
+    public WorldData(File txtFile)
     {
+        
     }
 
     public void saveData(){
