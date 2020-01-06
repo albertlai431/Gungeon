@@ -9,7 +9,6 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class PauseMenu extends Menu
 {
     private Button play = new Button();
-    private Button save = new Button();
     private Button exit = new Button();
     
     /**
@@ -22,7 +21,6 @@ public class PauseMenu extends Menu
     public void addedToWorld(World w){
         GameWorld world = (GameWorld) w;
         world.addObject(play,world.width/2,100);
-        world.addObject(save,world.width/2,200);
         world.addObject(exit,world.width/2,300);
     }
     /**
@@ -39,9 +37,6 @@ public class PauseMenu extends Menu
         if(Greenfoot.mouseClicked(play)){
             world.play();
         }
-        else if(Greenfoot.mouseClicked(save)){
-            world.saveData();
-        }
         else if(Greenfoot.mouseClicked(exit)){
             
         }    
@@ -50,7 +45,6 @@ public class PauseMenu extends Menu
     public void closeMenu(){
         GameWorld world = (GameWorld) getWorld();
         world.removeObject(play);
-        world.removeObject(save);
         world.removeObject(exit);
         if(world!=null) world.removeObject(this);
     }    

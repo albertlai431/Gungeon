@@ -6,7 +6,7 @@ import java.io.File;
  * @author Albert Lai
  * @version January 2020
  */
-public class PlayerData extends Data 
+public class PlayerData 
 {
     private File txtFile;
     

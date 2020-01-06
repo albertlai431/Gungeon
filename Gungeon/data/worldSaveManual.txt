@@ -1,0 +1,6 @@
+This text file explains how worlds are saved.
+
+Each line contains the name of the object and 2 numbers following it (secondindex and firstindex of the 2D array)
+
+Valid names:
+Arrows, Fire, Spikes, Walls, Player, RifleEnemy, ShotgunEnemy, RocketEnemy

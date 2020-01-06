@@ -16,4 +16,6 @@ public abstract class Obstacles extends Actor
     {
         // Add your action code here.
     }    
+    
+    //protected abstract void damage();
 }

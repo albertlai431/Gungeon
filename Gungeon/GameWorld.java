@@ -1,9 +1,11 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Scanner; 
+import java.util.NoSuchElementException;
 
 /**
- * GameWorld is the world where the game takes place. It holds the player, elements of the 
+ * GameWorld is the world where the game takes place. It holds the player, actors of the 
  * game, 2D array of actors, and game data. 
  * 
  * TODO:
@@ -19,8 +21,6 @@ public class GameWorld extends World
     private Actor [][] arr;
     private Player player;
     private PlayerData playerData;
-    private WorldData worldData;
-    private int curLevel;
     private String saveDir;
     private String folderDir;
     private Menu menu;
@@ -30,10 +30,12 @@ public class GameWorld extends World
         STORE
     }    
     private State state;
-
+    
     public int height;
     public int width;
+    private int curLevel;
     private boolean isPaused = false;
+    private boolean lvlComplete = false;
 
     /**
      * Dummy constructor to make sure that things work
@@ -62,13 +64,15 @@ public class GameWorld extends World
         if(playerFile.isFile()) playerData = new PlayerData(playerFile);
         else System.out.println("File Not Found");
         
+        //check if player is complete this level
+        if(true) lvlComplete = true;
+
         //get level somehow
         curLevel = 1;
         File worldFile = new File(folderDir + File.separator + saveDir.charAt(saveDir.length()-1) + "lvl" + Integer.toString(curLevel) + ".txt");
-        if(worldFile.isFile()) worldData = new WorldData(worldFile);
-        else System.out.println("File Not Found");
+        parseTextFile(worldFile);
     }    
-    
+
     /**
      * Constructor to switch between rooms
      * 
@@ -91,6 +95,9 @@ public class GameWorld extends World
      */
     public void act(){
         keyboardInput();
+        
+        //checks if level is complete
+        if(getObjects(Enemy.class).size()==0) lvlComplete = true;
     }
 
     /**
@@ -122,13 +129,68 @@ public class GameWorld extends World
         }    
     }    
 
-    private void loadTextFile(){
+    private void parseTextFile(File worldFile){
+        Scanner s = null;
+        try{
+            s = new Scanner(worldFile);
+        }    
+        catch(FileNotFoundException e){
+            System.out.println("File Not Found");
+        }    
+
+        while(true){
+            try{
+                String actor = s.nextLine();
+                int secondInd = Integer.parseInt(s.nextLine());
+                int firstInd = Integer.parseInt(s.nextLine());
+                int xcoord = convertX(secondInd);
+                int ycoord = convertY(firstInd);
+                boolean isEnemy = false;
+                if(arr[firstInd][secondInd]!=null){
+                    Actor a = null;
+                    if(actor.indexOf("Arrows")==0){
+                        a = new Arrows();
+                    }    
+                    else if(actor.indexOf("Fire")==0){
+                        a = new Fire();
+                    }    
+                    else if(actor.indexOf("Spikes")==0){
+                        a = new Spikes();
+                    }  
+                    else if(actor.indexOf("Walls")==0){
+                        a = new Walls();
+                    } 
+                    else if(actor.indexOf("Player")==0){
+                        addObject(player, xcoord, ycoord);
+                        arr[firstInd][secondInd] = player;
+                    }  
+                    else if(actor.indexOf("RifleEnemy")==0){
+                        a = new RifleEnemy();
+                        isEnemy = true;
+                    }
+                    else if(actor.indexOf("ShotgunEnemy")==0){
+                        a = new ShotgunEnemy();
+                        isEnemy = true;
+                    } 
+                    else if(actor.indexOf("RocketEnemy")==0){
+                        a = new RocketEnemy();
+                        isEnemy = true;
+                    }
+                    else{
+                        System.out.println("Invalid actor");
+                    }   
+
+                    if(a!=null && !(lvlComplete && isEnemy)){
+                        addObject(a, xcoord, ycoord);
+                        arr[firstInd][secondInd] = a;
+                    }    
+                }
+            }    
+            catch(NoSuchElementException e){
+                break;
+            }    
+        }    
     }
-
-    public void saveData(){
-        playerData.saveData(player);
-
-    }    
 
     public void pause(){
         isPaused = true;
@@ -139,4 +201,18 @@ public class GameWorld extends World
         state = State.PLAYING;
         isPaused = false;
     }
+
+    /**
+     * convertX - takes the index value and converts to greenfoot X value
+     */
+    public int convertX(int secondIndex){
+        return 0;
+    }    
+
+    /**
+     * convertY - takes the index value and converts to greenfoot Y value
+     */
+    public int convertY(int firstIndex){
+        return 0;
+    }    
 }
