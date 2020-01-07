@@ -1,0 +1,11 @@
+This text file explains how players are saved.
+
+Every 2 lines contains the name of the variable and the value.
+
+Format:
+curLevel 
+maxLevel
+health
+statPoints
+
+Inventory

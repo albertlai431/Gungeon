@@ -3,6 +3,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner; 
 import java.util.NoSuchElementException;
+import java.lang.ArrayIndexOutOfBoundsException;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * GameWorld is the world where the game takes place. It holds the player, actors of the 
@@ -10,7 +14,6 @@ import java.util.NoSuchElementException;
  * 
  * TODO:
  * 1. Make data work (GameWorld, PlayerData, WorldData, file directory)
- * 2. Integrate obstacles with the world
  * 3. Make the actual text files 
  * 
  * @author Albert Lai
@@ -21,8 +24,8 @@ public class GameWorld extends World
     private Actor [][] arr;
     private Player player;
     private PlayerData playerData;
-    private String saveDir;
-    private String folderDir;
+    private static final String folderDir = "data" + File.separator + "save" + File.separator;
+    private static final String sourceDir = "data" + File.separator + "source" + File.separator;
     private Menu menu;
     private enum State{
         PLAYING,
@@ -30,10 +33,15 @@ public class GameWorld extends World
         STORE
     }    
     private State state;
-    
+
     public int height;
     public int width;
+    private static final int totLevels = 5;
+    private static final int totVersions = 5;
     private int curLevel;
+    private int tileSize;
+    private int XOffset;
+    private int YOffset;
     private boolean isPaused = false;
     private boolean lvlComplete = false;
 
@@ -53,23 +61,34 @@ public class GameWorld extends World
     /**
      * Contructor to initialize the world from "create a new game" or "load saved game"
      * 
-     * @param saveDir   a string representing the name of the save slot ("save1", "save2", "save3")
+     * @param boolean   true if loading from saved game, false if not
      * 
      */
-    public GameWorld(String saveDir){
+    public GameWorld(boolean loadFromSavedGame){
         this();
-        this.saveDir = saveDir;
-        this.folderDir = "data" + File.separator + saveDir;
-        File playerFile = new File(folderDir + File.separator + saveDir.charAt(saveDir.length()-1) + "Player.txt");
-        if(playerFile.isFile()) playerData = new PlayerData(playerFile);
-        else System.out.println("File Not Found");
-        
+        File playerFile = new File(folderDir + "Player.txt");
+        if(!playerFile.isFile()){
+            System.out.println("File Not Found");
+            return;
+        }    
+
+        //clear data and load from original text files
+        if(!loadFromSavedGame){
+            copyFile(sourceDir + "Player.txt", playerFile);
+            for(int i=1;i<=totLevels;i++){
+                int version = Greenfoot.getRandomNumber(totVersions);
+                copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + "txt", new File(folderDir + "lvl" + Integer.toString(i) + "txt"));
+            }   
+        }    
+
+        playerData = new PlayerData(playerFile);
+
         //check if player is complete this level
         if(true) lvlComplete = true;
 
         //get level somehow
         curLevel = 1;
-        File worldFile = new File(folderDir + File.separator + saveDir.charAt(saveDir.length()-1) + "lvl" + Integer.toString(curLevel) + ".txt");
+        File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
     }    
 
@@ -78,8 +97,34 @@ public class GameWorld extends World
      * 
      * 
      */
-    public GameWorld(String saveDir,String folderDir, int curLevel,Player player, PlayerData playerData){
+    public GameWorld(int curLevel,Player player, PlayerData playerData){
         this();
+        curLevel = this.curLevel;
+
+    }    
+
+    private void copyFile(String source, File dest){
+        try{
+            Scanner scanner = new Scanner(new File(source));
+            FileWriter fw = new FileWriter(dest);
+
+            while(true){
+                try{
+                    String s = scanner.nextLine();
+                    fw.write(s+"\n");
+                    System.out.println(s);
+                    fw.flush();
+                }
+                catch(NoSuchElementException e){
+                    break;
+                }    
+            }    
+            fw.close();
+            scanner.close();
+        }
+        catch(java.io.IOException e){
+            System.out.println("No such file");
+        } 
     }    
 
     /**
@@ -95,7 +140,7 @@ public class GameWorld extends World
      */
     public void act(){
         keyboardInput();
-        
+
         //checks if level is complete
         if(getObjects(Enemy.class).size()==0) lvlComplete = true;
     }
@@ -152,18 +197,14 @@ public class GameWorld extends World
                         a = new Arrows();
                     }    
                     else if(actor.indexOf("Fire")==0){
-                        a = new Fire();
+                        a = new Fire(firstInd, secondInd);
                     }    
                     else if(actor.indexOf("Spikes")==0){
-                        a = new Spikes();
+                        a = new Spikes(firstInd, secondInd);
                     }  
                     else if(actor.indexOf("Walls")==0){
                         a = new Walls();
                     } 
-                    else if(actor.indexOf("Player")==0){
-                        addObject(player, xcoord, ycoord);
-                        arr[firstInd][secondInd] = player;
-                    }  
                     else if(actor.indexOf("RifleEnemy")==0){
                         a = new RifleEnemy();
                         isEnemy = true;
@@ -206,13 +247,26 @@ public class GameWorld extends World
      * convertX - takes the index value and converts to greenfoot X value
      */
     public int convertX(int secondIndex){
-        return 0;
+        return XOffset + secondIndex*tileSize;
     }    
 
     /**
      * convertY - takes the index value and converts to greenfoot Y value
      */
     public int convertY(int firstIndex){
-        return 0;
+        return YOffset + firstIndex*tileSize;
+    }    
+
+    public boolean isWall(int firstInd, int secondInd){
+        try{
+            return arr[firstInd][secondInd] instanceof Walls;
+        }    
+        catch (ArrayIndexOutOfBoundsException e){
+            return true;
+        }    
+    }   
+
+    public void closeWorld(){
+        playerData.saveData(player);
     }    
 }

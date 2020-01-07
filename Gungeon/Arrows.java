@@ -8,12 +8,26 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Arrows extends Obstacles
 {
+    public Arrows(){
+        super(100);
+    }    
+    
     /**
      * Act - do whatever the Arrows wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
-        // Add your action code here.
+        actCount++;
+        if(actCount == actMod){
+            actCount = 0;
+            damage();
+        }    
+    }    
+    
+    protected void damage(){
+        super.damage();
+        
+        //arrows animation here
     }    
 }

@@ -1,0 +1,8 @@
+curLevel 
+1
+maxLevel
+1
+health
+6
+statPoints
+0

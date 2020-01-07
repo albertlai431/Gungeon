@@ -20,6 +20,7 @@ public class PlayerData
     
     public PlayerData(Player player, File txtFile){
         this.txtFile = txtFile;
+        
     }    
 
     public void saveData(Player player){
