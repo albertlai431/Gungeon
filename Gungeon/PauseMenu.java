@@ -8,8 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class PauseMenu extends Menu
 {
-    private Button play = new Button();
-    private Button exit = new Button();
+    private Button play = new Button("Play", 15);
+    private Button exit = new Button("Exit", 15);
     
     /**
      * Constructor for objects of class PauseMenu.
