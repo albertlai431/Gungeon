@@ -1,85 +1,73 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+//import java.awt.Font;
 /**
- * A Label class that allows you to display a textual value on screen.
- * <p>
- * The Label is an actor, so you will need to create it, and then add it to the world
- * in Greenfoot.
- *
+ * A Generic Button to display text that is clickable. Multiple buttons can be added the world.
+ * 
  * @author Alex Li
- * @version 1.2.1
+ * @version v1.0.0
  */
-public class Label extends Actor
+public class Button extends Actor
 {
-    //instance variables
+    // Declare private variables
+    private GreenfootImage img, temp;
+    //ButtonText is the text the button will display
     private String text;
-    private int fontSize;
-    private boolean isTransparent;
-    //default colours
-    private Color textColour = Color.BLACK;
-    private Color backgroundColor;
-    private Font font;
-    private GreenfootImage img;
+    //The font of the button
+    private Font TextFont;
+    //A boolean to control whether the button will belong in a drop down menu or not
+    private Color textColour, highlightColour;
+    //The font size of the button
+    private int fontSize, textWidth = 0;
+    //helper class
     private TextSizeFinder finder = new TextSizeFinder();
     /**
-     * Creates a default label with customizable font size and text. The text will have a black outline on a white background
-     * 
-     * @param text             The text that you want to label to have
-     * @param fontSize          The desired fontSize
-     * @param isTransparent     True if the background is transparent
+     * Constructs a TextButton with a given String, a specified size, whether it is a subButton, and its rgb values
+     * @param text          String value to display
+     * @param fontSize      Size of text, as an integer
      */
-    public Label(String text, int fontSize, boolean isTransparent)
-    {
-        //changes the outline to be white
+    public Button (String text, int fontSize){
+        textColour = new Color(98,98,98);
+        highlightColour = new Color(158,158,159);
+        TextFont = new Font ("calibri",fontSize);
         this.text = text;
         this.fontSize = fontSize;
-        this.isTransparent = isTransparent;
-        font = new Font ("calibri", false, false, fontSize);
-        textColour = Color.BLACK;
-        if(isTransparent) backgroundColor = new Color(0,0,0,0);
-        else backgroundColor = new Color(0,0,0);
-        //draws the image
-        updateImage();
+        img = new GreenfootImage(finder.getTextWidth(text,fontSize), finder.getTextHeight(text,fontSize));
+        img.setColor(textColour);
+        img.setFont(TextFont);
+        img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
+        setImage(img);
     }
-    public Label(String text, int fontSize, int txtR, int txtB, int txtG, boolean isTransparent)
-    {
-        //changes the outline to be white
+    //txtR, txtB ... highlightG are the RGB values of the text colour and highlight colour
+    public Button (String text, int fontSize, int txtR, int txtB, int txtG, int highlightR, int highlightB, int highlightG){
+        textColour = new Color(txtR,txtB,txtG);
+        highlightColour = new Color(highlightR,highlightB,highlightG);
+        TextFont = new Font ("calibri",fontSize);
         this.text = text;
         this.fontSize = fontSize;
-        isTransparent = false;
-        font = new Font ("calibri", false, false, fontSize);
-        textColour = new Color(txtR,txtB,txtG);
-        if(isTransparent) backgroundColor = new Color(0,0,0,0);
-        else backgroundColor = new Color(0,0,0);
-        //draws the image
-        updateImage();
-    }
-    //must have a background
-    public Label(String text, int fontSize, int txtR, int txtB, int txtG, int backR, int backB, int backG)
-    {
-        //changes the outline to be white
-        this.text = text;
-        this.fontSize = fontSize;
-        isTransparent = false;
-        font = new Font ("calibri", false, false, fontSize);
-        textColour = new Color(txtR,txtB,txtG);
-        backgroundColor = new Color(backR, backB, backG);
-        //draws the image
-        updateImage();
+        img = new GreenfootImage(finder.getTextWidth(text,fontSize), finder.getTextHeight(text,fontSize));
+        img.setColor(textColour);
+        img.setFont(TextFont);
+        img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
+        setImage(img);
     }
     /**
-     * Updates the image on screen to show the current text with its specified font size and colour.
+     * Highlights the button if the mouse is hoving over a button
      */
-    private void updateImage()
+    public void hoverOver(){
+        img.clear();
+        img.setColor(highlightColour);
+        img.setFont(TextFont);
+        img.drawString(text, 5, 15);
+        setImage(img);
+    }
+    public void reset()
     {
-        img = new GreenfootImage(finder.getTextWidth(text,fontSize), finder.getTextHeight(text,fontSize));
-        img.setFont(font);
-        if(!isTransparent){
-            img.setColor(backgroundColor);
-            img.fill();
-        }
+        img.clear();
         img.setColor(textColour);
-        img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
+        img.setFont(TextFont);
+        img.drawString(text, 5, 15);
         setImage(img);
     }
 }
