@@ -19,9 +19,10 @@ public class Button extends Actor
     //A boolean to control whether the button will belong in a drop down menu or not
     private Color textColour, highlightColour;
     //The font size of the button
-    private int fontSize, textWidth = 0;
+    private int fontSize, textWidth = 0, actCount = 0;
     //helper class
     private TextSizeFinder finder = new TextSizeFinder();
+    private MouseInfo mouse;
     /**
      * Constructs a TextButton with a given String, a specified size, whether it is a subButton, and its rgb values
      * @param text          String value to display
@@ -77,6 +78,15 @@ public class Button extends Actor
         img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
         setImage(img);
     }
+    public void act(){
+        if(actCount % 5 == 0){
+            if(Greenfoot.mouseMoved(this)){ 
+                //Highlights the button
+                this.hoverOver();
+            }
+            if(Greenfoot.mouseMoved(null) &&!Greenfoot.mouseMoved(this)) this.reset();
+        }
+    }
     /**
      * Highlights the button if the mouse is hoving over a button
      */
@@ -84,7 +94,7 @@ public class Button extends Actor
         img.clear();
         img.setColor(highlightColour);
         img.setFont(TextFont);
-        img.drawString(text, 5, 15);
+        img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
         setImage(img);
     }
     public void reset()
@@ -92,7 +102,7 @@ public class Button extends Actor
         img.clear();
         img.setColor(textColour);
         img.setFont(TextFont);
-        img.drawString(text, 5, 15);
+        img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
         setImage(img);
     }
 }
