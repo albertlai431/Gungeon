@@ -34,12 +34,12 @@ public class GameWorld extends World
     }    
     private State state;
 
-    public int height;
-    public int width;
+    public static final int height = 640;
+    public static final int width = 960;
     private static final int totLevels = 5;
     private static final int totVersions = 5;
+    public static final int tileSize = 32;
     private int curLevel;
-    private int tileSize;
     private int XOffset;
     private int YOffset;
     private boolean isPaused = false;
@@ -52,10 +52,9 @@ public class GameWorld extends World
     public GameWorld()
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
-        super(960, 640, 1,false); 
-        height = getHeight();
-        width = getWidth();
+        super(width, height, 1,false); 
         state = State.PLAYING;
+        arr = new Actor [height/tileSize][width/tileSize];
     }
 
     /**
@@ -95,44 +94,18 @@ public class GameWorld extends World
     /**
      * Constructor to switch between rooms
      * 
-     * 
+     * @param curLevel          current level of the world
+     * @param player            player transferred from the other world
+     * @param playerData        playerData transferred from the other world
      */
     public GameWorld(int curLevel,Player player, PlayerData playerData){
         this();
-        curLevel = this.curLevel;
-
+        this.curLevel = curLevel;
+        this.player = player;
+        this.playerData = playerData; 
+        File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
+        parseTextFile(worldFile);
     }    
-
-    private void copyFile(String source, File dest){
-        try{
-            Scanner scanner = new Scanner(new File(source));
-            FileWriter fw = new FileWriter(dest);
-
-            while(true){
-                try{
-                    String s = scanner.nextLine();
-                    fw.write(s+"\n");
-                    System.out.println(s);
-                    fw.flush();
-                }
-                catch(NoSuchElementException e){
-                    break;
-                }    
-            }    
-            fw.close();
-            scanner.close();
-        }
-        catch(java.io.IOException e){
-            System.out.println("No such file");
-        } 
-    }    
-
-    /**
-     * gameOver - checks if player is dead and ends the game
-     */
-    public void gameOver(){
-
-    }
 
     /**
      * Act - do whatever the GameWorld wants to do. This method is called whenever
@@ -144,7 +117,7 @@ public class GameWorld extends World
         //checks if level is complete
         if(getObjects(Enemy.class).size()==0) lvlComplete = true;
     }
-
+    
     /**
      * keyboardInput - checks for keyboard input
      */
@@ -172,8 +145,83 @@ public class GameWorld extends World
                 state = State.STORE;
             }
         }    
+    }
+    
+    //game specific events
+    /**
+     * gameOver - checks if player is dead and ends the game, called by player class
+     */
+    public void gameOver(){
+        //game over animation
+    }
+    
+    /**
+     * pause - pauses all the elements in the world
+     */
+    public void pause(){
+        isPaused = true;
+    }
+    
+    /**
+     * play - 
+     */
+    public void play(){
+        if(menu!=null && menu.getWorld()!=null) menu.closeMenu();
+        state = State.PLAYING;
+        isPaused = false;
+    }
+    
+    /**
+     * closeWorld - closes the current world
+     */
+    public void closeWorld(){
+        playerData.saveData(player);
     }    
 
+    /**
+     * switchWorld - switch to a different room
+     * 
+     * @param newLevel              new level to switch to
+     */
+    public void switchWorld(int newLevel){
+        closeWorld();
+        Greenfoot.setWorld(new GameWorld(newLevel, player, playerData));
+    }
+
+    //methods dealing with text files
+    /**
+     * copyFile - takes contents of one file and copies it into another file
+     * 
+     * @param source            source file directory to copy content from
+     * @param dest              Text file to copy contents into
+     */
+    private void copyFile(String source, File dest){
+        try{
+            Scanner scanner = new Scanner(new File(source));
+            FileWriter fw = new FileWriter(dest);
+
+            while(true){
+                try{
+                    String s = scanner.nextLine();
+                    fw.write(s+"\n");
+                    System.out.println(s);
+                    fw.flush();
+                }
+                catch(NoSuchElementException e){
+                    break;
+                }    
+            }    
+            fw.close();
+            scanner.close();
+        }
+        catch(java.io.IOException e){
+            System.out.println("No such file");
+        } 
+    }    
+
+    /**
+     * parseTextFile - takes world text file and parses it
+     */
     private void parseTextFile(File worldFile){
         Scanner s = null;
         try{
@@ -233,18 +281,12 @@ public class GameWorld extends World
         }    
     }
 
-    public void pause(){
-        isPaused = true;
-    }
-
-    public void play(){
-        if(menu!=null && menu.getWorld()!=null) menu.closeMenu();
-        state = State.PLAYING;
-        isPaused = false;
-    }
-
+    //helper classes
     /**
      * convertX - takes the index value and converts to greenfoot X value
+     * 
+     * param secondIndex            second index of 2D to be converted
+     * @return int                  greenfoot x value
      */
     public int convertX(int secondIndex){
         return XOffset + secondIndex*tileSize;
@@ -252,11 +294,21 @@ public class GameWorld extends World
 
     /**
      * convertY - takes the index value and converts to greenfoot Y value
+     * 
+     * @param firstIndex            first index of 2D aray to be converted
+     * @return int                  greenfoot y value
      */
     public int convertY(int firstIndex){
         return YOffset + firstIndex*tileSize;
     }    
 
+    /**
+     * isWall - takes position in 2D array and returns whether or not a wall exists
+     * 
+     * @param firstInd              first index of 2D array
+     * @param secondInd             second index of 2D array
+     * @return boolean              whether of not there's a wall
+     */
     public boolean isWall(int firstInd, int secondInd){
         try{
             return arr[firstInd][secondInd] instanceof Walls;
@@ -265,8 +317,4 @@ public class GameWorld extends World
             return true;
         }    
     }   
-
-    public void closeWorld(){
-        playerData.saveData(player);
-    }    
 }

@@ -14,8 +14,10 @@ public abstract class Menu extends Actor
      */
     public void act() 
     {
-        // Add your action code here.
-    }    
+        checkButtonClicks();
+    }   
+    
+    protected abstract void checkButtonClicks();
     
     public abstract void closeMenu();
 }
