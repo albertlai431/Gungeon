@@ -30,6 +30,7 @@ public class Label extends Actor
      */
     public Label(String text, int fontSize, boolean isTransparent)
     {
+        //changes the outline to be white
         this.text = text;
         this.fontSize = fontSize;
         this.isTransparent = isTransparent;
@@ -42,6 +43,7 @@ public class Label extends Actor
     }
     public Label(String text, int fontSize, int txtR, int txtB, int txtG, boolean isTransparent)
     {
+        //changes the outline to be white
         this.text = text;
         this.fontSize = fontSize;
         isTransparent = false;
@@ -55,10 +57,50 @@ public class Label extends Actor
     //must have a background
     public Label(String text, int fontSize, int txtR, int txtB, int txtG, int backR, int backB, int backG)
     {
+        //changes the outline to be white
         this.text = text;
         this.fontSize = fontSize;
         isTransparent = false;
         font = new Font ("calibri", false, false, fontSize);
+        textColour = new Color(txtR,txtB,txtG);
+        backgroundColor = new Color(backR, backB, backG);
+        //draws the image
+        updateImage();
+    }
+    //custom fonts
+    public Label(String text, String fontName, int fontSize, boolean isTransparent)
+    {
+        //changes the outline to be white
+        this.text = text;
+        this.fontSize = fontSize;
+        this.isTransparent = isTransparent;
+        font = new Font (fontName, false, false, fontSize);
+        textColour = Color.BLACK;
+        if(isTransparent) backgroundColor = new Color(0,0,0,0);
+        else backgroundColor = new Color(0,0,0);
+        //draws the image
+        updateImage();
+    }
+    public Label(String text, String fontName, int fontSize, int txtR, int txtB, int txtG, boolean isTransparent)
+    {
+        //changes the outline to be white
+        this.text = text;
+        this.fontSize = fontSize;
+        isTransparent = false;
+        font = new Font (fontName, false, false, fontSize);
+        textColour = new Color(txtR,txtB,txtG);
+        if(isTransparent) backgroundColor = new Color(0,0,0,0);
+        else backgroundColor = new Color(0,0,0);
+        //draws the image
+        updateImage();
+    }
+    public Label(String text, String fontName, int fontSize, int txtR, int txtB, int txtG, int backR, int backB, int backG)
+    {
+        //changes the outline to be white
+        this.text = text;
+        this.fontSize = fontSize;
+        isTransparent = false;
+        font = new Font (fontName, false, false, fontSize);
         textColour = new Color(txtR,txtB,txtG);
         backgroundColor = new Color(backR, backB, backG);
         //draws the image
