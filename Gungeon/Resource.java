@@ -8,12 +8,54 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Resource extends Actor
 {
-    /**
-     * Act - do whatever the Resource wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
+    private GreenfootImage firstImage;
+    private GreenfootImage secondImage;
+    private int currentStatus;
+    private boolean isHealthBar;
+    public Resource(GreenfootImage first)
     {
-        // Add your action code here.
-    }    
+        firstImage = new GreenfootImage(first);
+        firstImage.scale(16, 16);
+        setImage(firstImage);
+        isHealthBar = false;
+    }
+
+    public Resource(GreenfootImage first, GreenfootImage second)
+    {
+        firstImage = new GreenfootImage(first);
+        secondImage = new GreenfootImage(second);
+        firstImage.scale(16, 16);
+        secondImage.scale(16, 16);
+        setImage(firstImage);
+        currentStatus = 2;
+        isHealthBar = true;
+    }  
+
+    public boolean switchImage()
+    {
+        if(isHealthBar)
+        {
+            if(currentStatus == 2)
+            {
+                setImage(secondImage);
+                currentStatus = 1;
+            }
+            else
+            {
+                setImage(firstImage);
+                currentStatus = 2;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public int getStatus()
+    {
+        if(isHealthBar)
+        {
+            return currentStatus;
+        }
+        return -1;
+    }   
 }
