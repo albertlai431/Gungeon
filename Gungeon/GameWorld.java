@@ -5,7 +5,6 @@ import java.util.Scanner;
 import java.util.NoSuchElementException;
 import java.lang.ArrayIndexOutOfBoundsException;
 import java.io.FileWriter;
-import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -81,6 +80,7 @@ public class GameWorld extends World
         }    
 
         playerData = new PlayerData(playerFile);
+        player = playerData.createPlayer();
 
         //check if player is complete this level
         if(true) lvlComplete = true;
@@ -204,7 +204,6 @@ public class GameWorld extends World
                 try{
                     String s = scanner.nextLine();
                     fw.write(s+"\n");
-                    System.out.println(s);
                     fw.flush();
                 }
                 catch(NoSuchElementException e){
