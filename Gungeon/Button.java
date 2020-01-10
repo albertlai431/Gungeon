@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
  * A Generic Button to display text that is clickable. Multiple buttons can be added the world.
  * 
  * @author Alex Li
- * @version v1.0.0
+ * @version v1.1.0
  */
 public class Button extends Actor
 {
@@ -60,7 +60,7 @@ public class Button extends Actor
         TextFont = new Font (fontName,fontSize);
         this.text = text;
         this.fontSize = fontSize;
-        img = new GreenfootImage(finder.getTextWidth(text,fontSize), finder.getTextHeight(text,fontSize));
+        img = new GreenfootImage(finder.getTextWidth(text,fontName,fontSize), finder.getTextHeight(text,fontName,fontSize));
         img.setColor(textColour);
         img.setFont(TextFont);
         img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
@@ -69,10 +69,10 @@ public class Button extends Actor
     public Button (String text,  String fontName, int fontSize, int txtR, int txtB, int txtG, int highlightR, int highlightB, int highlightG){
         textColour = new Color(txtR,txtB,txtG);
         highlightColour = new Color(highlightR,highlightB,highlightG);
-        TextFont = new Font (fontName,fontSize);
+        TextFont = new Font(fontName,fontSize);
         this.text = text;
         this.fontSize = fontSize;
-        img = new GreenfootImage(finder.getTextWidth(text,fontSize), finder.getTextHeight(text,fontSize));
+        img = new GreenfootImage(finder.getTextWidth(text,fontName,fontSize), finder.getTextHeight(text,fontName,fontSize));
         img.setColor(textColour);
         img.setFont(TextFont);
         img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
