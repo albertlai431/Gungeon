@@ -12,7 +12,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Label extends Actor
 {
     //instance variables
-    private String text;
+    private String text,fontName;
     private int fontSize;
     private boolean isTransparent;
     //default colours
@@ -35,6 +35,7 @@ public class Label extends Actor
         this.fontSize = fontSize;
         this.isTransparent = isTransparent;
         font = new Font ("calibri", false, false, fontSize);
+        fontName = "Calibri";
         textColour = Color.BLACK;
         if(isTransparent) backgroundColor = new Color(0,0,0,0);
         else backgroundColor = new Color(0,0,0);
@@ -48,6 +49,7 @@ public class Label extends Actor
         this.fontSize = fontSize;
         isTransparent = false;
         font = new Font ("calibri", false, false, fontSize);
+        fontName = "Calibri";
         textColour = new Color(txtR,txtB,txtG);
         if(isTransparent) backgroundColor = new Color(0,0,0,0);
         else backgroundColor = new Color(0,0,0);
@@ -62,6 +64,7 @@ public class Label extends Actor
         this.fontSize = fontSize;
         isTransparent = false;
         font = new Font ("calibri", false, false, fontSize);
+        fontName = "Calibri";
         textColour = new Color(txtR,txtB,txtG);
         backgroundColor = new Color(backR, backB, backG);
         //draws the image
@@ -74,6 +77,7 @@ public class Label extends Actor
         this.text = text;
         this.fontSize = fontSize;
         this.isTransparent = isTransparent;
+        this.fontName = fontName;
         font = new Font (fontName, false, false, fontSize);
         textColour = Color.BLACK;
         if(isTransparent) backgroundColor = new Color(0,0,0,0);
@@ -87,6 +91,7 @@ public class Label extends Actor
         this.text = text;
         this.fontSize = fontSize;
         isTransparent = false;
+        this.fontName = fontName;
         font = new Font (fontName, false, false, fontSize);
         textColour = new Color(txtR,txtB,txtG);
         if(isTransparent) backgroundColor = new Color(0,0,0,0);
@@ -100,6 +105,7 @@ public class Label extends Actor
         this.text = text;
         this.fontSize = fontSize;
         isTransparent = false;
+        this.fontName = fontName;
         font = new Font (fontName, false, false, fontSize);
         textColour = new Color(txtR,txtB,txtG);
         backgroundColor = new Color(backR, backB, backG);
@@ -111,7 +117,8 @@ public class Label extends Actor
      */
     private void updateImage()
     {
-        img = new GreenfootImage(finder.getTextWidth(text,fontSize), finder.getTextHeight(text,fontSize));
+        if(fontName.equals("Calibri"))img = new GreenfootImage(finder.getTextWidth(text, fontSize), finder.getTextHeight(text, fontSize));
+        else img = new GreenfootImage(finder.getTextWidth(text,fontName, fontSize), finder.getTextHeight(text,fontName, fontSize));
         img.setFont(font);
         if(!isTransparent){
             img.setColor(backgroundColor);
