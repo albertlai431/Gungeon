@@ -5,7 +5,7 @@
  * @author Star Xie 
  * @version January 2020
  */
-public interface Animation 
+public interface AnimationInterface 
 {
     public void animateMovementUp();
     
