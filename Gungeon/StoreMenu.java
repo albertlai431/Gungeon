@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
+import java.io.File;
 
 /**
  * StoreMenu is the store that exists in the game. The user can open the Store anytime
@@ -25,11 +26,12 @@ public class StoreMenu extends Menu
     private int money;
     private int lastItemCost;
     private static final String[] itemNames = {"Pistol Gun","Rifle Gun","Shotgun Gun","Rifle Bullet","Shotgun Bullet","Half-Heart Refill","Speed Boost"};
-    private static final GreenfootImage [] img = {};
     private static final int[] xCoords = {250,350,450,250,350,250,350};
     private static final int[] yCoords = {225,225,225,350,350,475,475};
     private static final int[] costs = {0x3f3f3f3f,500,500,100,100,500,750}; //to be completed
     private static final int numItems = itemNames.length;
+    private static boolean createdImages = false;
+    private static GreenfootImage [] itemImages = new GreenfootImage [numItems];
 
     public StoreMenu(){
         storeMenuImg.setColor(Color.LIGHT_GRAY);
@@ -38,9 +40,19 @@ public class StoreMenu extends Menu
 
         //money = 
     }    
+    
+    public static void createImages(){
+        if(!createdImages){
+            createdImages = true;
+            for(int i=0;i<numItems;i++){
+                itemImages[i] = new GreenfootImage("Store"+File.separator+itemNames[i]+".png");
+                itemImages[i].scale(40,(int)((double)itemImages[i].getHeight()*40/itemImages[i].getWidth()));
+            }    
+        }    
+    }
 
     public void addedToWorld(World w){
-        GameWorld world = (GameWorld) w;
+        PauseWorld world = (PauseWorld) getWorld();
         world.addObject(menuTitle,world.width/2,world.height/2-180);
         world.addObject(closeStore, 725, 500);
         world.addObject(gunsLabel, 225, 170);
@@ -49,7 +61,7 @@ public class StoreMenu extends Menu
         world.addObject(equipButton, 700, 200);
         world.addObject(purchaseButton, 700, 225);
         for(int i=0;i<numItems;i++){
-            world.addObject(new StoreItem(itemNames[i],this,costs[i]),xCoords[i],yCoords[i]);
+            world.addObject(new StoreItem(itemImages[i], itemNames[i],this,costs[i]),xCoords[i],yCoords[i]);
         }    
     }    
 
@@ -87,9 +99,9 @@ public class StoreMenu extends Menu
     }
 
     protected void checkButtonClicks(){
-        GameWorld world = (GameWorld) getWorld();
+        PauseWorld world = (PauseWorld) getWorld();
         if(Greenfoot.mouseClicked(closeStore)){
-            world.play();
+            world.closeWorld();
         }
         else if(Greenfoot.mouseClicked(equipButton) && equipButton.getImage().getTransparency()!=0){
             equip();
@@ -100,7 +112,7 @@ public class StoreMenu extends Menu
     }    
 
     public void closeMenu(){
-        GameWorld world = (GameWorld) getWorld();
+        PauseWorld world = (PauseWorld) getWorld();
         world.removeObject(menuTitle);
         world.removeObject(closeStore);
         world.removeObject(gunsLabel);

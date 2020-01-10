@@ -23,16 +23,16 @@ public class PauseMenu extends Menu
     }    
 
     public void addedToWorld(World w){
-        GameWorld world = (GameWorld) w;
+        PauseWorld world = (PauseWorld) getWorld();
         world.addObject(menuTitle,world.width/2,world.height/2 - 30);
         world.addObject(play,world.width/2,world.height/2 + 5);
         world.addObject(exit,world.width/2,world.height/2 + 30);
     }
 
     protected void checkButtonClicks(){
-        GameWorld world = (GameWorld) getWorld();
+        PauseWorld world = (PauseWorld) getWorld();
         if(Greenfoot.mouseClicked(play)){
-            world.play();
+            world.closeWorld();
         }
         else if(Greenfoot.mouseClicked(exit)){
             world.closeWorld();
@@ -41,7 +41,7 @@ public class PauseMenu extends Menu
     }    
 
     public void closeMenu(){
-        GameWorld world = (GameWorld) getWorld();
+        PauseWorld world = (PauseWorld) getWorld();
         world.removeObject(menuTitle);
         world.removeObject(play);
         world.removeObject(exit);

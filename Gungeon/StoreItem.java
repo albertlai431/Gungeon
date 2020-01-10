@@ -14,14 +14,14 @@ public class StoreItem extends Actor
     private Label nameLabel;
     private StoreMenu storeMenu;
     private static final int itemSize = 80;
-    private static final GreenfootImage storeItemImg = new GreenfootImage(itemSize,itemSize);
-    private static final GreenfootImage selected = new GreenfootImage(itemSize,itemSize);
-    
+    private GreenfootImage storeItemImg = new GreenfootImage(itemSize,itemSize);
+    private GreenfootImage selected = new GreenfootImage(itemSize,itemSize);
+
     /**
      * Act - do whatever the StoreItem wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    public StoreItem(String item, StoreMenu storeMenu, int cost){
+    public StoreItem(GreenfootImage itemImage, String item, StoreMenu storeMenu, int cost){
         this.item = item;
         this.storeMenu = storeMenu;
         this.cost = cost;
@@ -29,24 +29,24 @@ public class StoreItem extends Actor
         //create storeItemImg
         storeItemImg.setColor(Color.WHITE);
         storeItemImg.fill();
-        //storeItemImg.drawImage(x,50,50);
+        storeItemImg.drawImage(itemImage,(itemSize-itemImage.getWidth())/2,(itemSize-itemImage.getHeight())/2);
         setImage(storeItemImg);
-        
+
         //create selected image
         selected.setColor(Color.WHITE);
         selected.fill();
         selected.setColor(Color.RED);
         selected.drawRect(0,0,itemSize-2,itemSize-2);
-        //storeItemImg.drawImage(x,50,50);
-        
+        selected.drawImage(itemImage,(itemSize-itemImage.getWidth())/2,(itemSize-itemImage.getHeight())/2);
+
         nameLabel = new Label(item,10,true);
     }    
-    
+
     public void addedToWorld(World w){
         GameWorld world = (GameWorld) w;
         world.addObject(nameLabel,this.getX(),this.getY()+itemSize/2+10);
     }
-    
+
     /**
      * Act - do whatever the StoreItem wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -58,13 +58,13 @@ public class StoreItem extends Actor
             changeImage();
         }    
     }    
-    
+
     public void remove(){
         GameWorld world = (GameWorld) getWorld();
         world.removeObject(nameLabel);
         world.removeObject(this);
     } 
-    
+
     public void changeImage(){
         if(getImage()==storeItemImg) setImage(selected);
         else setImage(storeItemImg);

@@ -11,4 +11,11 @@ public class Walls extends Obstacles
     public Walls(){
         super(0);
     }  
+    
+    public void addedToWorld(World w){
+        GameWorld world = (GameWorld) w;
+        if(world.width-getX()<25) getImage().rotate(270);
+        else if(getX()<25) getImage().rotate(90);
+        else if(getY()<25) getImage().rotate(180);
+    }    
 }

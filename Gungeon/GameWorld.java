@@ -13,7 +13,9 @@ import java.io.IOException;
  * 
  * TODO:
  * 1. Make data work (GameWorld, PlayerData, WorldData, file directory)
- * 3. Make the actual text files 
+ * 2. Make the actual text files 
+ * 3. Switch world for pause menu
+ * 4. Implement images
  * 
  * @author Albert Lai
  * @version January 2020
@@ -54,6 +56,7 @@ public class GameWorld extends World
         super(width, height, 1,false); 
         state = State.PLAYING;
         arr = new Actor [height/tileSize][width/tileSize];
+        StoreMenu.createImages();
     }
 
     /**
@@ -124,26 +127,10 @@ public class GameWorld extends World
     private void keyboardInput(){
         String key = Greenfoot.getKey();
         if("escape".equals(key)){
-            if(isPaused){
-                play();
-            }
-            else{
-                pause();
-                menu = new PauseMenu();
-                addObject(menu,width/2,height/2);
-                state = State.PAUSE;
-            }
+            Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
-        else if("s".equals(key) && state!=State.PAUSE){
-            if(isPaused){
-                play();
-            }
-            else{
-                pause();
-                menu = new StoreMenu();
-                addObject(menu,width/2,height/2);
-                state = State.STORE;
-            }
+        else if("z".equals(key)){
+            Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
     }
     
@@ -153,22 +140,6 @@ public class GameWorld extends World
      */
     public void gameOver(){
         //game over animation
-    }
-    
-    /**
-     * pause - pauses all the elements in the world
-     */
-    public void pause(){
-        isPaused = true;
-    }
-    
-    /**
-     * play - 
-     */
-    public void play(){
-        if(menu!=null && menu.getWorld()!=null) menu.closeMenu();
-        state = State.PLAYING;
-        isPaused = false;
     }
     
     /**
