@@ -8,12 +8,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Pistol extends Weapon
 {
-    /**
-     * Act - do whatever the Pistol wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
+    private String image = "Pistol.png";
+    public Pistol(int damage, int bulletSpeed, int fireRate, int reloadTime, int magazines, int magSize)
     {
-        // Add your action code here.
-    }    
+        super(damage, bulletSpeed, fireRate, reloadTime, magazines, magSize);
+        setImage(image);
+    }
+    protected Ammunition createBullet()
+    {
+        return new bulletBullet(damage,bulletSpeed);
+    }
 }
