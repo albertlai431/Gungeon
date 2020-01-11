@@ -17,7 +17,7 @@ public class Options extends World
     private Label title = new Label("CONTROLS",40,true);
     private Label subTitle1 = new Label("MOVEMENT",25,true);
     private Label subTitle2 = new Label("AIMING",25,true);
-    private Label subTitle3 = new Label("ADDITIONAL CONTORLS",25,true);
+    private Label subTitle3 = new Label("ADDITIONAL CONTROLS",25,true);
     private Label text1 = new Label("Use the \"WASD\" keys to move.",16,true);
     private Label text2 = new Label("Use the mouse to aim and mouse 1 (the left most button) to shoot.",16,true);
     private Label text3 = new Label("\"Z\" opens the in game shop",16,true);
