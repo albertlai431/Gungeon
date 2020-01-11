@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class TitleScreen extends World
 {
     private Button play = new Button("PLAY",35);
-    private Button options = new Button("OPTIONS",35);
+    private Button options = new Button("CONTROLS",35);
     private Button load = new Button("LOAD",35);
     private MouseInfo mouse = Greenfoot.getMouseInfo();
     /**
@@ -20,17 +20,17 @@ public class TitleScreen extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(960, 640, 1); 
-        addObject(play,35,500);
-        addObject(load,40,530);
-        addObject(options,63,560);
+        addObject(play,35,560);
+        addObject(load,40,590);
+        addObject(options,77,620);
     }
     public void act(){
         if(Greenfoot.mouseClicked(play)){
-            GameWorld gameWorld = new GameWorld(/*bool*/);
+            GameWorld gameWorld = new GameWorld(true);
             Greenfoot.setWorld(gameWorld);
         }
         else if(Greenfoot.mouseClicked(load)){
-            GameWorld gameWorld = new GameWorld(/*bool*/);
+            GameWorld gameWorld = new GameWorld(false);
             Greenfoot.setWorld(gameWorld);
         }
         else if(Greenfoot.mouseClicked(options)){
