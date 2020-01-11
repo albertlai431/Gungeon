@@ -129,4 +129,23 @@ public class ItemInfo extends Actor
         getWorld().removeObject(scoreLabel);
         updateScoreLabel();
     }
+    /**
+     * Call this method when the user reloads their gun
+     * @param totalAmmo             The total ammo of a specific type the player has. If the current gun is the pistol, totalAmmo = -1 
+     * @param currentAmmo           The amount of bullets in gun's magazine  
+     */
+    public void updateAmmo(int totalAmmo, int currentAmmo){
+        this.totalAmmo = totalAmmo;
+        this.currentAmmo = currentAmmo;
+        getWorld().removeObject(ammoLabel);
+        updateAmmoLabel();
+    }
+    /**
+     * Call this method when the user shoots their gun
+     */
+    public void updateAmmo(){
+        currentAmmo--;
+        getWorld().removeObject(ammoLabel);
+        updateAmmoLabel();
+    }
 }
