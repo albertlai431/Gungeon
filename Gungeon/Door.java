@@ -10,16 +10,18 @@ public class Door extends Obstacles
 {
     private int curLevel;
     private boolean isComplete = false;
-    //private static final GreenfootImage img;
+    private static final GreenfootImage [] img = {new GreenfootImage("lockedDoor.png"),new GreenfootImage("passage.jpg")};
     
     public Door(int curLevel, boolean isComplete){
         super(0);
         this.curLevel = curLevel;
         this.isComplete = isComplete;
+        if(isComplete) setImage(img[1]);
+        else setImage(img[0]);
     }   
     
     public void completeLevel(){
-        //change image
+        setImage(img[1]);
         isComplete = true;
     }    
     

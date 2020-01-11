@@ -12,11 +12,13 @@ import java.io.IOException;
  * game, 2D array of actors, and game data. 
  * 
  * TODO:
- * 1. Make data work (GameWorld, PlayerData, WorldData, file directory)
- * 2. Make the actual text files 
- * 3. Switch world for pause menu (screenshot?)
- * 4. Implement images + fix walls
- * 5. Fix Ammunition and merge Clarence + Star's branches
+ * - Arrows animation
+ * - Player data 
+ * 
+ * LATER:
+ * - Switch world for pause menu (screenshot?)
+ * - Implement images + fix walls
+ * - Fix Ammunition and merge Clarence's branches
  * 
  * @author Albert Lai
  * @version January 2020
@@ -27,6 +29,8 @@ public class GameWorld extends World
     private Actor [][] arr;
     private Player player;
     private PlayerData playerData;
+    private Door door;
+    private ItemInfo itemInfo = new ItemInfo(0,-1,5);
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
 
@@ -49,6 +53,8 @@ public class GameWorld extends World
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
         StoreMenu.createImages();
+        addObject(itemInfo,824,601);
+        setPaintOrder(Label.class,ItemInfo.class,Player.class);
     }
 
     /**
@@ -110,7 +116,10 @@ public class GameWorld extends World
         keyboardInput();
 
         //checks if level is complete
-        if(getObjects(Enemy.class).size()==0) lvlComplete = true;
+        if(getObjects(Enemy.class).size()==0){
+            System.out.println("ok");
+            door.completeLevel();
+        }    
     }
 
     /**
@@ -216,6 +225,12 @@ public class GameWorld extends World
                         else if(actor.indexOf("Walls")==0){
                             a = new Walls();
                         } 
+                        else if(actor.indexOf("Door")==0){
+                            int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
+                            a = new Door(doorLevel,/*cur player level*/curLevel>=doorLevel);
+                            if(secondInd==19) door = (Door) a;
+                            else addObject(player,convert(firstInd),convert(secondInd+1));
+                        } 
                         else if(actor.indexOf("RifleEnemy")==0){
                             a = new RifleEnemy();
                             isEnemy = true;
@@ -235,7 +250,7 @@ public class GameWorld extends World
                         else{
                             System.out.println("Invalid actor");
                         }   
-                        
+
                         if(a!=null && !(lvlComplete && isEnemy)){
                             addObject(a, xcoord, ycoord);
                             arr[firstInd][secondInd] = a;
@@ -263,7 +278,7 @@ public class GameWorld extends World
     public int convert(int index){
         return tileOffset + index*tileSize;
     }    
-    
+
     public int convert(int index, boolean isWall){
         if(index == 0) return 28;
         else if(index==29 || index==19) return index*tileSize-28;
@@ -300,19 +315,24 @@ public class GameWorld extends World
                 try{
                     int a = 0;
                     fw = new FileWriter(worldFile);
-                    //Walls
+
+                    //Door
+                    int xval = Greenfoot.getRandomNumber(5)+1;
+                    fw.write("Door" + (i-1) + "\n" + xval + "\n" + 0 + "\n");
+                    xval = 28 - Greenfoot.getRandomNumber(5);
+                    fw.write("Door" + (i+1) + "\n" + xval + "\n" + 19 + "\n");
+
+                    //Walls (horizontal and vertical)
                     for(int x=0;x<30;x++){
-                        fw.write("Walls\n" + x + "\n" + 0 + "\n");
-                        fw.write("Walls\n" + x + "\n" + 19 + "\n");
+                        if(!curarr[x][0]) fw.write("Walls\n" + x + "\n" + 0 + "\n");
+                        if(!curarr[x][19]) fw.write("Walls\n" + x + "\n" + 19 + "\n");
                         curarr[x][0] = true; curarr[x][19] = true; a+=2;
                     }
                     for(int y=1;y<19;y++){
-                        fw.write("Walls\n" + 0 + "\n" + y + "\n");
-                        fw.write("Walls\n" + 29 + "\n" + y + "\n");
+                        if(!curarr[0][y]) fw.write("Walls\n" + 0 + "\n" + y + "\n");
+                        if(!curarr[29][y]) fw.write("Walls\n" + 29 + "\n" + y + "\n");
                         curarr[0][y] = true; curarr[29][y] = true; a+=2;
                     }    
-                    
-                    //Door
 
                     //Boss
                     if(i==5){
