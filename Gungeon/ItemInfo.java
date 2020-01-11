@@ -30,9 +30,9 @@ public class ItemInfo extends Actor
         myImg.setColor(borderColor);
         myImg.drawRect(0,0,110,79);
         setImage(myImg);
-        guns[0] = new GreenfootImage("Pistol.png");
-        guns[1] = new GreenfootImage("Rifle.png");
-        guns[2] = new GreenfootImage("Shotgun.png");
+        guns[0] = new GreenfootImage("Pistol Gun.png");
+        guns[1] = new GreenfootImage("Rifle Gun.png");
+        guns[2] = new GreenfootImage("Shotgun Gun.png");
         this.currentGun = currentGun;
         this.totalAmmo = totalAmmo;
         this.currentAmmo = currentAmmo;
@@ -67,8 +67,7 @@ public class ItemInfo extends Actor
         }
     }   
     private void updateAmmoLabel(){
-        //GameWorld world = (GameWorld) getWorld();
-        GameWorld world = (GameWorld) getWorld();   
+        GameWorld world = (GameWorld) getWorld(); 
         if(currentGun == 0) ammoLabel = new Label(Integer.toString(currentAmmo)+"/infinite",16,true);           
         else ammoLabel = new Label(Integer.toString(currentAmmo)+"/"+Integer.toString(totalAmmo),16,true);
         if(getWorld()!=null){
@@ -128,5 +127,24 @@ public class ItemInfo extends Actor
         score+=increment;
         getWorld().removeObject(scoreLabel);
         updateScoreLabel();
+    }
+    /**
+     * Call this method when the user reloads their gun
+     * @param totalAmmo             The total ammo of a specific type the player has. If the current gun is the pistol, totalAmmo = -1 
+     * @param currentAmmo           The amount of bullets in gun's magazine  
+     */
+    public void updateAmmo(int totalAmmo, int currentAmmo){
+        this.totalAmmo = totalAmmo;
+        this.currentAmmo = currentAmmo;
+        getWorld().removeObject(ammoLabel);
+        updateAmmoLabel();
+    }
+    /**
+     * Call this method when the user shoots their gun
+     */
+    public void updateAmmo(){
+        currentAmmo--;
+        getWorld().removeObject(ammoLabel);
+        updateAmmoLabel();
     }
 }
