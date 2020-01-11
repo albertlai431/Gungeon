@@ -128,4 +128,7 @@ public class Label extends Actor
         img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
         setImage(img);
     }
+    public int getLength(){
+        return finder.getTextWidth(text, fontName, fontSize);
+    }
 }
