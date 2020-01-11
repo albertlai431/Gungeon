@@ -31,11 +31,11 @@ public class PauseMenu extends Menu
 
     protected void checkButtonClicks(){
         PauseWorld world = (PauseWorld) getWorld();
-        if(Greenfoot.mouseClicked(play)){
+        String key = Greenfoot.getKey();
+        if(Greenfoot.mouseClicked(play) || "escape".equals(key)){
             world.closeWorld();
         }
         else if(Greenfoot.mouseClicked(exit)){
-            world.closeWorld();
             Greenfoot.setWorld(new TitleScreen());
         }    
     }    

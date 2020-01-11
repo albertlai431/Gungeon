@@ -14,7 +14,7 @@ import java.io.IOException;
  * TODO:
  * 1. Make data work (GameWorld, PlayerData, WorldData, file directory)
  * 2. Make the actual text files 
- * 3. Switch world for pause menu
+ * 3. Switch world for pause menu (screenshot?)
  * 4. Implement images
  * 
  * @author Albert Lai
@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 public class GameWorld extends World
 {
+    //firstInd = xcoord, secondInd = ycoord
     private Actor [][] arr;
     private Player player;
     private PlayerData playerData;
@@ -41,8 +42,7 @@ public class GameWorld extends World
     private static final int totVersions = 5;
     public static final int tileSize = 32;
     private int curLevel;
-    private int XOffset;
-    private int YOffset;
+    private static final int tileOffset = 16;
     private boolean isPaused = false;
     private boolean lvlComplete = false;
 
@@ -55,7 +55,7 @@ public class GameWorld extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(width, height, 1,false); 
         state = State.PLAYING;
-        arr = new Actor [height/tileSize][width/tileSize];
+        arr = new Actor [width/tileSize][height/tileSize];
         StoreMenu.createImages();
     }
 
@@ -78,7 +78,7 @@ public class GameWorld extends World
             copyFile(sourceDir + "Player.txt", playerFile);
             for(int i=1;i<=totLevels;i++){
                 int version = Greenfoot.getRandomNumber(totVersions);
-                copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + "txt", new File(folderDir + "lvl" + Integer.toString(i) + "txt"));
+                copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
             }   
         }    
 
@@ -89,7 +89,7 @@ public class GameWorld extends World
         if(true) lvlComplete = true;
 
         //get level somehow
-        curLevel = 1;
+        curLevel = 3;
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
     }    
@@ -120,7 +120,7 @@ public class GameWorld extends World
         //checks if level is complete
         if(getObjects(Enemy.class).size()==0) lvlComplete = true;
     }
-    
+
     /**
      * keyboardInput - checks for keyboard input
      */
@@ -130,10 +130,10 @@ public class GameWorld extends World
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
-            Greenfoot.setWorld(new PauseWorld("pause",this));
+            Greenfoot.setWorld(new PauseWorld("store",this));
         }    
     }
-    
+
     //game specific events
     /**
      * gameOver - checks if player is dead and ends the game, called by player class
@@ -141,7 +141,7 @@ public class GameWorld extends World
     public void gameOver(){
         //game over animation
     }
-    
+
     /**
      * closeWorld - closes the current world
      */
@@ -204,46 +204,52 @@ public class GameWorld extends World
         while(true){
             try{
                 String actor = s.nextLine();
-                int secondInd = Integer.parseInt(s.nextLine());
                 int firstInd = Integer.parseInt(s.nextLine());
-                int xcoord = convertX(secondInd);
-                int ycoord = convertY(firstInd);
+                int secondInd = Integer.parseInt(s.nextLine());
+                int xcoord = convert(firstInd);
+                int ycoord = convert(secondInd);
                 boolean isEnemy = false;
-                if(arr[firstInd][secondInd]!=null){
-                    Actor a = null;
-                    if(actor.indexOf("Arrows")==0){
-                        a = new Arrows();
-                    }    
-                    else if(actor.indexOf("Fire")==0){
-                        a = new Fire(firstInd, secondInd);
-                    }    
-                    else if(actor.indexOf("Spikes")==0){
-                        a = new Spikes(firstInd, secondInd);
-                    }  
-                    else if(actor.indexOf("Walls")==0){
-                        a = new Walls();
-                    } 
-                    else if(actor.indexOf("RifleEnemy")==0){
-                        a = new RifleEnemy();
-                        isEnemy = true;
-                    }
-                    else if(actor.indexOf("ShotgunEnemy")==0){
-                        a = new ShotgunEnemy();
-                        isEnemy = true;
-                    } 
-                    else if(actor.indexOf("RocketEnemy")==0){
-                        a = new RocketEnemy();
-                        isEnemy = true;
-                    }
-                    else{
-                        System.out.println("Invalid actor");
-                    }   
+                try{
+                    if(arr[firstInd][secondInd]==null){
+                        Actor a = null;
+                        if(actor.indexOf("Arrows")==0){
+                            a = new Arrows();
+                        }    
+                        else if(actor.indexOf("Fire")==0){
+                            a = new Fire(firstInd, secondInd);
+                        }    
+                        else if(actor.indexOf("Spikes")==0){
+                            a = new Spikes(firstInd, secondInd);
+                        }  
+                        else if(actor.indexOf("Walls")==0){
+                            a = new Walls();
+                        } 
+                        else if(actor.indexOf("RifleEnemy")==0){
+                            a = new RifleEnemy();
+                            isEnemy = true;
+                        }
+                        else if(actor.indexOf("ShotgunEnemy")==0){
+                            a = new ShotgunEnemy();
+                            isEnemy = true;
+                        } 
+                        else if(actor.indexOf("RocketEnemy")==0){
+                            a = new RocketEnemy();
+                            isEnemy = true;
+                        }
+                        else{
+                            System.out.println("Invalid actor");
+                        }   
 
-                    if(a!=null && !(lvlComplete && isEnemy)){
-                        addObject(a, xcoord, ycoord);
-                        arr[firstInd][secondInd] = a;
-                    }    
+                        if(a!=null && !(lvlComplete && isEnemy)){
+                            addObject(a, xcoord, ycoord);
+                            arr[firstInd][secondInd] = a;
+                        }
+                    }
                 }
+                catch(Exception e){
+                    System.out.println(firstInd + " " + secondInd);
+                }    
+
             }    
             catch(NoSuchElementException e){
                 break;
@@ -258,18 +264,8 @@ public class GameWorld extends World
      * param secondIndex            second index of 2D to be converted
      * @return int                  greenfoot x value
      */
-    public int convertX(int secondIndex){
-        return XOffset + secondIndex*tileSize;
-    }    
-
-    /**
-     * convertY - takes the index value and converts to greenfoot Y value
-     * 
-     * @param firstIndex            first index of 2D aray to be converted
-     * @return int                  greenfoot y value
-     */
-    public int convertY(int firstIndex){
-        return YOffset + firstIndex*tileSize;
+    public int convert(int index){
+        return tileOffset + index*tileSize;
     }    
 
     /**
@@ -287,4 +283,86 @@ public class GameWorld extends World
             return true;
         }    
     }   
+
+    public void createTextFiles(){
+        FileWriter fw = null;
+        int[] obstacles = {0,2,5,10,20,30};
+        String[] obstaclesNames = {"Walls", "Arrows", "Fire", "Spikes"};
+        boolean curarr[][] = new boolean[30][20];
+        for(int i=1;i<=totLevels;i++){
+            for(int j=0;j<totVersions;j++){
+                File worldFile = new File(sourceDir + File.separator + "lvl" + Integer.toString(i) + Integer.toString(j) +".txt");
+                try{
+                    fw = new FileWriter(worldFile);
+                    //Walls
+                    for(int x=0;x<30;x++){
+                        fw.write("Walls\n" + x + "\n" + 0 + "\n");
+                        fw.write("Walls\n" + x + "\n" + 19 + "\n");
+                        curarr[x][0] = true; curarr[x][19] = true; 
+                    }
+                    for(int y=1;y<19;y++){
+                        fw.write("Walls\n" + 0 + "\n" + y + "\n");
+                        fw.write("Walls\n" + 29 + "\n" + y + "\n");
+                        curarr[0][y] = true; curarr[29][y] = true;
+                    }    
+
+                    //Obstacles (not passage)
+                    for(String actor: obstaclesNames){
+                        //walls
+                        if(actor.equals("Walls")){
+                            for(int k=0;k<Greenfoot.getRandomNumber(5);k++){
+                                while(true){
+                                    boolean works = true;
+                                    int x = Greenfoot.getRandomNumber(30);
+                                    int y = Greenfoot.getRandomNumber(20);
+                                    int xSize = Greenfoot.getRandomNumber(5);
+                                    int ySize = Greenfoot.getRandomNumber(5);
+                                    try{
+                                        for(int X=x; X<x+xSize; X++){
+                                            for(int Y=y; Y<y+ySize; Y++){
+                                                if(curarr[X][Y] || X==1 || X==28 || Y==1 || Y==18){
+                                                    works=false;
+                                                }    
+                                            }   
+                                        }    
+                                    }
+                                    catch(IndexOutOfBoundsException e){
+                                        works = false;
+                                    }
+
+                                    if(works){
+                                        for(int X=x; X<x+xSize; X++){
+                                            for(int Y=y; Y<y+ySize; Y++){
+                                                fw.write(actor + "\n" + X + "\n" + Y + "\n");
+                                                curarr[X][Y] = true;
+                                            }   
+                                        }
+                                        break;
+                                    }    
+                                }
+                            }    
+                            continue;
+                        }    
+                        for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i]-obstacles[i-1])+obstacles[i-1];k++){
+                            while(true){
+                                int x = Greenfoot.getRandomNumber(30);
+                                int y = Greenfoot.getRandomNumber(20);
+                                if(!curarr[x][y]){
+                                    fw.write(actor + "\n" + x + "\n" + y + "\n");
+                                    break;
+                                }   
+                            }
+                        }
+                    }
+                    
+                    //Passage
+                    fw.close();
+                }
+                catch(IOException e){
+                    System.out.println("File Not Found");
+                }    
+            }
+        }  
+        System.out.println("done");
+    }    
 }

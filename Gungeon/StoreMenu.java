@@ -100,7 +100,8 @@ public class StoreMenu extends Menu
 
     protected void checkButtonClicks(){
         PauseWorld world = (PauseWorld) getWorld();
-        if(Greenfoot.mouseClicked(closeStore)){
+        String key = Greenfoot.getKey();
+        if(Greenfoot.mouseClicked(closeStore) || "escape".equals(key) || "z".equals(key)){
             world.closeWorld();
         }
         else if(Greenfoot.mouseClicked(equipButton) && equipButton.getImage().getTransparency()!=0){

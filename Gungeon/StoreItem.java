@@ -43,7 +43,7 @@ public class StoreItem extends Actor
     }    
 
     public void addedToWorld(World w){
-        GameWorld world = (GameWorld) w;
+        PauseWorld world = (PauseWorld) w;
         world.addObject(nameLabel,this.getX(),this.getY()+itemSize/2+10);
     }
 
@@ -60,7 +60,7 @@ public class StoreItem extends Actor
     }    
 
     public void remove(){
-        GameWorld world = (GameWorld) getWorld();
+        PauseWorld world = (PauseWorld) getWorld();
         world.removeObject(nameLabel);
         world.removeObject(this);
     } 

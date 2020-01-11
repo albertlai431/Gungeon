@@ -44,7 +44,7 @@ public abstract class Obstacles extends Actor
                 if(!world.isWall(newFirstInd, newSecondInd)) break;
             }
             
-            a.setLocation(world.convertX(secondInd),world.convertY(firstInd));
+            a.setLocation(world.convert(firstInd),world.convert(secondInd));
         }    
     }    
 }
