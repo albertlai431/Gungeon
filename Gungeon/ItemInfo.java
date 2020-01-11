@@ -21,7 +21,7 @@ public class ItemInfo extends Actor
      * @param currentAmmo           The amount of bullets in gun's magazine  
      */
     public ItemInfo(int currentGun, int totalAmmo, int currentAmmo){
-        TitleScreen world = (TitleScreen) getWorld();
+        GameWorld world = (GameWorld) getWorld();
         myImg= new GreenfootImage(274,79);
         myImg.setColor(borderColor);
         myImg.fill();
@@ -67,8 +67,7 @@ public class ItemInfo extends Actor
         }
     }   
     private void updateAmmoLabel(){
-        //GameWorld world = (GameWorld) getWorld();
-        TitleScreen world = (TitleScreen) getWorld();   
+        GameWorld world = (GameWorld) getWorld(); 
         if(currentGun == 0) ammoLabel = new Label(Integer.toString(currentAmmo)+"/infinite",16,true);           
         else ammoLabel = new Label(Integer.toString(currentAmmo)+"/"+Integer.toString(totalAmmo),16,true);
         if(getWorld()!=null){
