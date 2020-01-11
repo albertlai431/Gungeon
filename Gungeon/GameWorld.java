@@ -15,7 +15,8 @@ import java.io.IOException;
  * 1. Make data work (GameWorld, PlayerData, WorldData, file directory)
  * 2. Make the actual text files 
  * 3. Switch world for pause menu (screenshot?)
- * 4. Implement images
+ * 4. Implement images + fix walls
+ * 5. Fix Ammunition and merge Clarence + Star's branches
  * 
  * @author Albert Lai
  * @version January 2020
@@ -28,13 +29,6 @@ public class GameWorld extends World
     private PlayerData playerData;
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
-    private Menu menu;
-    private enum State{
-        PLAYING,
-        PAUSE,
-        STORE
-    }    
-    private State state;
 
     public static final int height = 640;
     public static final int width = 960;
@@ -43,7 +37,6 @@ public class GameWorld extends World
     public static final int tileSize = 32;
     private int curLevel;
     private static final int tileOffset = 16;
-    private boolean isPaused = false;
     private boolean lvlComplete = false;
 
     /**
@@ -54,7 +47,6 @@ public class GameWorld extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(width, height, 1,false); 
-        state = State.PLAYING;
         arr = new Actor [width/tileSize][height/tileSize];
         StoreMenu.createImages();
     }
@@ -86,7 +78,7 @@ public class GameWorld extends World
         player = playerData.createPlayer();
 
         //check if player is complete this level
-        if(true) lvlComplete = true;
+        if(true) lvlComplete = false;
 
         //get level somehow
         curLevel = 3;
@@ -236,10 +228,14 @@ public class GameWorld extends World
                             a = new RocketEnemy();
                             isEnemy = true;
                         }
+                        else if(actor.indexOf("Boss")==0){
+                            a = new Boss();
+                            isEnemy = true;
+                        }
                         else{
                             System.out.println("Invalid actor");
                         }   
-
+                        
                         if(a!=null && !(lvlComplete && isEnemy)){
                             addObject(a, xcoord, ycoord);
                             arr[firstInd][secondInd] = a;
@@ -259,13 +255,19 @@ public class GameWorld extends World
 
     //helper classes
     /**
-     * convertX - takes the index value and converts to greenfoot X value
+     * convert - takes the index value and converts to greenfoot X value
      * 
      * param secondIndex            second index of 2D to be converted
      * @return int                  greenfoot x value
      */
     public int convert(int index){
         return tileOffset + index*tileSize;
+    }    
+    
+    public int convert(int index, boolean isWall){
+        if(index == 0) return 28;
+        else if(index==29 || index==19) return index*tileSize-28;
+        else return convert(index);
     }    
 
     /**
@@ -287,23 +289,35 @@ public class GameWorld extends World
     public void createTextFiles(){
         FileWriter fw = null;
         int[] obstacles = {0,2,5,10,20,30};
+        //ShotgunEnemy, RifleEnemy, RocketEnemy, Boss
+        int[][] enemies = {{4,6,8,6,5},{2,4,6,4,3},{0,1,2,5,3}};
         String[] obstaclesNames = {"Walls", "Arrows", "Fire", "Spikes"};
-        boolean curarr[][] = new boolean[30][20];
+
         for(int i=1;i<=totLevels;i++){
             for(int j=0;j<totVersions;j++){
+                boolean curarr[][] = new boolean[30][20];
                 File worldFile = new File(sourceDir + File.separator + "lvl" + Integer.toString(i) + Integer.toString(j) +".txt");
                 try{
+                    int a = 0;
                     fw = new FileWriter(worldFile);
                     //Walls
                     for(int x=0;x<30;x++){
                         fw.write("Walls\n" + x + "\n" + 0 + "\n");
                         fw.write("Walls\n" + x + "\n" + 19 + "\n");
-                        curarr[x][0] = true; curarr[x][19] = true; 
+                        curarr[x][0] = true; curarr[x][19] = true; a+=2;
                     }
                     for(int y=1;y<19;y++){
                         fw.write("Walls\n" + 0 + "\n" + y + "\n");
                         fw.write("Walls\n" + 29 + "\n" + y + "\n");
-                        curarr[0][y] = true; curarr[29][y] = true;
+                        curarr[0][y] = true; curarr[29][y] = true; a+=2;
+                    }    
+                    
+                    //Door
+
+                    //Boss
+                    if(i==5){
+                        curarr[28][18]=true;
+                        fw.write("Boss\n" + 28 + "\n" + 18 + "\n"); a++;
                     }    
 
                     //Obstacles (not passage)
@@ -335,6 +349,7 @@ public class GameWorld extends World
                                             for(int Y=y; Y<y+ySize; Y++){
                                                 fw.write(actor + "\n" + X + "\n" + Y + "\n");
                                                 curarr[X][Y] = true;
+                                                a++;
                                             }   
                                         }
                                         break;
@@ -349,19 +364,39 @@ public class GameWorld extends World
                                 int y = Greenfoot.getRandomNumber(20);
                                 if(!curarr[x][y]){
                                     fw.write(actor + "\n" + x + "\n" + y + "\n");
+                                    curarr[x][y] = true;
+                                    a++;
                                     break;
                                 }   
                             }
                         }
                     }
-                    
-                    //Passage
+
+                    //Enemies (ShotgunEnemy, RifleEnemy, RocketEnemy, Boss)
+                    for(int k=0;k<3;k++){
+                        for(int l=0;l<enemies[0][i-1];l++){
+                            while(true){
+                                int x = Greenfoot.getRandomNumber(30);
+                                int y = Greenfoot.getRandomNumber(20);
+                                if(!curarr[x][y]){
+                                    curarr[x][y] = true;
+                                    a++;
+                                    if(k==0) fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
+                                    else if(k==1) fw.write("RifleEnemy\n" + x + "\n" + y + "\n");
+                                    else fw.write("RocketEnemy\n" + x + "\n" + y + "\n");
+                                    break;
+                                }   
+                            }
+                        }
+                    }
+
                     fw.close();
                 }
                 catch(IOException e){
                     System.out.println("File Not Found");
                 }    
             }
+            System.out.println(i);
         }  
         System.out.println("done");
     }    

@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.io.File;
 
 /**
  * Write a description of class Walls here.
@@ -8,16 +9,18 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Walls extends Obstacles
 {
+    private static final String path = "Walls" + File.separator;
+    private static final GreenfootImage [] imgs = {new GreenfootImage(path+"wallUp.png"),new GreenfootImage(path+"wallDown.png"),
+                                                   new GreenfootImage(path+"wallRight.png"),new GreenfootImage(path+"wallLeft.png")};
+
     public Walls(){
         super(0);
     }  
-    
+
     public void addedToWorld(World w){
-        /*
         GameWorld world = (GameWorld) w;
-        if(world.width-getX()<25) getImage().rotate(270);
-        else if(getX()<25) getImage().rotate(90);
-        else if(getY()<25) getImage().rotate(180);
-        */
+        if(world.width-getX()<25) setImage(imgs[2]);
+        else if(getX()<25) setImage(imgs[3]);
+        else if(world.height-getY()<25) setImage(imgs[1]);
     }    
 }
