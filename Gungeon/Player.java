@@ -16,8 +16,6 @@ public class Player extends Actor implements AnimationInterface
     private int animationCount = 0;
     private int frameRate = 7;
     private int imageNumber = 0;
-    private int XCoord;
-    private int YCoord;
     public Player()
     {
         //Sets images to given GreenfootImage arrays
@@ -57,31 +55,6 @@ public class Player extends Actor implements AnimationInterface
     {
         animationCount++;  
         move();
-        if(Greenfoot.getMouseInfo() != null)
-        {
-            XCoord = Greenfoot.getMouseInfo().getX();
-            YCoord = Greenfoot.getMouseInfo().getY();
-        }
-
-        int x = this.getX();
-        int y = this.getY();
-        
-        if(x-XCoord<0)
-        {
-            if(y-YCoord>x-XCoord && y-YCoord<-1*(x-XCoord)) animateMovementRight();
-        }
-        if(x-XCoord>0)
-        {
-            if(y-YCoord<x-XCoord && -1*(y-YCoord)<x-XCoord) animateMovementLeft();
-        }
-        if(y-YCoord<0)
-        {
-            if(x-XCoord>y-YCoord && x-XCoord<-1*(y-YCoord)) animateMovementDown();
-        }
-        if(y-YCoord>0)
-        {
-            if(x-XCoord<y-YCoord && -1*(x-XCoord)<y-YCoord) animateMovementUp();
-        }
     }   
     
     public void move()
@@ -151,6 +124,4 @@ public class Player extends Actor implements AnimationInterface
             setImage(leftMvt[imageNumber]);
         }
     }
-    
-    
 }
