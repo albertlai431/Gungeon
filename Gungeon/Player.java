@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
+import java.util.Stack;
 /**
 * Write a description of class Player here.
 *a
@@ -25,10 +26,16 @@ public class Player extends Actor implements AnimationInterface
     private int YCoord;
     private boolean hasShotgun = false;
     private boolean hasRifle = false;
+    Stack<String> health = new Stack<String>();
     ArrayList<String> listOfGuns = new ArrayList<String>();
+    ResourceBarManager(3, 20, 20, 20, 20, 20, 
     public Player()
     {
         listOfGuns.add("pistol");
+        for(int i = 0; i < 6; i++)
+        {
+            health.push("Heart");
+        }
         //Sets images to given GreenfootImage arrays
         for(int i=0; i<rightMvt.length; i++)
         {
@@ -162,6 +169,11 @@ public class Player extends Actor implements AnimationInterface
             listOfGuns.add("rifle");
             hasRifle = true;
         }
+    }
+    
+    public void loseOneHeart()
+    {
+        health.pop();
     }
     
     public void animateMovementUp()
