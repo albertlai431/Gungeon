@@ -9,7 +9,7 @@ import java.util.*;
  * @author Star Xie, Albert Lai
 * @version November 2019
 */
-public class bulletBullet extends Ammunition
+public class PistolBullet extends Ammunition
 {
     //declare greenfoot sounds
     protected GreenfootSound hit = new GreenfootSound("BulletHit.wav");
@@ -22,7 +22,7 @@ public class bulletBullet extends Ammunition
      * @param actor             the specific object that is being targetted
      * @param damage            specifies the damage taken for each hit
      */
-    public bulletBullet(Actor actor, int damage)
+    public PistolBullet(Actor actor, int damage)
     {
         super(actor,damage);
         setImage(PistolBullet);
