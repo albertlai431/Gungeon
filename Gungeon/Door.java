@@ -20,6 +20,18 @@ public class Door extends Obstacles
         else setImage(img[0]);
     }   
     
+    public void act(){
+        if((getOneObjectAtOffset(0, -16, Player.class)!=null || getOneObjectAtOffset(0, 16, Player.class)!=null) /*&& isComplete*/){
+            GameWorld world = (GameWorld) getWorld();
+            if(curLevel == 0){
+                world.closeWorld();
+                Greenfoot.setWorld(new TitleScreen());
+            }    
+            else if(curLevel == 6) world.gameOver(true);
+            else world.switchWorld(curLevel);
+        }    
+    }    
+    
     public void completeLevel(){
         setImage(img[1]);
         isComplete = true;

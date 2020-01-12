@@ -13,6 +13,10 @@ import java.io.IOException;
  * 
  * TODO:
  * - Player data
+ * - Wall and door detection with player and enemies
+ * - Integrate player with store
+ * - Game Over and Victory animation 
+ * - Leaderboard?? 
  * 
  * NICE TO HAVE
  * - Screenshot 
@@ -27,18 +31,20 @@ public class GameWorld extends World
     private Player player;
     private PlayerData playerData;
     private Door door;
-    private ItemInfo itemInfo = new ItemInfo(0,-1,5);
+    private ItemInfo itemInfo;
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
-
+    private Button returnToTitleScreen = new Button("Return to Title Screen", 20);
     public static final int height = 640;
     public static final int width = 960;
     private static final int totLevels = 5;
     private static final int totVersions = 5;
     public static final int tileSize = 32;
+    private int fromLevel = -1;
     private int curLevel;
     private static final int tileOffset = 16;
     private boolean lvlComplete = false;
+    private boolean gameOver = false;
 
     /**
      * Dummy constructor to make sure that things work
@@ -50,7 +56,6 @@ public class GameWorld extends World
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
         StoreMenu.createImages();
-        addObject(itemInfo,824,601);
         setPaintOrder(Label.class,ItemInfo.class,Player.class);
     }
 
@@ -87,6 +92,9 @@ public class GameWorld extends World
         curLevel = 1;
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
+
+        itemInfo = new ItemInfo(0,-1,5);
+        addObject(itemInfo,824,601);
     }    
 
     /**
@@ -96,13 +104,18 @@ public class GameWorld extends World
      * @param player            player transferred from the other world
      * @param playerData        playerData transferred from the other world
      */
-    public GameWorld(int curLevel,Player player, PlayerData playerData){
+    public GameWorld(int curLevel,int fromLevel,Player player, PlayerData playerData){
         this();
         this.curLevel = curLevel;
+        this.fromLevel = fromLevel;
         this.player = player;
         this.playerData = playerData; 
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
+
+        //get player's current gun
+        itemInfo = new ItemInfo(0,-1,5);
+        addObject(itemInfo,824,601);
     }    
 
     /**
@@ -110,13 +123,17 @@ public class GameWorld extends World
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act(){
-        keyboardInput();
-
-        //checks if level is complete
-        if(getObjects(Enemy.class).size()==0){
-            System.out.println("ok");
-            door.completeLevel();
-        }    
+        if(gameOver){
+            if(Greenfoot.mouseClicked(returnToTitleScreen)) Greenfoot.setWorld(new TitleScreen());
+        }
+        else{
+            keyboardInput();
+            //checks if level is complete
+            if(fromLevel<curLevel && getObjects(Enemy.class).size()==0){
+                door.completeLevel();
+                //set player level
+            }    
+        }
     }
 
     /**
@@ -136,8 +153,15 @@ public class GameWorld extends World
     /**
      * gameOver - checks if player is dead and ends the game, called by player class
      */
-    public void gameOver(){
+    public void gameOver(boolean win){
         //game over animation
+        if(win){} //victory animation
+        else{} //game over animation
+        
+        //save to leaderboard?
+
+        gameOver = true;
+        addObject(returnToTitleScreen,width/2,height-100);
     }
 
     /**
@@ -154,7 +178,7 @@ public class GameWorld extends World
      */
     public void switchWorld(int newLevel){
         closeWorld();
-        Greenfoot.setWorld(new GameWorld(newLevel, player, playerData));
+        Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player, playerData));
     }
 
     //methods dealing with text files
@@ -221,13 +245,18 @@ public class GameWorld extends World
                         }  
                         else if(actor.indexOf("Walls")==0){
                             a = new Walls();
-                            
+
                         } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
                             a = new Door(doorLevel,/*cur player level*/curLevel>=doorLevel);
-                            if(secondInd==19) door = (Door) a;
-                            else addObject(player,convert(firstInd),convert(secondInd+1));
+                            if(fromLevel>curLevel){
+                                if(secondInd==19) addObject(player,convert(firstInd),convert(secondInd-2));
+                            }    
+                            else{
+                                if(secondInd==19) door = (Door) a;
+                                else addObject(player,convert(firstInd),convert(secondInd+2));
+                            }
                         } 
                         else if(actor.indexOf("RifleEnemy")==0){
                             a = new RifleEnemy();
@@ -334,25 +363,25 @@ public class GameWorld extends World
 
                     //Boss
                     if(i==5){
-                        curarr[28][18]=true;
-                        fw.write("Boss\n" + 28 + "\n" + 18 + "\n"); a++;
+                        curarr[27][16]=true;
+                        fw.write("Boss\n" + 27 + "\n" + 16 + "\n"); a++;
                     }    
 
                     //Obstacles (not passage)
                     for(String actor: obstaclesNames){
                         //walls
                         if(actor.equals("Walls")){
-                            for(int k=0;k<Greenfoot.getRandomNumber(5);k++){
+                            for(int k=0;k<6-i+Greenfoot.getRandomNumber(2);k++){
                                 while(true){
                                     boolean works = true;
                                     int x = Greenfoot.getRandomNumber(30);
                                     int y = Greenfoot.getRandomNumber(20);
-                                    int xSize = Greenfoot.getRandomNumber(5);
-                                    int ySize = Greenfoot.getRandomNumber(5);
+                                    int xSize = 3 + Greenfoot.getRandomNumber(5);
+                                    int ySize = 3 + Greenfoot.getRandomNumber(5);
                                     try{
                                         for(int X=x; X<x+xSize; X++){
                                             for(int Y=y; Y<y+ySize; Y++){
-                                                if(curarr[X][Y] || X==1 || X==28 || Y==1 || Y==18){
+                                                if(curarr[X][Y] || X<=2 || X>=27 || Y<=2 || Y>=17){
                                                     works=false;
                                                 }    
                                             }   
