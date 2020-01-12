@@ -12,13 +12,14 @@ import java.io.IOException;
  * game, 2D array of actors, and game data. 
  * 
  * TODO:
- * - Arrows animation
- * - Player data 
+ * - Fix Ammunition and merge Clarence's branches
+ * - Player data
  * 
  * LATER:
- * - Switch world for pause menu (screenshot?)
- * - Implement images + fix walls
- * - Fix Ammunition and merge Clarence's branches
+ * - Fix walls
+ * 
+ * NICE TO HAVE
+ * - Screenshot 
  * 
  * @author Albert Lai
  * @version January 2020
@@ -63,7 +64,7 @@ public class GameWorld extends World
      * @param boolean   true if loading from saved game, false if not
      * 
      */
-    public GameWorld(boolean loadFromSavedGame){
+    public GameWorld(boolean newGame){
         this();
         File playerFile = new File(folderDir + "Player.txt");
         if(!playerFile.isFile()){
@@ -72,7 +73,7 @@ public class GameWorld extends World
         }    
 
         //clear data and load from original text files
-        if(!loadFromSavedGame){
+        if(newGame){
             copyFile(sourceDir + "Player.txt", playerFile);
             for(int i=1;i<=totLevels;i++){
                 int version = Greenfoot.getRandomNumber(totVersions);
@@ -257,8 +258,8 @@ public class GameWorld extends World
                         }
                     }
                 }
-                catch(Exception e){
-                    System.out.println(firstInd + " " + secondInd);
+                catch(ArrayIndexOutOfBoundsException e){
+                    System.out.println("a " + firstInd + " " + secondInd);
                 }    
 
             }    

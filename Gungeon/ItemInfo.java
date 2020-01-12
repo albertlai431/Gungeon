@@ -30,9 +30,9 @@ public class ItemInfo extends Actor
         myImg.setColor(borderColor);
         myImg.drawRect(0,0,110,79);
         setImage(myImg);
-        guns[0] = new GreenfootImage("Pistol Gun.png");
-        guns[1] = new GreenfootImage("Rifle Gun.png");
-        guns[2] = new GreenfootImage("Shotgun Gun.png");
+        guns[0] = new GreenfootImage("Pistol.png");
+        guns[1] = new GreenfootImage("Rifle.png");
+        guns[2] = new GreenfootImage("Shotgun.png");
         this.currentGun = currentGun;
         this.totalAmmo = totalAmmo;
         this.currentAmmo = currentAmmo;

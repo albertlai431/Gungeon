@@ -8,15 +8,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Spikes extends Obstacles
 {
-    private int firstInd;
-    private int secondInd;
-    
+
     public Spikes(int firstInd, int secondInd){
-        super(100);
-        this.firstInd = firstInd;
-        this.secondInd = secondInd;
+        super(100,firstInd,secondInd);
     } 
-    
+
     /**
      * Act - do whatever the Spikes wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -29,11 +25,9 @@ public class Spikes extends Obstacles
             damage();
         }  
     } 
-    
+
     protected void damage(){
-        super.damage();
-        setNewLocation(player, firstInd, secondInd);
-        for(Enemy enemy: enemiesArrayList) setNewLocation(enemy, firstInd, secondInd);
+        super.damage(true);
     }
-    
+
 }

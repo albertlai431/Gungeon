@@ -14,27 +14,38 @@ public abstract class Obstacles extends Actor
     protected int actMod = 30;
     //damages are arbitrary for now
     protected int damage;
-
-    protected Player player;
-    protected ArrayList <Enemy> enemiesArrayList;
+    private int firstInd;
+    private int secondInd;
 
     public Obstacles(int damage){
         this.damage = damage;
     }    
+    
+    public Obstacles(int damage, int firstInd, int secondInd){
+        this(damage);
+        this.firstInd = firstInd;
+        this.secondInd = secondInd;
+    }   
 
-    protected void damage(){
-        player = (Player) getOneIntersectingObject(Player.class);
+    protected boolean damage(boolean changeLoc){
+        boolean hit = false;
+        Player player = (Player) getOneIntersectingObject(Player.class);
         if(player!=null){
             //player.loseHeart();
+            if(changeLoc) setNewLocation(player);
+            hit=true;
         }    
 
-        enemiesArrayList = (ArrayList) getIntersectingObjects(Enemy.class);
+        ArrayList <Enemy> enemiesArrayList = (ArrayList) getIntersectingObjects(Enemy.class);
         for(Enemy enemy: enemiesArrayList){
             //enemy.getDamaged();
-        }    
+            if(changeLoc) setNewLocation(enemy);
+            hit=true;
+        }
+        return hit;
     }
 
-    protected void setNewLocation(Actor a, int firstInd, int secondInd){
+    protected void setNewLocation(Actor a){
         if(a!=null){
             GameWorld world = (GameWorld) getWorld();
             int newFirstInd, newSecondInd;

@@ -10,7 +10,7 @@ public class Cursor extends Actor
 {
     private int XCoord;
     private int YCoord;
-    public CursorMouse()
+    public Cursor()
     {
         GreenfootImage image = new GreenfootImage("crusor.png");
         setImage(image);

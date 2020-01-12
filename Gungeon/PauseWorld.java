@@ -19,6 +19,7 @@ public class PauseWorld extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(960, 640, 1); 
+        setBackground("fullTiledFloor.png");
         if(menuTypes=="pause") addObject(new PauseMenu(),480,320);
         else addObject(new StoreMenu(),480,320);
         this.gameWorld = gameWorld;
