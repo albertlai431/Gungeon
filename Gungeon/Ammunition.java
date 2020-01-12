@@ -12,7 +12,7 @@ public abstract class Ammunition extends Actor
     protected int damage;
     protected int x;
     protected int y;
-    protected Actor target;
+    protected int speed;
     protected int ammo = 0;
     protected GreenfootSound hit = new GreenfootSound("BulletHit.wav");
     protected GreenfootSound shoot = new GreenfootSound("BulletShot.wav");
@@ -21,11 +21,12 @@ public abstract class Ammunition extends Actor
      *
      * @param damage            specifies the damage taken for each hit
      */
-    public Ammunition (int xCoord, int yCoord, int damage)
+    public Ammunition (int xCoord, int yCoord, int damage, int speed)
     {
         x = xCoord;
         y = yCoord;
         this.damage=damage;
+        this.speed=speed;
     }   
  
     /**
@@ -43,6 +44,7 @@ public abstract class Ammunition extends Actor
     {
         //Checks and deals damage to intersecting classes
         checkAndHit();
+        move(speed);
         //Makes sure that the World is not returning a null value
         if(getWorld()!=null){
             //Removes object at world's edge
