@@ -1,216 +1,148 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-import java.util.ArrayList;
 import java.util.Stack;
 /**
-* Write a description of class Player here.
-*a
- * @author (your name)
+ * Write a description of class ResourceBar here.
+ * 
+ * @author (your name) 
  * @version (a version number or a date)
-*/
-public class Player extends Actor implements AnimationInterface
+ */
+public class ResourceBarManager extends Actor
 {
-    GreenfootImage[] rightMvt = new GreenfootImage[5];
-    GreenfootImage[] leftMvt = new GreenfootImage[5];
-    GreenfootImage[] upMvt = new GreenfootImage[8];
-    GreenfootImage[] downMvt = new GreenfootImage[8];
-    private int scaleNumber = 100;
-    private int animationCount = 0;
-    private int frameRate = 7;
-    private int imageNumber = 0;
-    private int hearts = 0;
-    private int weapon = 0; // 0 = pistol, 1 = shotgun, 2 = rifle
-    private int totalAmmoShotgun = 0;
-    private int totalAmmoRifle = 0;
-    private int currentHealth = 6;
-    private int XCoord;
-    private int YCoord;
-    private boolean hasShotgun = false;
-    private boolean hasRifle = false;
-    Stack<String> health = new Stack<String>();
-    ArrayList<Integer> listOfGuns = new ArrayList<Integer>();
-    ResourceBarManager(3, 20, 20, 20, 20, 20, halfHeart.png, fullHeart.png, GameWorld);
-    public Player()
+    private boolean isHealthBar;
+    private int interval;
+    private int currentX;
+    private int currentY;
+    private int maxResource;
+    private int currentResource;
+    private Stack <Resource> resourceStack;
+    private GreenfootImage firstImage;
+    private GreenfootImage secondImage;
+    public ResourceBarManager(int max, int interval, int x, int y, GreenfootImage resourceImage, World world)
     {
-        listOfGuns.add("pistol");
-        for(int i = 0; i < 6; i++)
+        resourceStack = new Stack <Resource>();
+        this.firstImage = new GreenfootImage(resourceImage);
+        maxResource = max;
+        currentResource = max;
+        this.interval = interval;
+        currentX = x;
+        currentY = y;
+        for(int i = 0; i < max; i++)
         {
-            health.push(1);
+            resourceStack.push(new Resource(resourceImage));
         }
-        //Sets images to given GreenfootImage arrays
-        for(int i=0; i<rightMvt.length; i++)
-        {
-            rightMvt[i] = new GreenfootImage("pilotRight"+i+".png");
-            leftMvt[i] = new GreenfootImage("pilotRight"+i+".png");
-        }
-        for(int i=0; i<leftMvt.length; i++)
-        {
-            leftMvt[i].mirrorHorizontally();
-        }
-        for(int i=0; i<upMvt.length; i++)
-        {
-            upMvt[i] = new GreenfootImage("pilotUp"+i+".png");
-            downMvt[i] = new GreenfootImage("pilotDown"+i+".png");
-        }
-        
-        for(int i=0; i<rightMvt.length;i++)
-        {
-            rightMvt[i].scale(rightMvt[i].getWidth()*scaleNumber/100,rightMvt[i].getHeight()*scaleNumber/100);
-            leftMvt[i].scale(leftMvt[i].getWidth()*scaleNumber/100,leftMvt[i].getHeight()*scaleNumber/100);
-        }
-        for(int i=0; i<upMvt.length;i++)
-        {
-            upMvt[i].scale(upMvt[i].getWidth()*scaleNumber/100,upMvt[i].getHeight()*scaleNumber/100);
-            downMvt[i].scale(downMvt[i].getWidth()*scaleNumber/100,downMvt[i].getHeight()*scaleNumber/100);
-        }
-        
-        setImage(rightMvt[0]);
+        isHealthBar = false;
+        addBarToWorld(world);
     }
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act()
-    {
-        animationCount++;  
-        move();
-        changeGun();
-        if(Greenfoot.getMouseInfo() != null)
-        {
-            XCoord = Greenfoot.getMouseInfo().getX();
-            YCoord = Greenfoot.getMouseInfo().getY();
-        }
 
-        int x = this.getX();
-        int y = this.getY();
-        
-        if(x-XCoord<0)
-        {
-            if(y-YCoord>x-XCoord && y-YCoord<-1*(x-XCoord)) animateMovementRight();
-        }
-        if(x-XCoord>0)
-        {
-            if(y-YCoord<x-XCoord && -1*(y-YCoord)<x-XCoord) animateMovementLeft();
-        }
-        if(y-YCoord<0)
-        {
-            if(x-XCoord>y-YCoord && x-XCoord<-1*(y-YCoord)) animateMovementDown();
-        }
-        if(y-YCoord>0)
-        {
-            if(x-XCoord<y-YCoord && -1*(x-XCoord)<y-YCoord) animateMovementUp();
-        }
-    }   
-    
-    public void move()
+    public ResourceBarManager(int max, int interval, int x, int y, GreenfootImage firstImage, GreenfootImage secondImage, World world)
     {
-        if(Greenfoot.isKeyDown("a"))//runs if "a" is pressed and the player is past the starting location
-            {
-                //animateMovementLeft();
-                if(Greenfoot.isKeyDown("s")) setLocation(getX()-2, getY()+2);
-                else if(Greenfoot.isKeyDown("w")) setLocation(getX()-2, getY()-2);
-                else setLocation(getX()-2, getY());
+        resourceStack = new Stack <Resource>();
+        this.firstImage = new GreenfootImage(firstImage);
+        this.secondImage = new GreenfootImage(secondImage);
+        maxResource = max;
+        currentResource = max * 2;
+        this.interval = interval;
+        currentX = x;
+        currentY = y;        
+        for(int i = 0; i < max; i++)
+        {
+            resourceStack.push(new Resource(firstImage, secondImage));
+        }
+        isHealthBar = true;
+        addBarToWorld(world);
+    }
+
+    private void addBarToWorld(World world)
+    {
+        if(isHealthBar)
+        {
+            for(Resource i: resourceStack)
+            {   
+                world.addObject(i, currentX, currentY);
+                currentX += interval;
             }
-            else if(Greenfoot.isKeyDown("d"))//runs if "d" is pressed
+        }
+        else
+        {
+            for(Resource i: resourceStack)
             {
-                //animateMovementRight();
-                if(Greenfoot.isKeyDown("s")) setLocation(getX()+2, getY()+2);
-                else if(Greenfoot.isKeyDown("w")) setLocation(getX()+2, getY()-2);
-                else setLocation(getX()+2, getY());
+                world.addObject(i, currentX, currentY);
+                currentY += interval;
             }
-            else if(Greenfoot.isKeyDown("w"))//runs if "d" is pressed
+        }
+    }
+
+    public boolean reduceHealth(int hits, World world)
+    {
+        if(isHealthBar)
+        {
+            for(int i = 0; i < hits; i ++)
             {
-                //animateMovementUp();
-                if(Greenfoot.isKeyDown("a")) setLocation(getX()-2, getY()-2);
-                else if(Greenfoot.isKeyDown("d")) setLocation(getX()+2, getY()-2);
-                else setLocation(getX(), getY()-2);
+                if(resourceStack.peek().getStatus() == 2)
+                {
+                    resourceStack.peek().switchImage();
+                }
+                else
+                {
+                    world.removeObject(resourceStack.pop());
+                }
             }
-            else if(Greenfoot.isKeyDown("s"))//runs if "d" is pressed
+            return true;
+        }
+        return false;
+    }
+
+    public boolean reduceAmmo(World world)
+    {
+        if(isHealthBar == false)
+        {
+            world.removeObject(resourceStack.pop());
+            currentResource--;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean refillHealth(int Amount, World world)
+    {
+        if(isHealthBar)
+        {
+            for(int i = 0; i < Amount; i++)
             {
-                //animateMovementDown();
-                if(Greenfoot.isKeyDown("a")) setLocation(getX()-2, getY()+2);
-                else if(Greenfoot.isKeyDown("d")) setLocation(getX()+2, getY()+2);
-                else setLocation(getX(), getY()+2);
+                if(resourceStack.peek().getStatus() == 1)
+                {
+                    resourceStack.peek().switchImage();
+                }
+                else
+                {
+                    currentX = resourceStack.peek().getX();
+                    resourceStack.push(new Resource(firstImage, secondImage));
+                    resourceStack.peek().switchImage();
+                    world.addObject(resourceStack.peek(), currentX + interval, currentY);            
+                }
             }
-    }
-    
-    public int currentAmmoShotgun()
-    {
-        return totalAmmoShotgun;
-    }
-    
-    public int currentAmmoRifle()
-    {
-        return totalAmmoRifle;
-    }
-    
-    public String getCurrrentGun()
-    {
-        String x = listOfGuns.get(0);
-        return x;
-    }
-    
-    public void changeGun()
-    {
-       if(Greenfoot.isKeyDown("e") && (listOfGuns.size() > 1))
-       {
-           String x = listOfGuns.get(0);
-           listOfGuns.remove(0);
-           listOfGuns.add(x);
-       }
-    }
-    
-    public void newGun(int n)
-    {
-        if((n == 1) && (hasShotgun = false)){
-            listOfGuns.add("shotgun");
-            hasShotgun = true;
+            for(Resource i: resourceStack)
+            {
+                currentResource += i.getStatus();
+            }
+            return true;
         }
-        else if ((n == 2) && (hasRifle = false)){
-            listOfGuns.add("rifle");
-            hasRifle = true;
-        }
+        return false;
     }
-    
-    public void loseOneHeart()
+
+    public boolean refillAmmo(World world)
     {
-        health.pop();
-    }
-    
-    public void animateMovementUp()
-    {
-        if(animationCount%frameRate == 0)
+        if(isHealthBar == false)
         {
-            imageNumber = (imageNumber + 1)% (upMvt.length);
-            setImage(upMvt[imageNumber]);
+            for(int i = 0; i < maxResource - currentResource; i++)
+            {
+                currentY = resourceStack.peek().getY();
+                resourceStack.push(new Resource(firstImage));
+                world.addObject(resourceStack.peek(), currentX, currentY + interval);
+            }
+            return true;
         }
+        currentResource = maxResource;
+        return false;
     }
-    
-    public void animateMovementDown()
-    {
-        if(animationCount%frameRate == 0)
-        {
-            imageNumber = (imageNumber + 1)% (downMvt.length);
-            setImage(downMvt[imageNumber]);
-        }
-    }
-    
-    public void animateMovementRight()
-    {
-        if(animationCount%frameRate == 0)
-        {
-            imageNumber = (imageNumber + 1)% (rightMvt.length);
-            setImage(rightMvt[imageNumber]);
-        }
-    }
-    
-    public void animateMovementLeft()
-    {
-        if(animationCount%frameRate == 0)
-        {
-            imageNumber = (imageNumber + 1)% (leftMvt.length);
-            setImage(leftMvt[imageNumber]);
-        }
-    }
-    
-    
 }
