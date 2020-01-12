@@ -20,10 +20,10 @@ public class StoreMenu extends Menu
     private Label powerupsLabel = new Label("Power Ups", 20, true);
     private Button equipButton = new Button("Equip", 18);
     private Button purchaseButton = new Button("Purchase", 18);
+    private Player player;
 
     private StoreItem lastItem = null;
     private String lastItemName = null;
-    private int money;
     private int lastItemCost;
     private static final String[] itemNames = {"Pistol Gun","Rifle Gun","Shotgun Gun","Rifle Bullet","Shotgun Bullet","Half-Heart Refill","Speed Boost"};
     private static final int[] xCoords = {250,350,450,250,350,250,350};
@@ -33,12 +33,11 @@ public class StoreMenu extends Menu
     private static boolean createdImages = false;
     private static GreenfootImage [] itemImages = new GreenfootImage [numItems];
 
-    public StoreMenu(){
+    public StoreMenu(Player player){
         storeMenuImg.setColor(Color.LIGHT_GRAY);
         storeMenuImg.fill();
         setImage(storeMenuImg);
-
-        //money = 
+        this.player = player;
     }    
     
     public static void createImages(){

@@ -5,7 +5,7 @@ Every 2 lines contains the name of the variable and the value.
 Format:
 curLevel 
 maxLevel
-health
-statPoints
+money
+hearts
 
 Inventory

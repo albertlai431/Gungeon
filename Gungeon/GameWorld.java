@@ -145,7 +145,7 @@ public class GameWorld extends World
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
-            Greenfoot.setWorld(new PauseWorld("store",this));
+            Greenfoot.setWorld(new PauseWorld("store",this,player));
         }    
     }
 
