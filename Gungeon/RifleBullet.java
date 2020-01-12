@@ -25,7 +25,7 @@ public class RifleBullet extends Ammunition
     public RifleBullet(Actor actor, int damage)
     {
         super(actor,damage);
-        setImage(RifleBullet);
+        //setImage(RifleBullet);
         hit.setVolume(50);
         shoot.setVolume(75);
     }
@@ -77,7 +77,7 @@ public class RifleBullet extends Ammunition
             //Deal damage and play sound
             hit.play();
             //Decreases the damage of the vehicle when hit
-            enemy.getDamaged(damage);
+            //enemy.getDamaged(damage);
             //Removes the bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
         }   

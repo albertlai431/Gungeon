@@ -16,6 +16,6 @@ public class Pistol extends Weapon
     }
     protected Ammunition createBullet()
     {
-        return new bulletBullet(bulletDamage,bulletSpeed);
+        return new PistolBullet(null,bulletDamage/*,bulletSpeed*/);
     }
 }

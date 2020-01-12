@@ -16,6 +16,6 @@ public class Rifle extends Weapon
     }
     protected Ammunition createBullet()
     {
-        return new RifleBullet(bulletDamage, bulletSpeed);
+        return new RifleBullet(null,bulletDamage/*,bulletSpeed*/);
     }
 }
