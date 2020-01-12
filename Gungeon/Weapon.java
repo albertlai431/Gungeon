@@ -19,10 +19,11 @@ public abstract class Weapon extends Actor
     private int magSize;
     private boolean reloading;
     private boolean firing;
-    private Player p = new Player();
     private long nextFiredTime = 0;
     private long bulletReadyTime;
     private long lastFiredTime=0;
+    protected int mouseX;
+    protected int mouseY;
     /**
      * Constructor - Initializes the variables for the weapon
      * 
@@ -112,7 +113,7 @@ public abstract class Weapon extends Actor
         }
     }    
     /**
-     * stopFiring - Sets firing to 0 and stops shooting bullets from the weapon
+     * stopFiring - Stops shooting bullets from the weapon
      */
     private void stopFiring()
     {
@@ -135,7 +136,6 @@ public abstract class Weapon extends Actor
                 {
                     this.startTime = 0;
                     reloading = false;
-                    getWorld().removeObject(p);
                     if(this.magazines>0)
                     {
                         this.magazines--;

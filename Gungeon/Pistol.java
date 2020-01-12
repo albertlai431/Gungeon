@@ -16,6 +16,8 @@ public class Pistol extends Weapon
     }
     protected Ammunition createBullet()
     {
-        return new PistolBullet(null,bulletDamage/*,bulletSpeed*/);
+        this.mouseX = Greenfoot.getMouseInfo().getX();
+        this.mouseY = Greenfoot.getMouseInfo().getY();
+        return new bulletBullet(mouseX, mouseY, bulletDamage,bulletSpeed);
     }
 }
