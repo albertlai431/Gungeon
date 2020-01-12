@@ -12,11 +12,7 @@ import java.io.IOException;
  * game, 2D array of actors, and game data. 
  * 
  * TODO:
- * - Fix Ammunition and merge Clarence's branches
  * - Player data
- * 
- * LATER:
- * - Fix walls
  * 
  * NICE TO HAVE
  * - Screenshot 
@@ -88,7 +84,7 @@ public class GameWorld extends World
         if(true) lvlComplete = false;
 
         //get level somehow
-        curLevel = 3;
+        curLevel = 1;
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
     }    
@@ -225,6 +221,7 @@ public class GameWorld extends World
                         }  
                         else if(actor.indexOf("Walls")==0){
                             a = new Walls();
+                            
                         } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
@@ -318,15 +315,15 @@ public class GameWorld extends World
                     fw = new FileWriter(worldFile);
 
                     //Door
-                    int xval = Greenfoot.getRandomNumber(5)+1;
+                    int xval = Greenfoot.getRandomNumber(5)+2;
                     fw.write("Door" + (i-1) + "\n" + xval + "\n" + 0 + "\n");
-                    xval = 28 - Greenfoot.getRandomNumber(5);
+                    xval = 20 - Greenfoot.getRandomNumber(5);
                     fw.write("Door" + (i+1) + "\n" + xval + "\n" + 19 + "\n");
 
                     //Walls (horizontal and vertical)
                     for(int x=0;x<30;x++){
                         if(!curarr[x][0]) fw.write("Walls\n" + x + "\n" + 0 + "\n");
-                        if(!curarr[x][19]) fw.write("Walls\n" + x + "\n" + 19 + "\n");
+                        if(!curarr[x][19] && x!=0 && x!=29) fw.write("Walls\n" + x + "\n" + 19 + "\n");
                         curarr[x][0] = true; curarr[x][19] = true; a+=2;
                     }
                     for(int y=1;y<19;y++){

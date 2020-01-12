@@ -29,14 +29,14 @@ public abstract class Obstacles extends Actor
 
     protected boolean damage(boolean changeLoc){
         boolean hit = false;
-        Player player = (Player) getOneIntersectingObject(Player.class);
+        Player player = (Player) getOneObjectAtOffset​(0, 0, Player.class);
         if(player!=null){
             //player.loseHeart();
             if(changeLoc) setNewLocation(player);
             hit=true;
         }    
 
-        ArrayList <Enemy> enemiesArrayList = (ArrayList) getIntersectingObjects(Enemy.class);
+        ArrayList <Enemy> enemiesArrayList = (ArrayList) getObjectsAtOffset​(0, 0, Enemy.class);
         for(Enemy enemy: enemiesArrayList){
             //enemy.getDamaged();
             if(changeLoc) setNewLocation(enemy);
@@ -50,12 +50,12 @@ public abstract class Obstacles extends Actor
             GameWorld world = (GameWorld) getWorld();
             int newFirstInd, newSecondInd;
             while(true){
-                newFirstInd = firstInd + Greenfoot.getRandomNumber(3) - 1;
-                newSecondInd = secondInd + Greenfoot.getRandomNumber(3) - 1;
+                newFirstInd = firstInd + (Greenfoot.getRandomNumber(3)-1)*2;
+                newSecondInd = secondInd + (Greenfoot.getRandomNumber(3)-1)*2;
                 if(!world.isWall(newFirstInd, newSecondInd)) break;
             }
             
-            a.setLocation(world.convert(firstInd),world.convert(secondInd));
+            a.setLocation(world.convert(newFirstInd),world.convert(newSecondInd));
         }    
     }    
 }
