@@ -28,7 +28,7 @@ public class Player extends Actor implements AnimationInterface
     private boolean hasRifle = false;
     Stack<String> health = new Stack<String>();
     ArrayList<Integer> listOfGuns = new ArrayList<Integer>();
-    ResourceBarManager(3, 20, 20, 20, 20, 20, 
+    ResourceBarManager(3, 20, 20, 20, 20, 20, halfHeart.png, fullHeart.png, GameWorld);
     public Player()
     {
         listOfGuns.add("pistol");
