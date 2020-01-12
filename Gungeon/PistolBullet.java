@@ -19,7 +19,7 @@ public class PistolBullet extends Ammunition
      * @param actor             the specific object that is being targetted
      * @param damage            specifies the damage taken for each hit
      */
-    public PistolBullet()
+    public PistolBullet(int x, int y, int damage)
     {
         super(x, y, damage);
         setImage(bullet);
@@ -27,12 +27,12 @@ public class PistolBullet extends Ammunition
         shoot.setVolume(75);
     } 
    
-    private void reloadAmmo()
+    public void reloadAmmo()
     {
         ammo = 25;
     }
    
-    private int checkAmmo()
+    public int checkAmmo()
     {
         return ammo;
     }
