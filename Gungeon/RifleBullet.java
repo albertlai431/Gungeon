@@ -21,7 +21,7 @@ public class RifleBullet extends Ammunition
      * @param actor             the specific object that is being targetted
      * @param damage            specifies the damage taken for each hit
      */
-    public RifleBullet()
+    public RifleBullet(int x, int y, int damage)
     {
         super(x, y,damage);
         setImage(bullet);
@@ -29,12 +29,12 @@ public class RifleBullet extends Ammunition
         shoot.setVolume(75);
     }
 
-    private void reloadAmmo()
+    public void reloadAmmo()
     {
         ammo = 50;
     }
    
-    private int checkAmmo()
+    public int checkAmmo()
     {
         return ammo;
     }
