@@ -31,7 +31,7 @@ public abstract class Ammunition extends Actor
     /**
      * checkAndHit - checks if the Ammunition has hit a Vehicle or Building. To be implemented in subclasses
      */
-    protected abstract void checkAmmo();
+    protected abstract int checkAmmo();
    
     protected abstract void reloadAmmo();
     
@@ -78,7 +78,7 @@ public abstract class Ammunition extends Actor
             //Deal damage and play sound
             hit.play();
             //Decreases the damage of the vehicle when hit
-            enemy.getDamaged(damage);
+            enemy.getHit(damage);
             //Removes the bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
         }   
