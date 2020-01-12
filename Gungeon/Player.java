@@ -27,14 +27,14 @@ public class Player extends Actor implements AnimationInterface
     private boolean hasShotgun = false;
     private boolean hasRifle = false;
     Stack<String> health = new Stack<String>();
-    ArrayList<String> listOfGuns = new ArrayList<String>();
+    ArrayList<Integer> listOfGuns = new ArrayList<Integer>();
     ResourceBarManager(3, 20, 20, 20, 20, 20, 
     public Player()
     {
         listOfGuns.add("pistol");
         for(int i = 0; i < 6; i++)
         {
-            health.push("Heart");
+            health.push(1);
         }
         //Sets images to given GreenfootImage arrays
         for(int i=0; i<rightMvt.length; i++)
