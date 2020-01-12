@@ -258,16 +258,17 @@ public class GameWorld extends World
                                 else addObject(player,convert(firstInd),convert(secondInd+2));
                             }
                         } 
+                        //fix
                         else if(actor.indexOf("RifleEnemy")==0){
-                            a = new RifleEnemy();
+                            a = new SniperEnemy(200,2);
                             isEnemy = true;
                         }
                         else if(actor.indexOf("ShotgunEnemy")==0){
-                            a = new ShotgunEnemy();
+                            a = new ShotgunEnemy(100,2);
                             isEnemy = true;
                         } 
                         else if(actor.indexOf("RocketEnemy")==0){
-                            a = new RocketEnemy();
+                            a = new BulletEnemy(300,2);
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){

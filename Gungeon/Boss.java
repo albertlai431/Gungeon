@@ -16,4 +16,8 @@ public class Boss extends Enemy
     {
         // Add your action code here.
     }    
+    
+    protected void attack(){
+        
+    }    
 }
