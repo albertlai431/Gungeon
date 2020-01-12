@@ -1,5 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
- 
+import java.util.ArrayList;
 /**
 * Write a description of class Player here.
 *a
@@ -16,10 +16,19 @@ public class Player extends Actor implements AnimationInterface
     private int animationCount = 0;
     private int frameRate = 7;
     private int imageNumber = 0;
+    private int hearts = 0;
+    private int weapon = 0; // 0 = pistol, 1 = shotgun, 2 = rifle
+    private int totalAmmoShotgun = 0;
+    private int totalAmmoRifle = 0;
+    private int currentHealth = 6;
     private int XCoord;
     private int YCoord;
+    private boolean hasShotgun = false;
+    private boolean hasRifle = false;
+    ArrayList<String> listOfGuns = new ArrayList<String>();
     public Player()
     {
+        listOfGuns.add("pistol");
         //Sets images to given GreenfootImage arrays
         for(int i=0; i<rightMvt.length; i++)
         {
@@ -57,6 +66,7 @@ public class Player extends Actor implements AnimationInterface
     {
         animationCount++;  
         move();
+        changeGun();
         if(Greenfoot.getMouseInfo() != null)
         {
             XCoord = Greenfoot.getMouseInfo().getX();
@@ -114,6 +124,44 @@ public class Player extends Actor implements AnimationInterface
                 else if(Greenfoot.isKeyDown("d")) setLocation(getX()+2, getY()+2);
                 else setLocation(getX(), getY()+2);
             }
+    }
+    
+    public int currentAmmoShotgun()
+    {
+        return totalAmmoShotgun;
+    }
+    
+    public int currentAmmoRifle()
+    {
+        return totalAmmoRifle;
+    }
+    
+    public String getCurrrentGun()
+    {
+        String x = listOfGuns.get(0);
+        return x;
+    }
+    
+    public void changeGun()
+    {
+       if(Greenfoot.isKeyDown("e") && (listOfGuns.size() > 1))
+       {
+           String x = listOfGuns.get(0);
+           listOfGuns.remove(0);
+           listOfGuns.add(x);
+       }
+    }
+    
+    public void newGun(int n)
+    {
+        if((n == 1) && (hasShotgun = false)){
+            listOfGuns.add("shotgun");
+            hasShotgun = true;
+        }
+        else if ((n == 2) && (hasRifle = false)){
+            listOfGuns.add("rifle");
+            hasRifle = true;
+        }
     }
     
     public void animateMovementUp()
