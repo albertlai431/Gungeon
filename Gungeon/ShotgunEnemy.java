@@ -1,19 +1,40 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.util.ArrayList;
 /**
- * Write a description of class ShotgunEnemy here.
+ * Write a description of class RocketEnemy here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
 public class ShotgunEnemy extends Enemy
 {
-    /**
-     * Act - do whatever the ShotgunEnemy wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    // Need to use array list of images later
+    private static GreenfootImage ShotgunEnemyImage;
+    private static int imageX;
+    private static int imageY;
+    public ShotgunEnemy(int health, int bulletWidth)
+    {
+        //ShotgunEnemyImage.scale(imageX, imageY);
+        //setImage(ShotgunEnemyImage);        
+        healthPoints = health;    
+        this.bulletWidth = bulletWidth;
+    }
+    
+    public void addedToWorld()
+    {
+        foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
+        player = foundPlayers.get(0);
+    }
+    
     public void act() 
     {
-        // Add your action code here.
+        moveTowardsPlayer();       
     }    
+ 
+    
+    public void attack()
+    {
+        //getWorld().addObject(new ShotgunBullet(player, 1), getX(), getY());   
+        
+    }
 }
