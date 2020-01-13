@@ -101,8 +101,23 @@ public class Player extends Actor implements AnimationInterface
      */
     public void act()
     {
+        World world = getWorld();
+        List guns = getObjectsInRange(960, Weapon.class);
+        if(guns.size() == 0){
+            if(this.getCurrentGun() == "pistol")
+            {
+                world.addObject(gun,getX()+18, getY()+16);
+            }
+            else if(this.getCurrentGun() == "rifle"){
+                world.addObject(gun,getX()+20, getY()+13);
+            }
+            else if(this.getCurrentGun() == "shotgun"){
+                world.addObject(gun,getX()+16, getY()+15);
+            }
+        }
         animationCount++;  
         move();
+        changeGun();
         if(Greenfoot.getMouseInfo() != null)
         {
             XCoord = Greenfoot.getMouseInfo().getX();
@@ -111,7 +126,7 @@ public class Player extends Actor implements AnimationInterface
 
         int x = this.getX();
         int y = this.getY();
-
+        
         if(x-XCoord<0)
         {
             if(y-YCoord>x-XCoord && y-YCoord<-1*(x-XCoord)) animateMovementRight();
@@ -129,8 +144,10 @@ public class Player extends Actor implements AnimationInterface
             if(x-XCoord<y-YCoord && -1*(x-XCoord)<y-YCoord) animateMovementUp();
         }
     }   
-
-    int dx = 0, dy = 0;
+    
+    public void move()
+    {
+        int dx = 0, dy = 0;
         if(Greenfoot.isKeyDown("a"))//runs if "a" is pressed and the player is past the starting location
         {
             //animateMovementLeft();
@@ -175,24 +192,58 @@ public class Player extends Actor implements AnimationInterface
             }
             else dy = speed;
         }
-
         setLocation(getX()+dx,getY()+dy);
-
+        if(this.getCurrentGun() == "pistol")
+        {
+            gun.setLocation(getX()+18, getY()+16);
+        }
+        else if(this.getCurrentGun() == "rifle"){
+            gun.setLocation(getX()+20, getY()+13);
+        }
+        else if(this.getCurrentGun() == "shotgun"){
+            gun.setLocation(getX()+16, getY()+15);
+        }
         Door door = (Door) getOneObjectAtOffset(0, 0, Door.class);
         if((door!=null && !door.getComplete()) || getOneObjectAtOffset(0, 0, Walls.class)!=null) setLocation(getX()-dx,getY()-dy);
-        else{
-            if(this.getCurrentGun().equals("Pistol"))
-            {
-                gun.setLocation(getX()+18, getY()+16);
-            }
-            else if(this.getCurrentGun().equals("Rifle")){
-                gun.setLocation(getX()+20, getY()+13);
-            }
-            else if(this.getCurrentGun().equals("Shotgun")){
-                gun.setLocation(getX()+16, getY()+15);
-            }
+    }
+    
+    public int currentAmmoShotgun()
+    {
+        return totalAmmoShotgun;
+    }
+    
+    public int currentAmmoRifle()
+    {
+        return totalAmmoRifle;
+    }
+    
+    public String getCurrentGun()
+    {
+        String x = listOfGuns.get(0);
+        return x;
+    }
+    
+    public void changeGun()
+    {
+       if(Greenfoot.isKeyDown("e") && (listOfGuns.size() > 1))
+       {
+           String x = listOfGuns.get(0);
+           listOfGuns.remove(0);
+           listOfGuns.add(x);
+       }
+    }
+    
+    public void newGun(int n)
+    {
+        if((n == 1) && (hasShotgun = false)){
+            listOfGuns.add("shotgun");
+            hasShotgun = true;
         }
-    } 
+        else if ((n == 2) && (hasRifle = false)){
+            listOfGuns.add("rifle");
+            hasRifle = true;
+        }
+    }
 
     public String getCurrentGun()
     {
