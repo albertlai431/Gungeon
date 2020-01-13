@@ -1,10 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Menu here.
+ * Menu is the abstract superclass of PauseMenu and StoreMenu. It contains methods to handle button clicks. 
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Albert Lai
+ * @version January 2020
  */
 public abstract class Menu extends Actor
 {
@@ -17,7 +17,8 @@ public abstract class Menu extends Actor
         checkButtonClicks();
     }   
     
+    /**
+     * checkButtonClicks - checks for button clicks
+     */
     protected abstract void checkButtonClicks();
-    
-    public abstract void closeMenu();
 }

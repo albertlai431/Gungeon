@@ -11,13 +11,6 @@ import java.io.IOException;
  * GameWorld is the world where the game takes place. It holds the player, actors of the 
  * game, 2D array of actors, and game data. 
  * 
- * TODO:
- * - Integrate player with store
- * - Game Over and Victory animation 
- * 
- * NICE TO HAVE
- * - Screenshot 
- * 
  * @author Albert Lai
  * @version January 2020
  */
@@ -43,26 +36,27 @@ public class GameWorld extends World
     private boolean gameOver = false;
 
     /**
-     * Dummy constructor to make sure that things work
-     * 
+     * Base Constructor - not to be called directly
      */
     public GameWorld()
     {    
-        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
+        // Create a new world with 960x640 cells with a cell size of 1x1 pixels.
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
+        //Create Images
         StoreMenu.createImages();
-        setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        Player.createImages();
+        setPaintOrder(Resource.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
     }
 
     /**
      * Contructor to initialize the world from "create a new game" or "load saved game"
      * 
-     * @param boolean   true if loading from saved game, false if not
-     * 
+     * @param boolean   true if creating new game, false loading from old game
      */
     public GameWorld(boolean newGame){
         this();
+        //player file
         File playerFile = new File(folderDir + "Player.txt");
         if(!playerFile.isFile()){
             System.out.println("File Not Found");
@@ -77,35 +71,37 @@ public class GameWorld extends World
                 copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
             }   
         }    
-
+        
+        //Create ItemInfo and Player
+        itemInfo = new ItemInfo(0,-1,5);
         player = new Player(playerFile);
         curLevel = player.getCurLevel();
-        //check if player is complete this level
+        addObject(itemInfo,824,601);
         if(player.getMaxLevel()>=curLevel) lvlComplete = true;
+        
+        //Create World
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
-
-        itemInfo = new ItemInfo(0,-1,5);
-        addObject(itemInfo,824,601);
     }    
 
     /**
      * Constructor to switch between rooms
      * 
      * @param curLevel          current level of the world
+     * @param fromLevel         level of the previous room
      * @param player            player transferred from the other world
+     * @param itemInfo          ItemInfo transferred from the other world
      */
-    public GameWorld(int curLevel,int fromLevel,Player player){
+    public GameWorld(int curLevel,int fromLevel,Player player, ItemInfo itemInfo){
         this();
         this.curLevel = curLevel;
         this.fromLevel = fromLevel;
         this.player = player;
+        this.itemInfo = itemInfo;
+        addObject(itemInfo,824,601);
+        //create world
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
-
-        //get player's current gun
-        itemInfo = new ItemInfo(0,-1,5);
-        addObject(itemInfo,824,601);
     }    
 
     /**
@@ -114,6 +110,7 @@ public class GameWorld extends World
      */
     public void act(){
         if(gameOver){
+            //check button clicks
             if(Greenfoot.mouseClicked(returnToTitleScreen)) Greenfoot.setWorld(new TitleScreen());
         }
         else{
@@ -144,7 +141,6 @@ public class GameWorld extends World
      * gameOver - checks if player is dead and ends the game, called by player class
      */
     public void gameOver(boolean win){
-        //game over animation
         if(win){} //victory animation
         else{} //game over animation
         
@@ -171,7 +167,7 @@ public class GameWorld extends World
      */
     public void switchWorld(int newLevel){
         closeWorld(newLevel);
-        Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player));
+        Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player, itemInfo));
     }
         
     //methods dealing with text files
@@ -238,11 +234,10 @@ public class GameWorld extends World
                         }  
                         else if(actor.indexOf("Walls")==0){
                             a = new Walls();
-
                         } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
-                            a = new Door(doorLevel,/*cur player level*/curLevel>=doorLevel);
+                            a = new Door(doorLevel,player.getMaxLevel()>=doorLevel);
                             if(fromLevel>curLevel){
                                 if(secondInd==19) addObject(player,convert(firstInd),convert(secondInd-2));
                             }    
@@ -281,7 +276,6 @@ public class GameWorld extends World
                 catch(ArrayIndexOutOfBoundsException e){
                     System.out.println("a " + firstInd + " " + secondInd);
                 }    
-
             }    
             catch(NoSuchElementException e){
                 break;
@@ -315,7 +309,10 @@ public class GameWorld extends World
             return true;
         }    
     }   
-
+    
+    /**
+     * createTextFiles - create new text files for the game (not to be called during gameplay)
+     */
     public void createTextFiles(){
         FileWriter fw = null;
         int[] obstacles = {0,2,5,10,20,30};

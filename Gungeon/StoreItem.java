@@ -18,8 +18,12 @@ public class StoreItem extends Actor
     private GreenfootImage selected = new GreenfootImage(itemSize,itemSize);
 
     /**
-     * Act - do whatever the StoreItem wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Constructor for StoreItem
+     * 
+     * @param itemImage         image of the item
+     * @param item              name of the item
+     * @param StoreMenu         reference to StoreMenu object
+     * @param cost              cost of the object
      */
     public StoreItem(GreenfootImage itemImage, String item, StoreMenu storeMenu, int cost){
         this.item = item;
@@ -42,6 +46,9 @@ public class StoreItem extends Actor
         nameLabel = new Label(item,10,true);
     }    
 
+    /**
+     * addedToWorld - adds the label to the world
+     */
     public void addedToWorld(World w){
         PauseWorld world = (PauseWorld) w;
         world.addObject(nameLabel,this.getX(),this.getY()+itemSize/2+10);
@@ -59,12 +66,9 @@ public class StoreItem extends Actor
         }    
     }    
 
-    public void remove(){
-        PauseWorld world = (PauseWorld) getWorld();
-        world.removeObject(nameLabel);
-        world.removeObject(this);
-    } 
-
+    /**
+     * changeImage - changes the image of StoreItem
+     */
     public void changeImage(){
         if(getImage()==storeItemImg) setImage(selected);
         else setImage(storeItemImg);

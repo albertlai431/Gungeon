@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class PauseMenu here.
+ * PauseMenu is a menu class that allows the user to pause the game, giving them the option to either resume or exit and save. 
  * 
  * @author Albert Lai 
  * @version January 2020
@@ -11,7 +11,7 @@ public class PauseMenu extends Menu
     private static GreenfootImage pauseMenuImg = new GreenfootImage(200,120);
     private Label menuTitle = new Label("Pause", 27, true);
     private Button play = new Button("Play", 18);
-    private Button exit = new Button("Exit", 18);
+    private Button exit = new Button("Exit and Save", 18);
 
     /**
      * Constructor for objects of class PauseMenu.
@@ -22,6 +22,9 @@ public class PauseMenu extends Menu
         setImage(pauseMenuImg);
     }    
 
+    /**
+     * addedtoWorld - adds labels and buttons to the world
+     */
     public void addedToWorld(World w){
         PauseWorld world = (PauseWorld) getWorld();
         world.addObject(menuTitle,world.width/2,world.height/2 - 30);
@@ -29,6 +32,9 @@ public class PauseMenu extends Menu
         world.addObject(exit,world.width/2,world.height/2 + 30);
     }
 
+    /**
+     * checkButtonClicks - checks for button clicks
+     */
     protected void checkButtonClicks(){
         PauseWorld world = (PauseWorld) getWorld();
         String key = Greenfoot.getKey();
@@ -38,13 +44,5 @@ public class PauseMenu extends Menu
         else if(Greenfoot.mouseClicked(exit)){
             Greenfoot.setWorld(new TitleScreen());
         }    
-    }    
-
-    public void closeMenu(){
-        PauseWorld world = (PauseWorld) getWorld();
-        world.removeObject(menuTitle);
-        world.removeObject(play);
-        world.removeObject(exit);
-        if(world!=null) world.removeObject(this);
     }    
 }
