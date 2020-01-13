@@ -25,6 +25,7 @@ public abstract class Weapon extends Actor
     protected int mouseX;
     protected int mouseY;
     private Player player;
+    private ItemInfo itemInfo;
     /**
      * Constructor - Initializes the variables for the weapon
      * 
@@ -37,7 +38,7 @@ public abstract class Weapon extends Actor
      * @param   magSize          rhe number of magazines the user has
      * 
      */
-    public Weapon(Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, /*int magazines,*/ int magSize){
+    public Weapon(ItemInfo itemInfo, Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, /*int magazines,*/ int magSize){
         this.player = player;
         this.bulletDamage = bulletDamage;
         this.bulletSpeed = bulletSpeed;
@@ -48,6 +49,7 @@ public abstract class Weapon extends Actor
         //this.magazines = magazines; 
         this.ammoInMag = magSize;
         this.magSize = magSize;
+        this.itemInfo = itemInfo;
     }
     /**
      * createBullet - abstract class that choses the correct bullet for each type of weapon
@@ -72,6 +74,7 @@ public abstract class Weapon extends Actor
         //reload the weapon if the user presses r
         if(Greenfoot.isKeyDown("r"))
         {
+            itemInfo.updateAmmo();
             startReload();
             
         }
@@ -176,6 +179,7 @@ public abstract class Weapon extends Actor
         
         if(ammoInMag==0&&Greenfoot.isKeyDown("r"))
         {
+            itemInfo.updateAmmo();
             startReload();
             
         }
