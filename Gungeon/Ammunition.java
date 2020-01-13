@@ -14,8 +14,8 @@ public abstract class Ammunition extends Actor
     protected int y;
     protected int speed;
     protected int ammo = 0;
-    protected GreenfootSound hit = new GreenfootSound("BulletHit.wav");
-    protected GreenfootSound shoot = new GreenfootSound("BulletShot.wav");
+    //protected GreenfootSound hit = new GreenfootSound("BulletHit.wav");
+    //protected GreenfootSound shoot = new GreenfootSound("BulletShot.wav");
     /**
      * Constructor - calls the superclass and initializes values
      *
@@ -54,7 +54,7 @@ public abstract class Ammunition extends Actor
     
     protected void addedToWorld (World w){
         //Play sound
-        shoot.play();
+        //shoot.play();
         turnTowards(x, y);
     }
     
@@ -72,13 +72,13 @@ public abstract class Ammunition extends Actor
         //Checks to see if the bullet is on the opposite team as the objects
         if(walls != null){
             //Deal damage and play sound
-            hit.play();
+            //hit.play();
             //Removes the Bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
         }
         if(enemy != null){
             //Deal damage and play sound
-            hit.play();
+            //hit.play();
             //Decreases the damage of the vehicle when hit
             enemy.getHit(damage);
             //Removes the bullet object from the world

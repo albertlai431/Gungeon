@@ -10,18 +10,18 @@ public class Door extends Obstacles
 {
     private int curLevel;
     private boolean isComplete = false;
-    private static final GreenfootImage [] img = {new GreenfootImage("lockedDoor.png"),new GreenfootImage("passage.jpg")};
+    private static final GreenfootImage [] doorImg = {new GreenfootImage("lockedDoor.png"),new GreenfootImage("passage.jpg")};
     
     public Door(int curLevel, boolean isComplete){
         super(0);
         this.curLevel = curLevel;
         this.isComplete = isComplete;
-        if(isComplete) setImage(img[1]);
-        else setImage(img[0]);
+        if(this.isComplete) setImage(doorImg[1]);
+        else setImage(doorImg[0]);
     }   
     
     public void act(){
-        if((getOneObjectAtOffset(0, -16, Player.class)!=null || getOneObjectAtOffset(0, 16, Player.class)!=null) /*&& isComplete*/){
+        if((getOneObjectAtOffset(0, -25, Player.class)!=null || getOneObjectAtOffset(0, 25, Player.class)!=null) && isComplete){
             GameWorld world = (GameWorld) getWorld();
             if(curLevel == 0){
                 world.closeWorld(curLevel);
@@ -33,7 +33,7 @@ public class Door extends Obstacles
     }    
     
     public void completeLevel(){
-        setImage(img[1]);
+        setImage(doorImg[1]);
         isComplete = true;
     }    
     

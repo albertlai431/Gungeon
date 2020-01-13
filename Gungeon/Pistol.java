@@ -19,6 +19,7 @@ public class Pistol extends Weapon
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
+        if(ammoInMag<=10) player.reduceAmmo();
         return new PistolBullet(mouseX, mouseY, bulletDamage,bulletSpeed);
     }
 }

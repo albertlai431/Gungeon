@@ -1,4 +1,3 @@
-
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
@@ -14,8 +13,7 @@ public abstract class Weapon extends Actor
     private long reloadTime;
     protected int bulletDamage;
     private long startTime;
-    //private int magazines;
-    private int ammoInMag;
+    protected int ammoInMag;
     private int magSize;
     private boolean reloading;
     private boolean firing;
@@ -24,21 +22,22 @@ public abstract class Weapon extends Actor
     private long lastFiredTime=0;
     protected int mouseX;
     protected int mouseY;
-    private Player player;
+    protected Player player;
     private ItemInfo itemInfo;
     /**
      * Constructor - Initializes the variables for the weapon
      * 
+     * @param   itemInfo         the current ItemInfo object
+     * @param   player           the current Player object
      * @param   bulletDamage     the damage that the bullet will do to enemies
      * @param   bulletSpeed      the speed that the bullet will have
      * @param   fireRate         the time between each bullet when user is holding down the left click in milliseconds
      * @param   bulletReadyTime  the time bet each bullet when user is clicking the left click in milliseconds
      * @param   reloadTime       the times it takes for the weapon to reload
-     * @param   magazine         the number of bullets in a magazine
      * @param   magSize          rhe number of magazines the user has
      * 
      */
-    public Weapon(ItemInfo itemInfo, Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, /*int magazines,*/ int magSize){
+    public Weapon(ItemInfo itemInfo, Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, int magSize){
         this.player = player;
         this.bulletDamage = bulletDamage;
         this.bulletSpeed = bulletSpeed;
@@ -56,8 +55,7 @@ public abstract class Weapon extends Actor
      */
     abstract protected Ammunition createBullet();
     /**
-     * Act - do whatever the Weapon wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Act - Checks for button presses and mouse clicks
      */
     public void act() 
     {
@@ -140,9 +138,9 @@ public abstract class Weapon extends Actor
                 {
                     this.startTime = 0;
                     reloading = false;
-                    if(/*magazines>0*/player.canReload(this))
+                    if(player.canReload(this))
                     {
-                        //this.magazines--;
+                        
                         this.ammoInMag = magSize;
                         
                     }
@@ -174,7 +172,7 @@ public abstract class Weapon extends Actor
         Ammunition bullet = createBullet();
         lastFiredTime = System.currentTimeMillis();
         getWorld().addObject(bullet, this.getX(), this.getY());
-        System.out.println(ammoInMag);
+        //System.out.println(ammoInMag);
         this.ammoInMag--;
         
         if(ammoInMag==0&&Greenfoot.isKeyDown("r"))
@@ -183,5 +181,33 @@ public abstract class Weapon extends Actor
             startReload();
             
         }
+    }
+    public int getAmmo()
+    {
+        return ammoInMag;
+    }
+    public long getFireRate()
+    {
+        return fireRate;
+    }
+    public int getMagSize()
+    {
+        return magSize;
+    }
+    public long getReloadTime()
+    {
+        return reloadTime;
+    }
+    public long getBulletReadyTime()
+    {
+        return bulletReadyTime;
+    }
+    public int getBulletDamage()
+    {
+        return bulletDamage;
+    }
+    public int getBulletSpeed()
+    {
+        return bulletSpeed;
     }
 }

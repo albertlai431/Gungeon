@@ -25,8 +25,8 @@ public class ShotgunBullet extends Ammunition
     {
         super(x, y,damage, speed);
         setImage(bullet);
-        hit.setVolume(50);
-        shoot.setVolume(75);
+        //hit.setVolume(50);
+        //shoot.setVolume(75);
     } 
    
     public void reloadAmmo()

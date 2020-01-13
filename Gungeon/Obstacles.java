@@ -12,7 +12,6 @@ public abstract class Obstacles extends Actor
     private static GreenfootImage img; 
     protected int actCount = 0;
     protected int actMod = 30;
-    //damages are arbitrary for now
     protected int damage;
     private int firstInd;
     private int secondInd;
@@ -31,7 +30,7 @@ public abstract class Obstacles extends Actor
         boolean hit = false;
         Player player = (Player) getOneObjectAtOffset​(0, 0, Player.class);
         if(player!=null){
-            //player.loseHeart();
+            player.loseOneHeart();
             if(changeLoc) setNewLocation(player);
             hit=true;
         }    

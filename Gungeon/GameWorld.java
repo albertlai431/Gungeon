@@ -32,7 +32,7 @@ public class GameWorld extends World
     private int fromLevel = -1;
     private int curLevel;
     private static final int tileOffset = 16;
-    private boolean lvlComplete = false;
+    private boolean lvlComplete = true;
     private boolean gameOver = false;
 
     /**
@@ -46,7 +46,7 @@ public class GameWorld extends World
         //Create Images
         StoreMenu.createImages();
         Player.createImages();
-        setPaintOrder(Resource.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        setPaintOrder(Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
     }
 
     /**
@@ -71,14 +71,18 @@ public class GameWorld extends World
                 copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
             }   
         }    
-        
+
         //Create ItemInfo and Player
         itemInfo = new ItemInfo(0,-1,5);
-        player = new Player(playerFile);
+        player = new Player(playerFile, itemInfo);
         curLevel = player.getCurLevel();
+        if(curLevel == 1){
+            addObject(player,convert(2),convert(2));
+            arr[2][2] = player;
+        }    
         addObject(itemInfo,824,601);
         if(player.getMaxLevel()>=curLevel) lvlComplete = true;
-        
+
         //Create World
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
@@ -116,9 +120,10 @@ public class GameWorld extends World
         else{
             keyboardInput();
             //checks if level is complete
-            if(fromLevel<curLevel && getObjects(Enemy.class).size()==0){
+            if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && !lvlComplete){
                 door.completeLevel();
                 player.incrementMaxLevel();
+                lvlComplete = true;
             }    
         }
     }
@@ -143,11 +148,11 @@ public class GameWorld extends World
     public void gameOver(boolean win){
         if(win){} //victory animation
         else{} //game over animation
-        
+
         //save to leaderboard?
-        
+
         //clear some data??
-        
+
         gameOver = true;
         addObject(returnToTitleScreen,width/2,height-100);
     }
@@ -169,7 +174,7 @@ public class GameWorld extends World
         closeWorld(newLevel);
         Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player, itemInfo));
     }
-        
+
     //methods dealing with text files
     /**
      * copyFile - takes contents of one file and copies it into another file
@@ -239,11 +244,17 @@ public class GameWorld extends World
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
                             a = new Door(doorLevel,player.getMaxLevel()>=doorLevel);
                             if(fromLevel>curLevel){
-                                if(secondInd==19) addObject(player,convert(firstInd),convert(secondInd-2));
+                                if(secondInd==19){
+                                    addObject(player,convert(firstInd),convert(secondInd-2));
+                                    arr[firstInd][secondInd-2] = player;
+                                }    
                             }    
                             else{
                                 if(secondInd==19) door = (Door) a;
-                                else addObject(player,convert(firstInd),convert(secondInd+2));
+                                else{
+                                    addObject(player,convert(firstInd),convert(secondInd+2));
+                                    arr[firstInd][secondInd+2] = player;
+                                }    
                             }
                         } 
                         //fix
@@ -309,7 +320,7 @@ public class GameWorld extends World
             return true;
         }    
     }   
-    
+
     /**
      * createTextFiles - create new text files for the game (not to be called during gameplay)
      */
@@ -329,8 +340,11 @@ public class GameWorld extends World
                     fw = new FileWriter(worldFile);
 
                     //Door
-                    int xval = Greenfoot.getRandomNumber(5)+2;
-                    fw.write("Door" + (i-1) + "\n" + xval + "\n" + 0 + "\n");
+                    int xval;
+                    if(i!=1){
+                        xval = Greenfoot.getRandomNumber(5)+2;
+                        fw.write("Door" + (i-1) + "\n" + xval + "\n" + 0 + "\n");
+                    }
                     xval = 20 - Greenfoot.getRandomNumber(5);
                     fw.write("Door" + (i+1) + "\n" + xval + "\n" + 19 + "\n");
 
