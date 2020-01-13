@@ -27,6 +27,7 @@ public class Options extends World
     private Label text6 = new Label("\"Esc\" pasues the game",16,true);
     private Button back = new Button("BACK",35);
     private Button next = new Button("NEXT",35);
+    private Button done = new Button("DONE",35);
     private int tutorialCount = 0;
     /**
      * Constructor for objects of class Options.
@@ -93,6 +94,7 @@ public class Options extends World
                 addObject(next,911,620);
                 addObject(back,50,620);
                 getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);
+                tutorialCount--;
             }
         }
         if(Greenfoot.mouseClicked(next)){
@@ -110,8 +112,13 @@ public class Options extends World
                 removeObjects(objects);
                 getBackground().fill();
                 addObject(back,50,620);
+                addObject(done,910,620);
                 getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);
             }
+        }
+        if(Greenfoot.mouseClicked(done)){
+            TitleScreen titleWorld = new TitleScreen();
+            Greenfoot.setWorld(titleWorld);
         }
     }
 }
