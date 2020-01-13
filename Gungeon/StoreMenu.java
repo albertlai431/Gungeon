@@ -21,6 +21,7 @@ public class StoreMenu extends Menu
     private Button equipButton = new Button("Equip", 18);
     private Button purchaseButton = new Button("Purchase", 18);
     private Player player;
+    private ItemInfo itemInfo;
 
     private StoreItem lastItem = null;
     private String lastItemName = null;
@@ -33,13 +34,14 @@ public class StoreMenu extends Menu
     private static boolean createdImages = false;
     private static GreenfootImage [] itemImages = new GreenfootImage [numItems];
 
-    public StoreMenu(Player player){
+    public StoreMenu(Player player, ItemInfo itemInfo){
         storeMenuImg.setColor(Color.LIGHT_GRAY);
         storeMenuImg.fill();
         setImage(storeMenuImg);
         this.player = player;
+        this.itemInfo = itemInfo;
     }    
-    
+
     public static void createImages(){
         if(!createdImages){
             createdImages = true;
@@ -81,32 +83,40 @@ public class StoreMenu extends Menu
     private void purchase(){
         //add to player inventory
         if(lastItemName.contains("Gun")){
-            
+            player.newGun(lastItemName);
+        }    
+        else{
+            player.changeItemNumber(lastItemName,1);
         }    
         player.setMoney(-lastItemCost);
+        itemInfo.updateMoney(-lastItemCost);
         setPurchaseTransparency();
     }    
 
     private void equip(){
         if(lastItemName.contains("Gun")){
-            
+            while(!lastItemName.contains(player.getCurrentGun())) player.changeGun();
         }    
-        else{
-            //decrease inventory by one
-            //equip item
-        }
+        else if(lastItemName.equals("Speed Boost")){
+            player.speedBoost();
+            player.changeItemNumber("Speed Boost", -1);
+        }    
+        else if(lastItemName.equals("Half-Heart Refill")){
+            player.addOneHeart();
+            player.changeItemNumber("Half-Heart Refill", -1);
+        }    
         setEquipTransparency();
     }
-    
+
     private void setPurchaseTransparency(){
         if(player.getMoney()<lastItemCost || (lastItemName.contains("Gun") && player.hasGun(lastItemName))){
             purchaseButton.getImage().setTransparency(0);
         }    
         else purchaseButton.getImage().setTransparency(255);
     }    
-    
+
     private void setEquipTransparency(){
-        if((lastItemName.contains("Gun") && lastItemName.contains(player.getCurrentGun()))|| player.getItemNumber(lastItemName)>0) equipButton.getImage().setTransparency(255);
+        if((lastItemName.contains("Gun") && lastItemName.contains(player.getCurrentGun()))|| player.getItemNumber(lastItemName)>0 || lastItemName.contains("Bullets")) equipButton.getImage().setTransparency(255);
         else equipButton.getImage().setTransparency(255);
     }    
 

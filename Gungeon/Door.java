@@ -24,7 +24,7 @@ public class Door extends Obstacles
         if((getOneObjectAtOffset(0, -16, Player.class)!=null || getOneObjectAtOffset(0, 16, Player.class)!=null) /*&& isComplete*/){
             GameWorld world = (GameWorld) getWorld();
             if(curLevel == 0){
-                world.closeWorld();
+                world.closeWorld(curLevel);
                 Greenfoot.setWorld(new TitleScreen());
             }    
             else if(curLevel == 6) world.gameOver(true);

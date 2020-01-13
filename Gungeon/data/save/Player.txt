@@ -1,8 +1,15 @@
-curLevel 
 1
-maxLevel
 1
-health
+0
 6
-statPoints
+1
+Pistol
+Pistol
+Rifle Bullet
+0
+Shotgun Bullet
+0
+Half-Heart Refill
+0
+Speed Boost 
 0

@@ -31,7 +31,7 @@ public class ResourceBarManager extends Actor
             resourceStack.push(new Resource(resourceImage));
         }
         isHealthBar = false;
-        addBarToWorld(world);
+        //addBarToWorld(world);
     }
 
     public ResourceBarManager(int max, int interval, int x, int y, GreenfootImage firstImage, GreenfootImage secondImage, World world)
@@ -49,10 +49,10 @@ public class ResourceBarManager extends Actor
             resourceStack.push(new Resource(firstImage, secondImage));
         }
         isHealthBar = true;
-        addBarToWorld(world);
+        //addBarToWorld(world);
     }
 
-    private void addBarToWorld(World world)
+    public void addedToWorld(World world)
     {
         if(isHealthBar)
         {

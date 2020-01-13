@@ -4,6 +4,7 @@
 6
 1
 Pistol
+Pistol
 Rifle Bullet
 0
 Shotgun Bullet

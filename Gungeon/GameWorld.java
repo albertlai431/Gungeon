@@ -12,11 +12,8 @@ import java.io.IOException;
  * game, 2D array of actors, and game data. 
  * 
  * TODO:
- * - Player data
- * - Wall and door detection with player and enemies
  * - Integrate player with store
  * - Game Over and Victory animation 
- * - Leaderboard?? 
  * 
  * NICE TO HAVE
  * - Screenshot 
@@ -29,7 +26,6 @@ public class GameWorld extends World
     //firstInd = xcoord, secondInd = ycoord
     private Actor [][] arr;
     private Player player;
-    private PlayerData playerData;
     private Door door;
     private ItemInfo itemInfo;
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
@@ -56,7 +52,7 @@ public class GameWorld extends World
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
         StoreMenu.createImages();
-        setPaintOrder(Label.class,ItemInfo.class,Player.class);
+        setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
     }
 
     /**
@@ -82,14 +78,10 @@ public class GameWorld extends World
             }   
         }    
 
-        playerData = new PlayerData(playerFile);
-        player = playerData.createPlayer();
-
+        player = new Player(playerFile);
+        curLevel = player.getCurLevel();
         //check if player is complete this level
-        if(true) lvlComplete = false;
-
-        //get level somehow
-        curLevel = 1;
+        if(player.getMaxLevel()>=curLevel) lvlComplete = true;
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
 
@@ -102,14 +94,12 @@ public class GameWorld extends World
      * 
      * @param curLevel          current level of the world
      * @param player            player transferred from the other world
-     * @param playerData        playerData transferred from the other world
      */
-    public GameWorld(int curLevel,int fromLevel,Player player, PlayerData playerData){
+    public GameWorld(int curLevel,int fromLevel,Player player){
         this();
         this.curLevel = curLevel;
         this.fromLevel = fromLevel;
         this.player = player;
-        this.playerData = playerData; 
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
 
@@ -131,7 +121,7 @@ public class GameWorld extends World
             //checks if level is complete
             if(fromLevel<curLevel && getObjects(Enemy.class).size()==0){
                 door.completeLevel();
-                //set player level
+                player.incrementMaxLevel();
             }    
         }
     }
@@ -145,7 +135,7 @@ public class GameWorld extends World
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
-            Greenfoot.setWorld(new PauseWorld("store",this,player));
+            Greenfoot.setWorld(new PauseWorld("store",this,player,itemInfo));
         }    
     }
 
@@ -159,7 +149,9 @@ public class GameWorld extends World
         else{} //game over animation
         
         //save to leaderboard?
-
+        
+        //clear some data??
+        
         gameOver = true;
         addObject(returnToTitleScreen,width/2,height-100);
     }
@@ -167,8 +159,9 @@ public class GameWorld extends World
     /**
      * closeWorld - closes the current world
      */
-    public void closeWorld(){
-        playerData.saveData(player);
+    public void closeWorld(int newLevel){
+        player.changeCurLevel(newLevel);
+        player.saveData();
     }    
 
     /**
@@ -177,10 +170,10 @@ public class GameWorld extends World
      * @param newLevel              new level to switch to
      */
     public void switchWorld(int newLevel){
-        closeWorld();
-        Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player, playerData));
+        closeWorld(newLevel);
+        Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player));
     }
-
+        
     //methods dealing with text files
     /**
      * copyFile - takes contents of one file and copies it into another file
@@ -305,12 +298,6 @@ public class GameWorld extends World
      */
     public int convert(int index){
         return tileOffset + index*tileSize;
-    }    
-
-    public int convert(int index, boolean isWall){
-        if(index == 0) return 28;
-        else if(index==29 || index==19) return index*tileSize-28;
-        else return convert(index);
     }    
 
     /**

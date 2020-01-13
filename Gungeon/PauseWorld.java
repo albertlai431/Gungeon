@@ -24,9 +24,9 @@ public class PauseWorld extends World
         this.gameWorld = gameWorld;
     }
     
-    public PauseWorld(String menuType, GameWorld gameWorld, Player player){
+    public PauseWorld(String menuType, GameWorld gameWorld, Player player, ItemInfo itemInfo){
         this(menuType, gameWorld);
-        
+        addObject(new StoreMenu(player,itemInfo),480,320);
     }    
     
     public void closeWorld(){

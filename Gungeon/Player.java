@@ -11,7 +11,13 @@ import java.io.IOException;
 
 /**
  * Write a description of class Player here.
- *a
+ * 
+ * 
+ * TODO
+ * - fix speed
+ * - weapon integration (pass iteminfo into weapon)
+ * - constructor
+ * 
  * @author (your name)
  * @version (a version number or a date)
  */
@@ -21,13 +27,14 @@ public class Player extends Actor implements AnimationInterface
     GreenfootImage[] leftMvt = new GreenfootImage[5];
     GreenfootImage[] upMvt = new GreenfootImage[8];
     GreenfootImage[] downMvt = new GreenfootImage[8];
-
+    private int speed = 2;
     private int curLevel;
     private int maxLevel;
     private int money;
     private File txtFile;
     private HashMap <String,Integer> items = new HashMap <String,Integer>();
-    private Weapon gun;
+    private Weapon gun = null;
+    private ItemInfo itemInfo;
 
     private int scaleNumber = 100;
     private int animationCount = 0;
@@ -44,8 +51,9 @@ public class Player extends Actor implements AnimationInterface
     private boolean hasRifle = false;
     private Stack<Integer> health = new Stack<Integer>();
     private ArrayList<String> listOfGuns = new ArrayList<String>();
-    private ResourceBarManager healthBar = new ResourceBarManager(3, 20, 20, 20, new GreenfootImage("halfHeart.png"), new GreenfootImage("fullHeart.png"), (GameWorld) getWorld());
-    public Player()
+    private ResourceBarManager healthBar;
+
+    public Player(File txtFile)
     {
         for(int i = 0; i < 6; i++)
         {
@@ -79,7 +87,16 @@ public class Player extends Actor implements AnimationInterface
         }
 
         setImage(rightMvt[0]);
+        healthBar =  new ResourceBarManager(3, 16, 16, 32, new GreenfootImage("halfHeart.png"), new GreenfootImage("fullHeart.png"), (GameWorld) getWorld());
+
+        this.txtFile = txtFile;
+        parseData();
     }
+
+    public void addedToWorld(World w){
+        getWorld().addObject(gun,getX(),getY());
+        getWorld().addObject(healthBar,100,100);
+    }    
 
     /**
      * Act - do whatever the Player wants to do. This method is called whenever
@@ -164,7 +181,7 @@ public class Player extends Actor implements AnimationInterface
             }
             else dy = 2;
         }
-        
+
         setLocation(getX()+dx,getY()+dy);
         Door door = (Door) getOneObjectAtOffset(0, 0, Door.class);
         if((door!=null && !door.getComplete()) || getOneObjectAtOffset(0, 0, Walls.class)!=null) setLocation(getX()-dx,getY()-dy);
@@ -185,7 +202,7 @@ public class Player extends Actor implements AnimationInterface
         String x = listOfGuns.get(0);
         return x;
     }
-    
+
     public boolean hasGun(String gunName){
         for(String gun: listOfGuns){
             if(gunName.contains(gun)) return true;
@@ -200,17 +217,32 @@ public class Player extends Actor implements AnimationInterface
             String x = listOfGuns.get(0);
             listOfGuns.remove(0);
             listOfGuns.add(x);
+            if(gun!=null) getWorld().removeObject(gun);
+
+            if(listOfGuns.get(0)=="Pistol"){
+                itemInfo.updateGun(0, -1, 15);
+                gun = new Pistol(this,50,2,100,100,100,15);
+            }    
+            else if(listOfGuns.get(0)=="Shotgun"){
+                itemInfo.updateGun(0, 8+items.get("Shotgun Bullet")*8, 8);
+                gun = new Pistol(this,100,4,50,50,100,8);
+            }    
+            else{
+                itemInfo.updateGun(0, 30+items.get("Shotgun Bullet")*30, 30);
+                gun = new Pistol(this,200,5,50,50,50,30);
+            }    
+            if(getWorld()!=null) getWorld().addObject(gun,getX(),getY());
         }
     }
 
-    public void newGun(int n)
+    public void newGun(String gun)
     {
-        if((n == 1) && (hasShotgun = false)){
-            listOfGuns.add("shotgun");
+        if(gun.contains("Shotgun")){
+            listOfGuns.add("Shotgun");
             hasShotgun = true;
         }
-        else if ((n == 2) && (hasRifle = false)){
-            listOfGuns.add("rifle");
+        else{
+            listOfGuns.add("Rifle");
             hasRifle = true;
         }
     }
@@ -263,12 +295,33 @@ public class Player extends Actor implements AnimationInterface
         }
     }
 
+    public boolean canReload(Weapon w){
+        if(w instanceof Shotgun){
+            if(items.get("Shotgun Bullet")>0){
+                items.put("Shotgun Bullet",items.get("Shotgun Bullet")-1);
+                itemInfo.updateAmmo(8+items.get("Shotgun Bullet")*8, 8);
+                return true;
+            }    
+            else return false;
+        }   
+        else if(w instanceof Rifle){
+            if(items.get("Rifle Bullet")>0){
+                items.put("Rifle Bullet",items.get("Rifle Bullet")-1);
+                itemInfo.updateAmmo(30+items.get("Rifle Bullet")*30, 30);
+                return true;
+            }    
+            else return false;
+        }
+        else{
+            itemInfo.updateAmmo(-1, 15);
+            return true;
+        }    
+    }    
+
     /**
      * saveData - save data from player into text file
      */
     public void saveData() {
-        // get data from Player
-
         // save data into a text file (haven't tested yet!)
         try {
             FileWriter fw = new FileWriter(txtFile);
@@ -278,6 +331,7 @@ public class Player extends Actor implements AnimationInterface
             fw.write(hearts + "\n");
             fw.write(listOfGuns.size() + "\n");
             for(String gun: listOfGuns) fw.write(gun + "\n");
+            fw.write(getCurrentGun() + "\n");
             for(String key: items.keySet()){
                 fw.write(key+"\n");
                 fw.write(items.get(key)+"\n");
@@ -299,17 +353,21 @@ public class Player extends Actor implements AnimationInterface
             System.out.println("File Not Found");
         }
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             int val = Integer.parseInt(s.nextLine());
             switch (i) {
                 case 0:
                 curLevel = val;
+                break;
                 case 1:
                 maxLevel = val;
+                break;
                 case 2:
                 money = val;
+                break;
                 case 3:
                 hearts = val;
+                break;
                 case 4:
                 for(int j=0;j<val;j++){
                     listOfGuns.add(s.nextLine());
@@ -317,9 +375,16 @@ public class Player extends Actor implements AnimationInterface
             }
         }
 
+        String curgun = s.nextLine();
+        while(getCurrentGun()!=curgun) changeGun();
+
         for (int i = 0; i < 4; i++) {
-            items.put(s.nextLine(),Integer.parseInt(s.nextLine()));
-        }    
+            String item = s.nextLine();
+            int val = Integer.parseInt(s.nextLine());
+            System.out.println(item);
+            System.out.println(val);
+            items.put(item,val);
+        }
     }
 
     /**
@@ -346,5 +411,25 @@ public class Player extends Actor implements AnimationInterface
 
     public void changeItemNumber(String name, int amount){
         items.put(name,items.get(name)+amount);
+    }    
+
+    public void speedBoost(){
+        speed++;
+    }    
+
+    public int getCurLevel(){
+        return curLevel;
+    }    
+
+    public void changeCurLevel(int amount){
+        curLevel=amount;
+    }    
+    
+    public int getMaxLevel(){
+        return maxLevel;
+    }  
+    
+    public void incrementMaxLevel(){
+        maxLevel++;
     }    
 }
