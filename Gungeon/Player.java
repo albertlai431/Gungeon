@@ -130,50 +130,52 @@ public class Player extends Actor implements AnimationInterface
         }
     }   
 
-    int dx = 0, dy = 0;
+    public void move()
+    {
+        int dx = 0, dy = 0;
         if(Greenfoot.isKeyDown("a"))//runs if "a" is pressed and the player is past the starting location
         {
             //animateMovementLeft();
             if(Greenfoot.isKeyDown("s")){
-                dx = -speed; dy = speed;
+                dx = -2; dy = 2;
             }
             else if(Greenfoot.isKeyDown("w")){
-                dx = -speed; dy = -speed;
+                dx = -2; dy = -2;
             }
-            else dx = -speed;
+            else dx = -2;
         }
         else if(Greenfoot.isKeyDown("d"))//runs if "d" is pressed
         {
             //animateMovementRight();
             if(Greenfoot.isKeyDown("s")){
-                dx = speed; dy = speed;
-            }
+                dx = 2; dy = 2;
+            }    
             else if(Greenfoot.isKeyDown("w")){
-                dx = speed; dy = -speed;
-            }
-            else dx = speed;
+                dx = 2; dy = -2;
+            }    
+            else dx = 2;
         }
         else if(Greenfoot.isKeyDown("w"))//runs if "d" is pressed
         {
             //animateMovementUp();
             if(Greenfoot.isKeyDown("a")) {
-                dx = -speed; dy = -speed;
+                dx = -2; dy = -2;
             }
             else if(Greenfoot.isKeyDown("d")) {
-                dx = speed; dy = -speed;
+                dx = 2; dy = -2;
             }
-            else dy = -speed;
+            else dy = -2;
         }
         else if(Greenfoot.isKeyDown("s"))//runs if "d" is pressed
         {
             //animateMovementDown();
             if(Greenfoot.isKeyDown("a")) {
-                dx = -speed; dy = speed;
+                dx = -2; dy = 2;
             }
             else if(Greenfoot.isKeyDown("d")) {
-                dx = speed; dy = speed;
+                dx = 2; dy = 2;
             }
-            else dy = speed;
+            else dy = 2;
         }
 
         setLocation(getX()+dx,getY()+dy);
