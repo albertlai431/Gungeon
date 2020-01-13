@@ -147,4 +147,11 @@ public class ItemInfo extends Actor
         getWorld().removeObject(ammoLabel);
         updateAmmoLabel();
     }
+    /**
+     * Returns the player's score
+     * @return int                  The score
+     */
+    public int getScore(){
+        return score;
+    }
 }
