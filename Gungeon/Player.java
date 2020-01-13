@@ -37,7 +37,7 @@ public class Player extends Actor implements AnimationInterface
     private ItemInfo itemInfo;
 
     private int scaleNumber = 100;
-    private int animationCount = 0;
+    private long animationCount = 0;
     private int frameRate = 7;
     private int imageNumber = 0;
     private int hearts = 0;
@@ -104,6 +104,20 @@ public class Player extends Actor implements AnimationInterface
      */
     public void act()
     {
+        World world = getWorld();
+        List guns = getObjectsInRange(960, Weapon.class);
+        if(guns.size() == 0){
+            if(this.getCurrentGun() == "pistol")
+            {
+                world.addObject(gun,getX()+18, getY()+16);
+            }
+            else if(this.getCurrentGun() == "rifle"){
+                world.addObject(gun,getX()+20, getY()+13);
+            }
+            else if(this.getCurrentGun() == "shotgun"){
+                world.addObject(gun,getX()+16, getY()+15);
+            }
+        }
         animationCount++;  
         move();
         changeGun();
@@ -183,6 +197,16 @@ public class Player extends Actor implements AnimationInterface
         }
 
         setLocation(getX()+dx,getY()+dy);
+        if(this.getCurrentGun() == "pistol")
+        {
+            gun.setLocation(getX()+18, getY()+16);
+        }
+        else if(this.getCurrentGun() == "rifle"){
+            gun.setLocation(getX()+20, getY()+13);
+        }
+        else if(this.getCurrentGun() == "shotgun"){
+            gun.setLocation(getX()+16, getY()+15);
+        }
         Door door = (Door) getOneObjectAtOffset(0, 0, Door.class);
         if((door!=null && !door.getComplete()) || getOneObjectAtOffset(0, 0, Walls.class)!=null) setLocation(getX()-dx,getY()-dy);
     } 
@@ -266,8 +290,33 @@ public class Player extends Actor implements AnimationInterface
             imageNumber = (imageNumber + 1)% (upMvt.length);
             setImage(upMvt[imageNumber]);
         }
+        if(this.getCurrentGun() == "pistol")
+        {
+            GreenfootImage rightGun = new GreenfootImage("Pistol.png");
+            rightGun.scale(rightGun.getWidth()*150/100,rightGun.getHeight()*150/100);
+            
+            gun.setImage(rightGun);
+            gun.setLocation(getX()-10,getY()-12);
+        }
+        else if(this.getCurrentGun() == "rifle")
+        {
+            GreenfootImage rightGun = new GreenfootImage("Rifle.png");
+            rightGun.scale(rightGun.getWidth()*150/100,rightGun.getHeight()*150/100);
+            
+            gun.setImage(rightGun);
+            gun.setLocation(getX()-20,getY()+4);
+        }
+        else if(this.getCurrentGun() == "shotgun")
+        {
+            GreenfootImage rightGun = new GreenfootImage("Shotgun.png");
+            rightGun.scale(rightGun.getWidth()*150/100,rightGun.getHeight()*150/100);
+            
+            gun.setImage(rightGun);
+            gun.setLocation(getX()-10,getY()+6);
+        }
+        getWorld().setPaintOrder(Label.class,ItemInfo.class,Player.class,Weapon.class,Ammunition.class);
     }
-
+    
     public void animateMovementDown()
     {
         if(animationCount%frameRate == 0)
@@ -275,8 +324,10 @@ public class Player extends Actor implements AnimationInterface
             imageNumber = (imageNumber + 1)% (downMvt.length);
             setImage(downMvt[imageNumber]);
         }
+        
+        getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
     }
-
+    
     public void animateMovementRight()
     {
         if(animationCount%frameRate == 0)
@@ -284,14 +335,69 @@ public class Player extends Actor implements AnimationInterface
             imageNumber = (imageNumber + 1)% (rightMvt.length);
             setImage(rightMvt[imageNumber]);
         }
+        if(this.getCurrentGun() == "pistol")
+        {
+            GreenfootImage rightGun = new GreenfootImage("Pistol.png");
+            rightGun.scale(rightGun.getWidth()*150/100,rightGun.getHeight()*150/100);
+            
+            gun.setImage(rightGun);
+            getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        }
+        else if(this.getCurrentGun() == "rifle")
+        {
+            GreenfootImage rightGun = new GreenfootImage("Rifle.png");
+            rightGun.scale(rightGun.getWidth()*150/100,rightGun.getHeight()*150/100);
+            
+            gun.setImage(rightGun);
+            getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        }
+        else if(this.getCurrentGun() == "shotgun")
+        {
+            GreenfootImage rightGun = new GreenfootImage("Shotgun.png");
+            rightGun.scale(rightGun.getWidth()*150/100,rightGun.getHeight()*150/100);
+            
+            gun.setImage(rightGun);
+            getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        }
     }
-
+    
     public void animateMovementLeft()
     {
         if(animationCount%frameRate == 0)
         {
             imageNumber = (imageNumber + 1)% (leftMvt.length);
             setImage(leftMvt[imageNumber]);
+        }
+        
+        if(this.getCurrentGun() == "pistol")
+        {
+            GreenfootImage leftGun = new GreenfootImage("Pistol.png");
+            leftGun.mirrorVertically();
+            leftGun.scale(leftGun.getWidth()*150/100,leftGun.getHeight()*150/100);
+            
+            gun.setImage(leftGun);
+            gun.setLocation(getX()+10,getY()+12);
+            getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        }
+        else if(this.getCurrentGun() == "rifle")
+        {
+            GreenfootImage leftGun = new GreenfootImage("Rifle.png");
+            leftGun.mirrorVertically();
+            leftGun.scale(leftGun.getWidth()*150/100,leftGun.getHeight()*150/100);
+            
+            gun.setImage(leftGun);
+            gun.setLocation(getX()+9,getY()+12);
+            getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        }
+        else if(this.getCurrentGun() == "shotgun")
+        {
+            GreenfootImage leftGun = new GreenfootImage("Shotgun.png");
+            leftGun.mirrorVertically();
+            leftGun.scale(leftGun.getWidth()*150/100,leftGun.getHeight()*150/100);
+            
+            gun.setImage(leftGun);
+            gun.setLocation(getX()+10,getY()+12);
+            getWorld().setPaintOrder(Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
         }
     }
 
