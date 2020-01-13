@@ -9,15 +9,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Pistol extends Weapon
 {
     private String image = "Pistol.png";
-    public Pistol(int damage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize)
+    public Pistol(Player player, int damage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize)
     {
-        super(damage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize);
+        super(player, damage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize);
         setImage(image);
     }
     protected Ammunition createBullet()
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
-        return new bulletBullet(mouseX, mouseY, bulletDamage,bulletSpeed);
+        return new PistolBullet(mouseX, mouseY, bulletDamage,bulletSpeed);
     }
 }

@@ -37,7 +37,8 @@ public abstract class Weapon extends Actor
      * @param   magSize          rhe number of magazines the user has
      * 
      */
-    public Weapon(int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, /*int magazines,*/ int magSize){
+    public Weapon(Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, /*int magazines,*/ int magSize){
+        this.player = player;
         this.bulletDamage = bulletDamage;
         this.bulletSpeed = bulletSpeed;
         this.fireRate = fireRate;
