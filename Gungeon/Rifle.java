@@ -9,9 +9,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Rifle extends Weapon
 {
     private GreenfootImage gun = new GreenfootImage("Rifle.png");
-    public Rifle(Player player,int damage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize)
+    public Rifle(ItemInfo itemInfo, Player player,int damage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize)
     {
-        super(player,damage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize);
+        super(itemInfo,player,damage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize);
         gun.scale(gun.getWidth()*150/100,gun.getHeight()*150/100);
         setImage(gun);
     }
