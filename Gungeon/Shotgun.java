@@ -9,9 +9,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Shotgun extends Weapon
 {
     private String image = "Shotgun.png";
-    public Shotgun(int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magazines, int magSize)
+    public Shotgun(int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize)
     {
-        super(bulletDamage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magazines, magSize);
+        super(bulletDamage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize);
         setImage(image);
     }
     protected Ammunition createBullet()

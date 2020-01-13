@@ -14,7 +14,7 @@ public abstract class Weapon extends Actor
     private long reloadTime;
     protected int bulletDamage;
     private long startTime;
-    private int magazines;
+    //private int magazines;
     private int ammoInMag;
     private int magSize;
     private boolean reloading;
@@ -24,6 +24,7 @@ public abstract class Weapon extends Actor
     private long lastFiredTime=0;
     protected int mouseX;
     protected int mouseY;
+    private Player player;
     /**
      * Constructor - Initializes the variables for the weapon
      * 
@@ -36,14 +37,14 @@ public abstract class Weapon extends Actor
      * @param   magSize          rhe number of magazines the user has
      * 
      */
-    public Weapon(int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, int magazines, int magSize){
+    public Weapon(int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, /*int magazines,*/ int magSize){
         this.bulletDamage = bulletDamage;
         this.bulletSpeed = bulletSpeed;
         this.fireRate = fireRate;
         this.bulletReadyTime = bulletReadyTime;
         this.reloadTime = reloadTime;
         this.startTime = 0;
-        this.magazines = magazines; 
+        //this.magazines = magazines; 
         this.ammoInMag = magSize;
         this.magSize = magSize;
     }
@@ -57,7 +58,6 @@ public abstract class Weapon extends Actor
      */
     public void act() 
     {
-        //System.out.println(pressedReload);
         
         MouseInfo mi = Greenfoot.getMouseInfo();
         if (mi != null)
@@ -136,9 +136,9 @@ public abstract class Weapon extends Actor
                 {
                     this.startTime = 0;
                     reloading = false;
-                    if(this.magazines>0)
+                    if(/*magazines>0*/player.canReload(this))
                     {
-                        this.magazines--;
+                        //this.magazines--;
                         this.ammoInMag = magSize;
                         
                     }
@@ -173,7 +173,7 @@ public abstract class Weapon extends Actor
         System.out.println(ammoInMag);
         this.ammoInMag--;
         
-        if(ammoInMag==0)
+        if(ammoInMag==0&&Greenfoot.isKeyDown("r"))
         {
             startReload();
             
