@@ -74,28 +74,41 @@ public class StoreMenu extends Menu
         lastItemCost = itemCost;
 
         //make buttons transparent accordingly
-        if(money<itemCost){//or if already bought
-            purchaseButton.getImage().setTransparency(0);
-        }    
-        else purchaseButton.getImage().setTransparency(255);
-
-        //if already equipped
+        setPurchaseTransparency();
+        setEquipTransparency();
     }    
 
     private void purchase(){
         //add to player inventory
-        money-=lastItemCost;
-        if(lastItemName.contains("Gun") || money<lastItemCost) purchaseButton.getImage().setTransparency(0);
+        if(lastItemName.contains("Gun")){
+            
+        }    
+        player.setMoney(-lastItemCost);
+        setPurchaseTransparency();
     }    
 
     private void equip(){
-        //add to current player weapon
-        if(lastItemName.contains("Gun")) equipButton.getImage().setTransparency(0);
+        if(lastItemName.contains("Gun")){
+            
+        }    
         else{
             //decrease inventory by one
             //equip item
         }
+        setEquipTransparency();
     }
+    
+    private void setPurchaseTransparency(){
+        if(player.getMoney()<lastItemCost || (lastItemName.contains("Gun") && player.hasGun(lastItemName))){
+            purchaseButton.getImage().setTransparency(0);
+        }    
+        else purchaseButton.getImage().setTransparency(255);
+    }    
+    
+    private void setEquipTransparency(){
+        if((lastItemName.contains("Gun") && lastItemName.contains(player.getCurrentGun()))|| player.getItemNumber(lastItemName)>0) equipButton.getImage().setTransparency(255);
+        else equipButton.getImage().setTransparency(255);
+    }    
 
     protected void checkButtonClicks(){
         PauseWorld world = (PauseWorld) getWorld();

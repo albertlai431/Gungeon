@@ -1,6 +1,9 @@
 This text file explains how players are saved.
 
-Every 2 lines contains the name of the variable and the value.
+Every line contains the value.
+For weapons, first value is the number of guns. Second value is the name of the guns.
+For items, 2 values are given: the item name and value. 
+
 
 Format:
 curLevel 
@@ -8,4 +11,6 @@ maxLevel
 money
 hearts
 
-Inventory
+Weapons
+
+Items

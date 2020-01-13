@@ -40,4 +40,8 @@ public class Door extends Obstacles
     private int getLevel(){
         return curLevel;
     }    
+    
+    public boolean getComplete(){
+        return isComplete;
+    }    
 }
