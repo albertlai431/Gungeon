@@ -1,3 +1,4 @@
+
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
@@ -8,34 +9,66 @@ import java.util.ArrayList;
  */
 public class BulletEnemy extends Enemy
 {
-    // Need to use array list of images later
-    private static GreenfootImage BulletEnemyImage;;
     private static int imageX;
     private static int imageY;
     public BulletEnemy(int health, int bulletWidth)
     {
-        //BulletEnemyImage.scale(imageX, imageY);
-        //setImage(BulletEnemyImage);        
+        animationImage = new GreenfootImage("bulletEnemyDown0.png");
+        animationImage.scale(imageX, imageY);
+        setImage(animationImage);        
         healthPoints = health;     
         this.bulletWidth = bulletWidth;
+        fireRate = 30;
     }
     
-    public void addedToWorld()
-    {
-        foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
-        player = foundPlayers.get(0);
-    }
     
-    public void act() 
+     public void act() 
     {
-        moveTowardsPlayer();       
+        moveTowardsPlayer(); 
     }    
- 
-    
+     
     public void attack()
     {
-        //getWorld().addObject(new PistolBullet(player, 1), getX(), getY());   
+        //getWorld().addObject(new PistolBullet(player.getX(), player.getY(), 1, 15), getX(), getY());   
+    }  
+    
+    public void animateMovementUp()
+    {
+    }
+    
+    public void animateMovementDown()
+    {
+    }
+    
+    public void animateMovementRight()
+    {
+    }
+    
+    public void animateMovementLeft()
+    {
         
     }
-   
+    
+    public void animate(String direction)
+    {
+        int totalFrames = 0;
+        String imageName = new String(direction);
+        if(direction.equals("Left") || direction.equals("Right"))
+        {
+            totalFrames = 5;
+            imageName = new String("Left");
+        }
+        else
+        {
+            totalFrames = 8;
+        }
+        for(int i = 0; i < totalFrames; i++)
+        {
+            animationImage = new GreenfootImage("bulletEnemy" + imageName + i + ".png");
+            animationImage.scale(16, 28);
+            animationImage.mirrorHorizontally();
+            setImage(animationImage);
+            move(1);
+        }
+    }
 }
