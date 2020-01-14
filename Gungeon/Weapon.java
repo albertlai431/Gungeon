@@ -74,8 +74,9 @@ public abstract class Weapon extends Actor
         //reload the weapon if the user presses r
         if(Greenfoot.isKeyDown("r")&&ammoInMag<magSize)
         {
-            if(ammoInMag<=0)itemInfo.updateAmmo(0, ammoInMag);
-            else{itemInfo.updateAmmo(-1, ammoInMag);}
+            //if(ammoInMag<=0)itemInfo.updateAmmo(0, ammoInMag);
+            //else{itemInfo.updateAmmo(0, ammoInMag);}
+            itemInfo.updateAmmo(0, ammoInMag);
             startReload();
         }
         //check for mouse press
@@ -178,7 +179,7 @@ public abstract class Weapon extends Actor
         Ammunition bullet = createBullet();
         lastFiredTime = System.currentTimeMillis();
         getWorld().addObject(bullet, this.getX(), this.getY());
-        this.ammoInMag--;
+        //this.ammoInMag--;
     }
 
     public int getAmmo()

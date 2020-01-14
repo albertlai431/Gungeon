@@ -20,6 +20,7 @@ public class Shotgun extends Weapon
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
         if(ammoInMag<=10) player.reduceAmmo();
+        itemInfo.updateAmmo();
         return new ShotgunBullet(mouseX, mouseY,bulletDamage,bulletSpeed);
     }
 }
