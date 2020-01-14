@@ -8,22 +8,16 @@ import java.util.ArrayList;
  */
 public class SniperEnemy extends Enemy
 {
-    // Need to use array list of images later
-    private static GreenfootImage SniperEnemyImage;
     private static int imageX;
     private static int imageY;
     public SniperEnemy(int health, int bulletWidth)
     {
-        //SniperEnemyImage.scale(imageX, imageY);
-        //setImage(SniperEnemyImage);        
-        //healthPoints = health;
-        //this.bulletWidth = bulletWidth;        
-    }
-    
-    public void addedToWorld()
-    {
-        foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
-        player = foundPlayers.get(0);
+        animationImage = new GreenfootImage("bulletEnemyDown0.png");
+        animationImage.scale(imageX, imageY);
+        setImage(animationImage);        
+        healthPoints = health;     
+        this.bulletWidth = bulletWidth;
+        fireRate = 60;    
     }
 
     public void act() 
@@ -34,8 +28,45 @@ public class SniperEnemy extends Enemy
     
     public void attack()
     {
-        //getWorld().addObject(new SniperBullet(player, 1), getX(), getY());   
-        
+        //getWorld().addObject(new SniperBullet(player.getX(), player.getY(), 1, 30), getX(), getY());          
     }
     
+    public void animate(String direction)
+    {
+        int totalFrames = 0;
+        String imageName = new String(direction);
+        if(direction.equals("Left") || direction.equals("Right"))
+        {
+            totalFrames = 4;
+            imageName = new String("Left");
+        }
+        else
+        {
+            totalFrames = 7;
+        }
+        for(int i = 0; i < totalFrames; i++)
+        {
+            animationImage = new GreenfootImage("sniperEnemy" + imageName + i + ".png");
+            animationImage.scale(16, 28);
+            animationImage.mirrorHorizontally();
+            setImage(animationImage);
+            move(1);
+        }
+    }
+    
+    public void animateMovementUp()
+    {
+    }
+    
+    public void animateMovementDown()
+    {
+    }
+    
+    public void animateMovementRight()
+    {
+    }
+    
+    public void animateMovementLeft()
+    {
+    }
 }
