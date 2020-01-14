@@ -47,7 +47,7 @@ public class Label extends Actor
         //changes the outline to be white
         this.text = text;
         this.fontSize = fontSize;
-        isTransparent = false;
+        this. isTransparent = isTransparent;
         font = new Font ("calibri", false, false, fontSize);
         fontName = "Calibri";
         textColour = new Color(txtR,txtB,txtG);
@@ -90,7 +90,7 @@ public class Label extends Actor
         //changes the outline to be white
         this.text = text;
         this.fontSize = fontSize;
-        isTransparent = false;
+        this.isTransparent = isTransparent;
         this.fontName = fontName;
         font = new Font (fontName, false, false, fontSize);
         textColour = new Color(txtR,txtB,txtG);
@@ -130,5 +130,8 @@ public class Label extends Actor
     }
     public int getLength(){
         return finder.getTextWidth(text, fontName, fontSize);
+    }
+    public void updateText(String newText){
+        text = newText;
     }
 }
