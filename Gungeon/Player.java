@@ -237,6 +237,11 @@ public class Player extends Actor implements AnimationInterface
         }
     } 
 
+    /**
+     * invalidMove - checks if the last move was invalid
+     * 
+     * @return boolean              true if the move was invalid and false if not
+     */
     public boolean invalidMove(){
         for(int i =-1; i<=1;i++){
             for(int j =-1;j<=1;j++){
@@ -248,13 +253,23 @@ public class Player extends Actor implements AnimationInterface
         }
         return false;
     }    
-    
+
+    /**
+     * getCurrentgun - returns the name of the current gun
+     * 
+     * @return String               the name of the current gun
+     */
     public String getCurrentGun()
     {
-        String x = listOfGuns.get(0);
-        return x;
+        return listOfGuns.get(0);
     }
 
+    /**
+     * hasGun - returns whether or not the player has the specified gun
+     * 
+     * @param gunName               Name of the gun
+     * @return boolean              true if the player has the gun and false if not
+     */
     public boolean hasGun(String gunName){
         for(String gun: listOfGuns){
             if(gunName.contains(gun)) return true;
@@ -262,6 +277,9 @@ public class Player extends Actor implements AnimationInterface
         return false;
     }    
 
+    /**
+     * changeGun - changes the gun to the next one in the arraylist
+     */
     public void changeGun()
     {
         String x = listOfGuns.remove(0);
@@ -270,31 +288,36 @@ public class Player extends Actor implements AnimationInterface
         if(gun!=null) getWorld().removeObject(gun);
 
         if(reloadBar!=null) reloadBar.remove(getWorld());
-        if(reloadBar!=null && reloadBar.getWorld()!=null) getWorld().removeObject(reloadBar);
+        //if(reloadBar!=null && reloadBar.getWorld()!=null) getWorld().removeObject(reloadBar);
 
         if(listOfGuns.get(0).equals("Pistol")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, ammoInMag.get("Pistol"));
-            gun = new Pistol(itemInfo,this,50,4,100,100,100,ammoInMag.get("Pistol"));
+            gun = new Pistol(itemInfo,this,50,4,100,100,100,15, ammoInMag.get("Pistol"));
             getWorld().addObject(gun,getX()+18, getY()+16);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Pistol")), 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
-            getWorld().addObject(reloadBar,200,200);
+            //getWorld().addObject(reloadBar,200,200);
         }    
         else if(listOfGuns.get(0).equals("Shotgun")){
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, ammoInMag.get("Shotgun")+items.get("Shotgun Bullet")*8, ammoInMag.get("Shotgun"));
-            gun = new Shotgun(itemInfo,this,200,5,500,500,300,ammoInMag.get("Shotgun"));
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, items.get("Shotgun Bullet"), ammoInMag.get("Shotgun"));
+            gun = new Shotgun(itemInfo,this,200,5,300,300,300,8,ammoInMag.get("Shotgun"));
             getWorld().addObject(gun,getX()+16, getY()+15);
-            reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Shotgun")), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
-            getWorld().addObject(reloadBar,200,200);
+            reloadBar = new ResourceBarManager(8, ammoInMag.get("Shotgun"), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
+            //getWorld().addObject(reloadBar,200,200);
         }    
         else{
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(1, ammoInMag.get("Rifle")+items.get("Rifle Bullet")*30, ammoInMag.get("Rifle"));
-            gun = new Rifle(itemInfo,this,100,6,50,50,50,ammoInMag.get("Rifle"));
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(1, items.get("Rifle Bullet"), ammoInMag.get("Rifle"));
+            gun = new Rifle(itemInfo,this,100,6,50,50,50,30,ammoInMag.get("Rifle"));
             getWorld().addObject(gun,getX()+20, getY()+13);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Rifle")), 6, 700, 575, rifleBarImg, (GameWorld) getWorld());
-            getWorld().addObject(reloadBar,200,200);
+            //getWorld().addObject(reloadBar,200,200);
         } 
     }
 
+    /**
+     * newGun - adds a new gun to the player
+     * 
+     * @param gun               name of the gun
+     */
     public void newGun(String gun)
     {
         if(gun.contains("Shotgun")){
@@ -307,6 +330,9 @@ public class Player extends Actor implements AnimationInterface
         }
     }
 
+    /**
+     * loseOneHeart - takes one half-heart away from the player
+     */
     public void loseOneHeart()
     {
         hearts--;
@@ -317,6 +343,9 @@ public class Player extends Actor implements AnimationInterface
         }   
     }
 
+    /**
+     * addOneHeart - adds a half-heart to the player
+     */
     public void addOneHeart()
     {
         hearts++;
@@ -410,11 +439,17 @@ public class Player extends Actor implements AnimationInterface
         }
     }
 
+    /**
+     * canReload - checks if there is enough ammo for reload and if there is, update itemInfo and reloadBar
+     * 
+     * @param w                 current weapon of the player
+     * @return boolean          whether the player can reload or not
+     */
     public boolean canReload(Weapon w){
         if(w instanceof Shotgun){
             if(items.get("Shotgun Bullet")>0 && w.getAmmo()<8){
-                items.put("Shotgun Bullet",items.get("Shotgun Bullet")-1);
-                itemInfo.updateAmmo(ammoInMag.get("Shotgun")+items.get("Shotgun Bullet")*8, 8);
+                items.put("Shotgun Bullet",items.get("Shotgun Bullet")-(8-w.getAmmo()));
+                itemInfo.updateAmmo(items.get("Shotgun Bullet"), 8);
                 reloadBar.refillAmmo((GameWorld) getWorld());
                 return true;
             }    
@@ -422,15 +457,15 @@ public class Player extends Actor implements AnimationInterface
         }   
         else if(w instanceof Rifle){
             if(items.get("Rifle Bullet")>0 && w.getAmmo()<30){
-                items.put("Rifle Bullet",items.get("Rifle Bullet")-1);
-                itemInfo.updateAmmo(ammoInMag.get("Rifle")+items.get("Rifle Bullet")*30, 30);
+                items.put("Rifle Bullet",items.get("Rifle Bullet")-(30-w.getAmmo()));
+                itemInfo.updateAmmo(items.get("Rifle Bullet"), 30);
                 reloadBar.refillAmmo((GameWorld) getWorld());
                 return true;
             }    
             else return false;
         }
         else if(w.getAmmo()<15){
-            itemInfo.updateAmmo(-1, ammoInMag.get("Pistol"));
+            itemInfo.updateAmmo(-1, 15);
             reloadBar.refillAmmo((GameWorld) getWorld());
             return true;
         }  
@@ -532,46 +567,88 @@ public class Player extends Actor implements AnimationInterface
         money+=amount;
     }
 
+    /**
+     * getItemNumber - gets the amount of item that the player has
+     * 
+     * @param name              Item name
+     * @return int              amount of item
+     */
     public int getItemNumber(String name){
         if(items.containsKey(name)) return items.get(name);
         return 0;
     }    
 
+    /**
+     * changeItemNumber - adds or removes an item
+     * 
+     * @param name              Item name
+     * @param amount            Amount to add or remove
+     */
     public void changeItemNumber(String name, int amount){
-        items.replace(name,items.get(name)+amount);
         if(name.equals("Shotgun Bullet")){
-            
+            items.replace("Shotgun Bullet",items.get("Shotgun Bullet")+amount);
+            itemInfo.updateAmmo(items.get("Shotgun Bullet"), gun.getAmmo());
         } 
-        else if(name.equals("Shotgun Bullet")){
-            
+        else if(name.equals("Rifle Bullet")){
+            items.replace("Rifle Bullet",items.get("Rifle Bullet")+amount);
+            itemInfo.updateAmmo(items.get("Rifle Bullet"), gun.getAmmo());
         }
-            
+        else items.replace(name,items.get(name)+amount);
     }    
 
+    /**
+     * speedBoost - increase the speed
+     */
     public void speedBoost(){
         speed++;
     }    
 
+    /**
+     * getCurLevel - returns the current level
+     * 
+     * @return int          current level of the player
+     */
     public int getCurLevel(){
         return curLevel;
     }    
 
+    /**
+     * changeCurLevel - changes level of the player
+     * 
+     * @param amount        new level
+     */
     public void changeCurLevel(int amount){
         curLevel=amount;
     }    
 
+    /**
+     * getMaxLevel - returns max level of the player
+     * 
+     * @return int          max level of the player
+     */
     public int getMaxLevel(){
         return maxLevel;
     }  
 
+    /**
+     * incrementMaxLevel - increases max level
+     */
     public void incrementMaxLevel(){
         maxLevel++;
     }    
 
+    /**
+     * getHearts - returns number of hearts of the player
+     * 
+     * @return int          number of hearts of the player
+     */
     public int getHearts(){
         return hearts;
     }
 
+    /**
+     * reduceAmmo - updates reloadBar
+     */
     public void reduceAmmo(){
         reloadBar.reduceAmmo((GameWorld) getWorld());
     }    

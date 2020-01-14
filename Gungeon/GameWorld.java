@@ -126,8 +126,7 @@ public class GameWorld extends World
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
-            closeWorld(curLevel);
-            Greenfoot.setWorld(new PauseWorld("store",this,player,itemInfo));
+            Greenfoot.setWorld(new PauseWorld(this,player,itemInfo));
         }    
     }
     
@@ -248,16 +247,16 @@ public class GameWorld extends World
                             }
                         } 
                         //fix
-                        else if(actor.indexOf("RifleEnemy")==0){
-                            a = new SniperEnemy(200,2);
+                        else if(actor.indexOf("BulletEnemy")==0){
+                            a = new BulletEnemy();
                             isEnemy = true;
                         }
                         else if(actor.indexOf("ShotgunEnemy")==0){
-                            a = new ShotgunEnemy(100,2);
+                            a = new ShotgunEnemy();
                             isEnemy = true;
                         } 
-                        else if(actor.indexOf("RocketEnemy")==0){
-                            a = new BulletEnemy(300,2);
+                        else if(actor.indexOf("SniperEnemy")==0){
+                            a = new SniperEnemy();
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){
@@ -327,9 +326,9 @@ public class GameWorld extends World
      */
     public void createTextFiles(){
         FileWriter fw = null;
-        int[] obstacles = {0,2,5,10,20,30};
+        int[] obstacles = {1,2,5,8,9,10};
         //ShotgunEnemy, RifleEnemy, RocketEnemy, Boss
-        int[][] enemies = {{4,6,8,6,5},{2,4,6,4,3},{0,1,2,5,3}};
+        int[][] enemies = {{3,4,3,3,4},{2,3,5,4,3},{0,1,2,5,3}};
         String[] obstaclesNames = {"Walls", "Arrows", "Fire", "Spikes"};
 
         for(int i=1;i<=totLevels;i++){
@@ -419,7 +418,7 @@ public class GameWorld extends World
                         }
                     }
 
-                    //Enemies (ShotgunEnemy, RifleEnemy, RocketEnemy, Boss)
+                    //Enemies (BulletEnemy, SniperEnemy, ShotgunEnemy, Boss)
                     for(int k=0;k<3;k++){
                         for(int l=0;l<enemies[0][i-1];l++){
                             while(true){
@@ -428,9 +427,9 @@ public class GameWorld extends World
                                 if(!curarr[x][y]){
                                     curarr[x][y] = true;
                                     a++;
-                                    if(k==0) fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
-                                    else if(k==1) fw.write("RifleEnemy\n" + x + "\n" + y + "\n");
-                                    else fw.write("RocketEnemy\n" + x + "\n" + y + "\n");
+                                    if(k==0) fw.write("BulletEnemy\n" + x + "\n" + y + "\n");
+                                    else if(k==1) fw.write("SniperEnemy\n" + x + "\n" + y + "\n");
+                                    else fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
                                     break;
                                 }   
                             }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class LineOfSightRect extends Actor
 {
-    private ArrayList<Resource> obstacles;
+    private ArrayList<Obstacles> obstacles;
     private GreenfootImage rect;
     private Color rectColor = new Color(123, 115, 115);
     public LineOfSightRect(int x, int y)
@@ -23,13 +23,13 @@ public class LineOfSightRect extends Actor
     {
         setLocation((enemyX + playerX)/2, (enemyY + playerY)/2);
         setRotation(rotation);        
-        obstacles = new ArrayList<Resource>(getIntersectingObjects(Resource.class));
+        obstacles = (ArrayList) (getIntersectingObjects(Obstacles.class));
         if(obstacles.isEmpty())
         {
-            System.out.println("yes");
+            //System.out.println("yes");
             return true;
         }
-        System.out.println("no");
+        //System.out.println("no");
         return false;
     } 
 }

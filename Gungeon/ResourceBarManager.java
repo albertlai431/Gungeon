@@ -141,9 +141,9 @@ public class ResourceBarManager extends Actor
                 resourceStack.push(new Resource(firstImage));
                 world.addObject(resourceStack.peek(), currentX, currentY + interval);
             }
+            currentResource = maxResource;
             return true;
         }
-        currentResource = maxResource;
         return false;
     }
     

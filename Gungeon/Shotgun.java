@@ -9,9 +9,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Shotgun extends Weapon
 {
     private GreenfootImage gun = new GreenfootImage("Shotgun.png");
-    public Shotgun(ItemInfo itemInfo, Player player,int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize)
+    public Shotgun(ItemInfo itemInfo, Player player,int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize, int ammoInMag)
     {
-        super(itemInfo,player, bulletDamage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize);
+        super(itemInfo,player, bulletDamage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize, ammoInMag);
         gun.scale(gun.getWidth()*150/100,gun.getHeight()*150/100);
         setImage(gun);
     }
@@ -19,8 +19,6 @@ public class Shotgun extends Weapon
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
-        if(ammoInMag<=10) player.reduceAmmo();
-        itemInfo.updateAmmo();
         return new ShotgunBullet(mouseX, mouseY,bulletDamage,bulletSpeed);
     }
 }

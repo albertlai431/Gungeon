@@ -37,7 +37,7 @@ public abstract class Weapon extends Actor
      * @param   magSize          rhe number of magazines the user has
      * 
      */
-    public Weapon(ItemInfo itemInfo, Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, int magSize){
+    public Weapon(ItemInfo itemInfo, Player player, int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime , long reloadTime, int magSize, int ammoInMag){
         this.player = player;
         this.bulletDamage = bulletDamage;
         this.bulletSpeed = bulletSpeed;
@@ -46,7 +46,7 @@ public abstract class Weapon extends Actor
         this.reloadTime = reloadTime;
         this.startTime = 0;
         //this.magazines = magazines; 
-        this.ammoInMag = magSize;
+        this.ammoInMag = ammoInMag;
         this.magSize = magSize;
         this.itemInfo = itemInfo;
     }
@@ -76,7 +76,7 @@ public abstract class Weapon extends Actor
         {
             //if(ammoInMag<=0)itemInfo.updateAmmo(0, ammoInMag);
             //else{itemInfo.updateAmmo(0, ammoInMag);}
-            itemInfo.updateAmmo(0, ammoInMag);
+            
             startReload();
         }
         //check for mouse press
@@ -145,7 +145,7 @@ public abstract class Weapon extends Actor
                 reloading = false;
                 if(player.canReload(this))
                 {
-
+                    
                     this.ammoInMag = magSize;
 
                 }
@@ -179,7 +179,9 @@ public abstract class Weapon extends Actor
         Ammunition bullet = createBullet();
         lastFiredTime = System.currentTimeMillis();
         getWorld().addObject(bullet, this.getX(), this.getY());
-        //this.ammoInMag--;
+        this.ammoInMag--;
+        if(ammoInMag<10) player.reduceAmmo();
+        itemInfo.updateAmmo();
     }
 
     public int getAmmo()

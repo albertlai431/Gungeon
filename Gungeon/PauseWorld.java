@@ -22,13 +22,13 @@ public class PauseWorld extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(960, 640, 1); 
-        setBackground("fullTiledFloor.png");
+        setBackground("pauseWorldImg.png");
         if(menuType.equals("pause")) addObject(new PauseMenu(),480,320);
         this.gameWorld = gameWorld;
     }
     
-    public PauseWorld(String menuType, GameWorld gameWorld, Player player, ItemInfo itemInfo){
-        this(menuType, gameWorld);
+    public PauseWorld(GameWorld gameWorld, Player player, ItemInfo itemInfo){
+        this("store", gameWorld);
         addObject(new StoreMenu(player,itemInfo),480,320);
     }   
     

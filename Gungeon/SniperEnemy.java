@@ -34,7 +34,7 @@ public class SniperEnemy extends Enemy
     
     public void attack()
     {
-        getWorld().addObject(new SniperBullet(player.getX(), player.getY(), 1, 15), getX(), getY());          
+        getWorld().addObject(new RifleBullet(player.getX(), player.getY(), 1, 15), getX(), getY());          
     }
       
     public void animateMovementUp()

@@ -1,19 +1,17 @@
 1
 0
-9500
+10000
 6
 2
-2
+1
 Pistol
-10
-Rifle
-30
+15
 Pistol
-Speed Boost
+Rifle Bullet
 0
 Shotgun Bullet
 0
 Half-Heart Refill
 0
-Rifle Bullet
+Speed Boost
 0
