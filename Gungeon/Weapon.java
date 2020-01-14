@@ -23,7 +23,7 @@ public abstract class Weapon extends Actor
     protected int mouseX;
     protected int mouseY;
     protected Player player;
-    private ItemInfo itemInfo;
+    protected ItemInfo itemInfo;
     /**
      * Constructor - Initializes the variables for the weapon
      * 
@@ -72,11 +72,10 @@ public abstract class Weapon extends Actor
             stopFiring();
         }
         //reload the weapon if the user presses r
-        if(Greenfoot.isKeyDown("r"))
+        if(Greenfoot.isKeyDown("r")&&ammoInMag<magSize)
         {
             if(ammoInMag<=0)itemInfo.updateAmmo(0, ammoInMag);
             else{itemInfo.updateAmmo(-1, ammoInMag);}
-            //itemInfo.updateAmmo();
             startReload();
         }
         //check for mouse press
@@ -179,15 +178,7 @@ public abstract class Weapon extends Actor
         Ammunition bullet = createBullet();
         lastFiredTime = System.currentTimeMillis();
         getWorld().addObject(bullet, this.getX(), this.getY());
-        //System.out.println(ammoInMag);
         this.ammoInMag--;
-
-        if(ammoInMag==0&&Greenfoot.isKeyDown("r"))
-        {
-            itemInfo.updateAmmo();
-            startReload();
-
-        }
     }
 
     public int getAmmo()
