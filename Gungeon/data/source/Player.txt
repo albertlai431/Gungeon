@@ -13,5 +13,5 @@ Shotgun Bullet
 0
 Half-Heart Refill
 0
-Speed Boost 
+Speed Boost
 0

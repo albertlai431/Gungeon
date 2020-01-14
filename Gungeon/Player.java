@@ -273,19 +273,19 @@ public class Player extends Actor implements AnimationInterface
 
         if(listOfGuns.get(0).equals("Pistol")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, ammoInMag.get("Pistol"));
-            gun = new Pistol(itemInfo,this,50,3,100,100,100,ammoInMag.get("Pistol"));
+            gun = new Pistol(itemInfo,this,50,4,100,100,100,ammoInMag.get("Pistol"));
             getWorld().addObject(gun,getX()+18, getY()+16);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Pistol")), 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
         }    
         else if(listOfGuns.get(0).equals("Shotgun")){
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, ammoInMag.get("Shotgun")+items.get("Shotgun Bullet")*8, ammoInMag.get("Shotgun"));
-            gun = new Shotgun(itemInfo,this,100,4,50,50,100,ammoInMag.get("Shotgun"));
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, ammoInMag.get("Shotgun")+items.get("Shotgun Bullet")*8, ammoInMag.get("Shotgun"));
+            gun = new Shotgun(itemInfo,this,200,5,500,500,300,ammoInMag.get("Shotgun"));
             getWorld().addObject(gun,getX()+16, getY()+15);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Shotgun")), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
         }    
         else{
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, ammoInMag.get("Rifle")+items.get("Rifle Bullet")*30, ammoInMag.get("Rifle"));
-            gun = new Rifle(itemInfo,this,200,5,50,50,50,30);
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(1, ammoInMag.get("Rifle")+items.get("Rifle Bullet")*30, ammoInMag.get("Rifle"));
+            gun = new Rifle(itemInfo,this,100,6,50,50,50,ammoInMag.get("Rifle"));
             getWorld().addObject(gun,getX()+20, getY()+13);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Rifle")), 6, 700, 575, rifleBarImg, (GameWorld) getWorld());
         } 
@@ -562,5 +562,6 @@ public class Player extends Actor implements AnimationInterface
 
     public void reduceAmmo(){
         reloadBar.reduceAmmo((GameWorld) getWorld());
+        itemInfo.updateAmmo();
     }    
 }

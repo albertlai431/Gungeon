@@ -7,11 +7,11 @@
 Pistol
 15
 Pistol
-Rifle Bullet
+Speed Boost
 0
 Shotgun Bullet
 0
 Half-Heart Refill
 0
-Speed Boost 
+Rifle Bullet
 0
