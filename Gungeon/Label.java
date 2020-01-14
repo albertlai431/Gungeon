@@ -133,5 +133,6 @@ public class Label extends Actor
     }
     public void updateText(String newText){
         text = newText;
+        updateImage();
     }
 }
