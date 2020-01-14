@@ -1,11 +1,13 @@
 1
 0
-10000
+9500
 6
 2
-1
+2
 Pistol
-15
+10
+Rifle
+30
 Pistol
 Speed Boost
 0

@@ -67,7 +67,7 @@ public class GameWorld extends World
         if(newGame) transferTextFiles();
 
         //Create ItemInfo and Player
-        itemInfo = new ItemInfo(0,-1,15);
+        itemInfo = new ItemInfo(0,-1,15,0);
         addObject(itemInfo,824,601);
         player = new Player(playerFile, itemInfo);
         curLevel = player.getCurLevel();
