@@ -11,7 +11,7 @@ public abstract class Obstacles extends Actor
 {
     private static GreenfootImage img; 
     protected int actCount = 0;
-    protected int actMod = 30;
+    protected int actMod = 60;
     protected int damage;
     private int firstInd;
     private int secondInd;
@@ -28,33 +28,36 @@ public abstract class Obstacles extends Actor
 
     protected boolean damage(boolean changeLoc){
         boolean hit = false;
-        Player player = (Player) getOneObjectAtOffset​(0, 0, Player.class);
+        //intersecting vs offset??
+        Player player = (Player) getOneIntersectingObject​(Player.class);
         if(player!=null){
             player.loseOneHeart();
-            if(changeLoc) setNewLocation(player);
+            //if(changeLoc) setNewLocation(player);
             hit=true;
         }    
 
-        ArrayList <Enemy> enemiesArrayList = (ArrayList) getObjectsAtOffset​(0, 0, Enemy.class);
+        ArrayList <Enemy> enemiesArrayList = (ArrayList) getIntersectingObjects​(Enemy.class);
         for(Enemy enemy: enemiesArrayList){
-            //enemy.getDamaged();
-            if(changeLoc) setNewLocation(enemy);
+            enemy.getDamaged(damage);
+            //if(changeLoc) setNewLocation(enemy);
             hit=true;
         }
         return hit;
     }
 
+    /*
     protected void setNewLocation(Actor a){
         if(a!=null){
             GameWorld world = (GameWorld) getWorld();
             int newFirstInd, newSecondInd;
             while(true){
-                newFirstInd = firstInd + (Greenfoot.getRandomNumber(3)-1)*2;
-                newSecondInd = secondInd + (Greenfoot.getRandomNumber(3)-1)*2;
+                newFirstInd = firstInd + (Greenfoot.getRandomNumber(3)-1);
+                newSecondInd = secondInd + (Greenfoot.getRandomNumber(3)-1);
                 if(!world.isWall(newFirstInd, newSecondInd)) break;
             }
             
             a.setLocation(world.convert(newFirstInd),world.convert(newSecondInd));
         }    
-    }    
+    }   
+    */
 }

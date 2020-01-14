@@ -51,7 +51,6 @@ public class StoreMenu extends Menu
         setImage(storeMenuImg);
         this.player = player;
         this.itemInfo = itemInfo;
-        moneyLabel = new Label(Integer.toString(player.getMoney()),18, true);
     }    
 
     /**
@@ -79,7 +78,8 @@ public class StoreMenu extends Menu
         world.addObject(powerupsLabel, 240, 420);
         world.addObject(equipButton, 700, 200);
         world.addObject(purchaseButton, 700, 225);
-        world.addObject(moneyLabel, 550, 100);
+        moneyLabel = new Label(Integer.toString(player.getMoney()),18, true);
+        world.addObject(moneyLabel, 720, 148);
         for(int i=0;i<numItems;i++){
             world.addObject(new StoreItem(itemImages[i], itemNames[i],this,costs[i]),xCoords[i],yCoords[i]);
         }    
@@ -105,13 +105,7 @@ public class StoreMenu extends Menu
         getWorld().removeObject(costLabel);
 
         //quantity and cost labels
-        if(lastItemName.contains("Gun")){
-            quantityLabel = new Label("Quantity: " + Integer.toString(lastItemName.contains(player.getCurrentGun()) ? 1:0), 20, true);
-        }    
-        else{
-            quantityLabel = new Label("Quantity: " + Integer.toString(player.getItemNumber(lastItemName)), 20, true);
-        }
-        getWorld().addObject(quantityLabel,600,300);
+        setQuantityLabel();
         costLabel = new Label("Cost: $" + Integer.toString(itemCost), 20, true);
         getWorld().addObject(costLabel,600,325);
 
@@ -132,20 +126,11 @@ public class StoreMenu extends Menu
             player.changeItemNumber(lastItemName,1);
         }    
         player.setMoney(-lastItemCost);
-        getWorld().removeObject(moneyLabel);
-        moneyLabel = new Label(Integer.toString(player.getMoney()),18, true);
-        getWorld().addObject(moneyLabel, 550, 100);
         itemInfo.updateMoney(-lastItemCost);
         setPurchaseTransparency();
-        
-        getWorld().removeObject(quantityLabel);
-        if(lastItemName.contains("Gun")){
-            quantityLabel = new Label("Quantity: " + Integer.toString(player.getItemNumber(lastItemName)), 20, true);
-        }    
-        else{
-            quantityLabel = new Label("Quantity: " + Integer.toString(lastItemName.contains(player.getCurrentGun()) ? 1:0), 20, true);
-        }
-        getWorld().addObject(quantityLabel,600,300);
+        setEquipTransparency();
+        setQuantityLabel();
+        setMoneyLabel();
     }    
 
     /**
@@ -165,14 +150,7 @@ public class StoreMenu extends Menu
         } 
         
         setEquipTransparency();
-        getWorld().removeObject(quantityLabel);
-        if(lastItemName.contains("Gun")){
-            quantityLabel = new Label("Quantity: " + Integer.toString(player.getItemNumber(lastItemName)), 20, true);
-        }    
-        else{
-            quantityLabel = new Label("Quantity: " + Integer.toString(lastItemName.contains(player.getCurrentGun()) ? 1:0), 20, true);
-        }
-        getWorld().addObject(quantityLabel,600,300);
+        setQuantityLabel();
     }
 
     /**
@@ -190,11 +168,28 @@ public class StoreMenu extends Menu
      */
     private void setEquipTransparency(){
         if(lastItemName.equals("Half-Heart Refill")){
-            if(player.getItemNumber("Half-Heart Refill")==6 || player.getItemNumber("Half-Heart Refill")==0) equipButton.getImage().setTransparency(0);
+            if(player.getHearts()==6 || player.getHearts()==0) equipButton.getImage().setTransparency(0);
             else equipButton.getImage().setTransparency(255);
         }    
-        else if((lastItemName.contains("Gun") && lastItemName.contains(player.getCurrentGun()))|| player.getItemNumber(lastItemName)>0 || lastItemName.contains("Bullets")) equipButton.getImage().setTransparency(255);
+        else if((lastItemName.contains("Gun") && lastItemName.contains(player.getCurrentGun()))|| player.getItemNumber(lastItemName)==0 || lastItemName.contains("Bullet")) equipButton.getImage().setTransparency(0);
         else equipButton.getImage().setTransparency(255);
+    }  
+    
+    private void setQuantityLabel(){
+        if(quantityLabel!=null && quantityLabel.getWorld()!=null) getWorld().removeObject(quantityLabel);
+        if(lastItemName.contains("Gun")){
+            quantityLabel = new Label("Quantity: " + Integer.toString(lastItemName.contains(player.getCurrentGun()) ? 1:0), 20, true);
+        }    
+        else{
+            quantityLabel = new Label("Quantity: " + Integer.toString(player.getItemNumber(lastItemName)), 20, true);
+        }
+        getWorld().addObject(quantityLabel,600,300);
+    }    
+    
+    private void setMoneyLabel(){
+        if(moneyLabel!=null && moneyLabel.getWorld()!=null)getWorld().removeObject(moneyLabel);
+        moneyLabel = new Label(Integer.toString(player.getMoney()),18, true);
+        getWorld().addObject(moneyLabel, 720, 148);
     }    
 
     /**

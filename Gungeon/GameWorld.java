@@ -23,17 +23,17 @@ public class GameWorld extends World
     private ItemInfo itemInfo;
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
-    private Button returnToTitleScreen = new Button("Return to Title Screen", 20);
+    
     public static final int height = 640;
     public static final int width = 960;
     private static final int totLevels = 5;
     private static final int totVersions = 5;
     public static final int tileSize = 32;
+    private File playerFile = new File(folderDir + "Player.txt");
     private int fromLevel = -1;
     private int curLevel;
     private static final int tileOffset = 16;
     private boolean lvlComplete = true;
-    private boolean gameOver = false;
 
     /**
      * Base Constructor - not to be called directly
@@ -47,6 +47,7 @@ public class GameWorld extends World
         StoreMenu.createImages();
         Player.createImages();
         setPaintOrder(Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        String key = Greenfoot.getKey();
     }
 
     /**
@@ -57,30 +58,23 @@ public class GameWorld extends World
     public GameWorld(boolean newGame){
         this();
         //player file
-        File playerFile = new File(folderDir + "Player.txt");
         if(!playerFile.isFile()){
             System.out.println("File Not Found");
             return;
         }    
 
         //clear data and load from original text files
-        if(newGame){
-            copyFile(sourceDir + "Player.txt", playerFile);
-            for(int i=1;i<=totLevels;i++){
-                int version = Greenfoot.getRandomNumber(totVersions);
-                copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
-            }   
-        }    
+        if(newGame) transferTextFiles();
 
         //Create ItemInfo and Player
-        itemInfo = new ItemInfo(0,-1,5);
+        itemInfo = new ItemInfo(0,-1,15);
+        addObject(itemInfo,824,601);
         player = new Player(playerFile, itemInfo);
         curLevel = player.getCurLevel();
         if(curLevel == 1){
             addObject(player,convert(2),convert(2));
             arr[2][2] = player;
         }    
-        addObject(itemInfo,824,601);
         if(player.getMaxLevel()>=curLevel) lvlComplete = true;
 
         //Create World
@@ -113,19 +107,13 @@ public class GameWorld extends World
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act(){
-        if(gameOver){
-            //check button clicks
-            if(Greenfoot.mouseClicked(returnToTitleScreen)) Greenfoot.setWorld(new TitleScreen());
-        }
-        else{
-            keyboardInput();
-            //checks if level is complete
-            if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && !lvlComplete){
-                door.completeLevel();
-                player.incrementMaxLevel();
-                lvlComplete = true;
-            }    
-        }
+        keyboardInput();
+        //checks if level is complete
+        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && !lvlComplete){
+            door.completeLevel();
+            player.incrementMaxLevel();
+            lvlComplete = true;
+        }    
     }
 
     /**
@@ -140,21 +128,21 @@ public class GameWorld extends World
             Greenfoot.setWorld(new PauseWorld("store",this,player,itemInfo));
         }    
     }
+    
+    /**
+     * updateScore - called when enemies die to update the score
+     */
+    public void updateScore(){
+        itemInfo.incrementKills();
+    }    
 
     //game specific events
     /**
      * gameOver - checks if player is dead and ends the game, called by player class
      */
     public void gameOver(boolean win){
-        if(win){} //victory animation
-        else{} //game over animation
-
-        //save to leaderboard?
-
-        //clear some data??
-
-        gameOver = true;
-        addObject(returnToTitleScreen,width/2,height-100);
+        transferTextFiles();
+        Greenfoot.setWorld(new PauseWorld(itemInfo.getScore(),win));
     }
 
     /**
@@ -293,6 +281,17 @@ public class GameWorld extends World
             }    
         }    
     }
+
+    /**
+     * transferTextFiles - make new worlds from text files
+     */
+    private void transferTextFiles(){
+        copyFile(sourceDir + "Player.txt", playerFile);
+        for(int i=1;i<=totLevels;i++){
+            int version = Greenfoot.getRandomNumber(totVersions);
+            copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
+        }
+    }    
 
     //helper classes
     /**

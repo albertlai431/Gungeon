@@ -11,6 +11,9 @@ public class PauseWorld extends World
     private GameWorld gameWorld;
     public static int height = 640;
     public static int width = 960;
+    private Button returnToTitleScreen = new Button("Return to Title Screen", 22);
+    private Label scoreLabel;
+    
     /**
      * Constructor for objects of class PauseWorld.
      * 
@@ -27,6 +30,27 @@ public class PauseWorld extends World
     public PauseWorld(String menuType, GameWorld gameWorld, Player player, ItemInfo itemInfo){
         this(menuType, gameWorld);
         addObject(new StoreMenu(player,itemInfo),480,320);
+    }   
+    
+    public PauseWorld(int score, boolean isWin){
+        super(960, 640, 1); 
+        
+        if(isWin){
+            setBackground("Victory.png");
+            scoreLabel = new Label("Score: " + Integer.toString(score), 35, 230, 230, 230, true);
+            addObject(scoreLabel,120,575);
+            addObject(returnToTitleScreen, 830, 575);
+        }    
+        else{
+            setBackground("gameOver.png");
+            scoreLabel = new Label("Score: " + Integer.toString(score), 35, 230, 230, 230, true);
+            addObject(scoreLabel,480,550);
+            addObject(returnToTitleScreen, 480, 585);
+        }    
+    }    
+    
+    public void act(){
+        if(returnToTitleScreen.getWorld()!=null && Greenfoot.mouseClicked(returnToTitleScreen)) Greenfoot.setWorld(new TitleScreen());
     }    
     
     public void closeWorld(){

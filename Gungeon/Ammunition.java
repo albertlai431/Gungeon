@@ -80,7 +80,7 @@ public abstract class Ammunition extends Actor
             //Deal damage and play sound
             //hit.play();
             //Decreases the damage of the vehicle when hit
-            enemy.getHit(damage);
+            enemy.getDamaged(damage);
             //Removes the bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
         }   

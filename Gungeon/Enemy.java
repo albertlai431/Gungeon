@@ -63,7 +63,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
 
     private boolean checkForObstacle(int x, int y)
     {
-        ArrayList obstacleList = new ArrayList<Player>(getWorld().getObjectsAt(x, y, Obstacles.class));
+        ArrayList <Obstacles> obstacleList = (ArrayList) (getWorld().getObjectsAt(x, y, Obstacles.class));
         if(obstacleList.isEmpty())
         {
             return false;
@@ -119,8 +119,9 @@ public abstract class Enemy extends Actor implements AnimationInterface
 
     protected void die()
     {
-        getWorld().updateScore();
-        getWorld().removeObject(this);
+        GameWorld world = (GameWorld) getWorld();
+        world.updateScore();
+        world.removeObject(this);
     }
 
     protected abstract void animate(String direction);
