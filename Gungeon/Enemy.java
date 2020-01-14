@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public abstract class Enemy extends Actor implements AnimationInterface
 {
-    protected static int tileSizeX = 20;
-    protected static int tileSizeY = 20;
+    protected static int tileSizeX = 32;
+    protected static int tileSizeY = 32;
     protected int currentX;
     protected int currentY;
     protected int playerX;
@@ -20,6 +20,8 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected int bulletSpeed;
     protected int damage = 1;
     protected int fireRate;
+    protected long animationCount = 0;
+    protected int movementCounter = 30;
     protected GreenfootImage animationImage;
     protected ArrayList<Player> foundPlayers;
     protected Actor player;
@@ -38,9 +40,16 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected void moveTowardsPlayer()
     {
         int[] closestTileCoordinates = findClosestAdjacentTileTowardsPlayer();
-        turnTowards(closestTileCoordinates[0], closestTileCoordinates[1]);
-        animate(getDirection(getRotation()));        
-        while(checkLineOfSight(bulletWidth, getPointDistance(getX(), getY(), player.getX(), player.getY())) == true)
+        if(movementCounter == 30)
+        {
+            animate(closestTileCoordinates);
+            movementCounter = 0;
+        }
+        else
+        {
+            movementCounter++;
+        }
+        while(checkLineOfSight(bulletWidth) == true)
         {
             int counter = fireRate;
             if(fireRate == counter)
@@ -52,7 +61,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
             {
                 counter++;
             }
-        }
+        }        
     }
 
     private double getPointDistance(int enemyX, int enemyY, int playerX, int playerY)
@@ -72,9 +81,9 @@ public abstract class Enemy extends Actor implements AnimationInterface
     }
 
     private int[] findClosestAdjacentTileTowardsPlayer()
-    {
+    {        
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
-        player = foundPlayers.get(0);        
+        player = foundPlayers.get(0);    
         currentX = getX();
         currentY = getY();        
         playerX = player.getX();
@@ -110,7 +119,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         return closestTileCoordinates;
     }
 
-    private boolean checkLineOfSight(int bulletWidth, double bulletLength)
+    private boolean checkLineOfSight(int bulletWidth)
     {
         LineOfSightRect line = new LineOfSightRect(bulletWidth, (int)getPointDistance(getX(), getY(), player.getX(), player.getY()) + 5);
         getWorld().addObject(line, 2, 2);
@@ -123,29 +132,72 @@ public abstract class Enemy extends Actor implements AnimationInterface
         world.updateScore();
         world.removeObject(this);
     }
-
-    protected abstract void animate(String direction);
-
-    protected String getDirection(int rotation)
+    
+    protected void animate(int[] closestTileCoordinates)
     {
-        if(rotation >= 225 && rotation < 315)
-        {
-            return "Up";
+        if(closestTileCoordinates[0] > getX() && closestTileCoordinates[1] == getY())
+        {           
+            for(int i = 0; i < 16; i++)
+            {
+                animationCount++;
+                animateMovementRight();
+                setLocation(getX() + 1, getY());
+            }
         }
-        else if((rotation >= 315 && rotation < 360) || (rotation >= 0 && rotation < 45))
-        {
-            return "Right";
+        else if(closestTileCoordinates[0] < getX() && closestTileCoordinates[1] == getY())
+        {           
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementLeft();
+                setLocation(getX() - 1, getY());
+            }
         }
-        else if(rotation >= 45 && rotation < 135)
+        else if(closestTileCoordinates[0] < getX() && closestTileCoordinates[1] < getY())
         {
-            return "Down";
-        }  
-        else if(rotation >= 135 && rotation < 225)
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementUp();
+                setLocation(getX() - 1, getY() - 1 );
+            }
+        }
+        else if(closestTileCoordinates[0] > getX() && closestTileCoordinates[1] < getY())
         {
-            return "Left";
-        }        
-        return "";
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementUp();
+                setLocation(getX() + 1, getY() - 1);
+            }
+        } 
+        else if(closestTileCoordinates[0] == getX() && closestTileCoordinates[1] < getY())
+        {
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementUp();
+                setLocation(getX(), getY() - 1);
+            }
+        }         
+        if(closestTileCoordinates[0] == getX() && closestTileCoordinates[1] > getY())
+        {
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementDown();
+                setLocation(getX(), getY() + 2);
+            }
+        } 
+        else if(closestTileCoordinates[0] < getX() && closestTileCoordinates[1] > getY())
+        {
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementDown();
+                setLocation(getX() - 1, getY() + 1);
+            }
+        } 
+        else if(closestTileCoordinates[0] > getX() && closestTileCoordinates[1] > getY())
+        {
+            for(int i = 0; i < 16; i++)
+            {
+                animateMovementDown();
+                setLocation(getX() + 1, getY() + 1);
+            }
+        }         
     }
-    
-    
-}
