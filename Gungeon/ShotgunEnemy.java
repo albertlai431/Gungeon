@@ -20,12 +20,6 @@ public class ShotgunEnemy extends Enemy
         this.bulletWidth = bulletWidth;
     }
     
-    public void addedToWorld()
-    {
-        foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
-        player = foundPlayers.get(0);
-    }
-    
     public void act() 
     {
         moveTowardsPlayer();       
@@ -34,7 +28,49 @@ public class ShotgunEnemy extends Enemy
     
     public void attack()
     {
-        //getWorld().addObject(new ShotgunBullet(player, 1), getX(), getY());   
-        
+        //getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() + 60, 1, 12), getX(), getY());   
+        //getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() + 30, 1, 12), getX(), getY());  
+        //getWorld().addObject(new ShotgunBullet(player.getX(), player.getY(), 1, 12), getX(), getY());  
+        //getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 30, 1, 12), getX(), getY());  
+        //getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60, 1, 12), getX(), getY());  
+    }  
+    
+    public void animateMovementUp()
+    {
+    }
+    
+    public void animateMovementDown()
+    {
+    }
+    
+    public void animateMovementRight()
+    {
+    }
+    
+    public void animateMovementLeft()
+    {
+    }
+    
+        public void animate(String direction)
+    {
+        int totalFrames = 0;
+        String imageName = new String(direction);
+        if(direction.equals("Left") || direction.equals("Right"))
+        {
+            totalFrames = 3;
+            imageName = new String("Left");
+        }
+        else
+        {
+            totalFrames = 8;
+        }
+        for(int i = 0; i < totalFrames; i++)
+        {
+            animationImage = new GreenfootImage("shotgunEnemy" + imageName + i + ".png");
+            animationImage.scale(16, 28);
+            animationImage.mirrorHorizontally();
+            setImage(animationImage);
+            move(1);
+        }
     }
 }
