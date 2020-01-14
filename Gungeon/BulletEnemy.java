@@ -14,7 +14,7 @@ public class BulletEnemy extends Enemy
     public BulletEnemy(int health, int bulletWidth)
     {
         animationImage = new GreenfootImage("bulletEnemyDown0.png");
-        animationImage.scale(imageX, imageY);
+        //animationImage.scale(imageX, imageY);
         setImage(animationImage);        
         healthPoints = health;     
         this.bulletWidth = bulletWidth;

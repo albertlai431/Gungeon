@@ -122,9 +122,11 @@ public class GameWorld extends World
     private void keyboardInput(){
         String key = Greenfoot.getKey();
         if("escape".equals(key)){
+            closeWorld(curLevel);
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
+            closeWorld(curLevel);
             Greenfoot.setWorld(new PauseWorld("store",this,player,itemInfo));
         }    
     }
@@ -379,7 +381,7 @@ public class GameWorld extends World
                                     try{
                                         for(int X=x; X<x+xSize; X++){
                                             for(int Y=y; Y<y+ySize; Y++){
-                                                if(curarr[X][Y] || X<=2 || X>=27 || Y<=2 || Y>=17){
+                                                if(curarr[X][Y] || X<=2 || X>=27 || Y<=2 || Y>=17 || (X==3 && Y==3)){
                                                     works=false;
                                                 }    
                                             }   

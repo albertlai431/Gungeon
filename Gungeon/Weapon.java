@@ -50,16 +50,18 @@ public abstract class Weapon extends Actor
         this.magSize = magSize;
         this.itemInfo = itemInfo;
     }
+
     /**
      * createBullet - abstract class that choses the correct bullet for each type of weapon
      */
     abstract protected Ammunition createBullet();
+
     /**
      * Act - Checks for button presses and mouse clicks
      */
     public void act() 
     {
-        
+
         MouseInfo mi = Greenfoot.getMouseInfo();
         if (mi != null)
         {
@@ -72,9 +74,10 @@ public abstract class Weapon extends Actor
         //reload the weapon if the user presses r
         if(Greenfoot.isKeyDown("r"))
         {
-            itemInfo.updateAmmo();
+            if(ammoInMag<=0)itemInfo.updateAmmo(0, ammoInMag);
+            else{itemInfo.updateAmmo(-1, ammoInMag);}
+            //itemInfo.updateAmmo();
             startReload();
-            
         }
         //check for mouse press
         if(Greenfoot.mousePressed(null))
@@ -111,9 +114,10 @@ public abstract class Weapon extends Actor
                 }
                 nextFiredTime = lastFiredTime+fireRate;
             }
-            
+
         }
     }    
+
     /**
      * stopFiring - Stops shooting bullets from the weapon
      */
@@ -122,6 +126,7 @@ public abstract class Weapon extends Actor
         firing = false;
         nextFiredTime = 0;
     }
+
     /**
      * isReloading - Checks if the weapon is currently reloading
      * 
@@ -132,27 +137,28 @@ public abstract class Weapon extends Actor
         if(reloading)
         {
 
-                long now = System.currentTimeMillis();
-        
-                if(now>=this.startTime)
+            long now = System.currentTimeMillis();
+
+            if(now>=this.startTime)
+            {
+                this.startTime = 0;
+                reloading = false;
+                if(player.canReload(this))
                 {
-                    this.startTime = 0;
-                    reloading = false;
-                    if(player.canReload(this))
-                    {
-                        
-                        this.ammoInMag = magSize;
-                        
-                    }
-                    return false;
+
+                    this.ammoInMag = magSize;
+
                 }
-                else{
-                    return true;
-                }
-            
+                return false;
+            }
+            else{
+                return true;
+            }
+
         }
         return false;
     }
+
     /**
      * startReload - Starts the reloading process
      */
@@ -164,6 +170,7 @@ public abstract class Weapon extends Actor
             this.startTime = now + reloadTime;
         }
     }
+
     /**
      * shoot - Creates the correct bullet by calling the createBullet() method and checks if there are enough bullets left
      */
@@ -174,38 +181,45 @@ public abstract class Weapon extends Actor
         getWorld().addObject(bullet, this.getX(), this.getY());
         //System.out.println(ammoInMag);
         this.ammoInMag--;
-        
+
         if(ammoInMag==0&&Greenfoot.isKeyDown("r"))
         {
             itemInfo.updateAmmo();
             startReload();
-            
+
         }
     }
+
     public int getAmmo()
     {
         return ammoInMag;
     }
+
     public long getFireRate()
     {
         return fireRate;
     }
+
     public int getMagSize()
     {
         return magSize;
     }
+
     public long getReloadTime()
     {
         return reloadTime;
     }
+
     public long getBulletReadyTime()
     {
         return bulletReadyTime;
     }
+
     public int getBulletDamage()
     {
         return bulletDamage;
     }
+
     public int getBulletSpeed()
     {
         return bulletSpeed;

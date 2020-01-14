@@ -1,10 +1,11 @@
 1
 0
-250
+10000
 6
 2
 1
 Pistol
+15
 Pistol
 Rifle Bullet
 0

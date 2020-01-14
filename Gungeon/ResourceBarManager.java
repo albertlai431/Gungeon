@@ -17,16 +17,16 @@ public class ResourceBarManager extends Actor
     private Stack <Resource> resourceStack;
     private GreenfootImage firstImage;
     private GreenfootImage secondImage;
-    public ResourceBarManager(int max, int interval, int x, int y, GreenfootImage resourceImage, World world)
+    public ResourceBarManager(int max, int cur, int interval, int x, int y, GreenfootImage resourceImage, World world)
     {
         resourceStack = new Stack <Resource>();
         this.firstImage = new GreenfootImage(resourceImage);
         maxResource = max;
-        currentResource = max;
+        currentResource = cur;
         this.interval = interval;
         currentX = x;
         currentY = y;
-        for(int i = 0; i < max; i++)
+        for(int i = 0; i < cur; i++)
         {
             resourceStack.push(new Resource(resourceImage));
         }
@@ -137,7 +137,7 @@ public class ResourceBarManager extends Actor
             for(int i = 0; i < maxResource - currentResource; i++)
             {
                 if(resourceStack.size()>0) currentY = resourceStack.peek().getY();
-                else currentY = 575;
+                else currentY = 575-interval;
                 resourceStack.push(new Resource(firstImage));
                 world.addObject(resourceStack.peek(), currentX, currentY + interval);
             }
@@ -146,4 +146,10 @@ public class ResourceBarManager extends Actor
         currentResource = maxResource;
         return false;
     }
+    
+    public void remove(World world){
+        while(!resourceStack.empty()){
+            world.removeObject(resourceStack.pop());
+        }    
+    }    
 }

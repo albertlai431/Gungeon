@@ -49,6 +49,7 @@ public class Player extends Actor implements AnimationInterface
     private Weapon gun = null;
     private ItemInfo itemInfo;
     private ArrayList<String> listOfGuns = new ArrayList<String>(); //Pistol, Shotgun, Rifle
+    private HashMap <String, Integer> ammoInMag = new HashMap <String,Integer>();
     private String curgun; //only for constructor purposes
 
     //Instance variables
@@ -79,15 +80,10 @@ public class Player extends Actor implements AnimationInterface
      * addedToWorld - adds guns and resource bars to the world
      */
     public void addedToWorld(World w){
+        changeGun(); 
         while(!getCurrentGun().equals(curgun)) changeGun();
         healthBar =  new ResourceBarManager(3, 20, 900, 620, fullHeart, halfHeart, (GameWorld) getWorld());
-        if(curgun.equals("Pistol")){
-            itemInfo.updateGun(0, -1, 15);
-            itemInfo.updateMoney(money);
-            gun = new Pistol(itemInfo,this,50,2,100,100,100,15);
-            reloadBar = new ResourceBarManager(10, 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
-            if(getWorld()!=null) getWorld().addObject(gun,getX()+18, getY()+16);
-        }    
+        healthBar.reduceHealth(6-hearts, (GameWorld) getWorld());
     }  
 
     /**
@@ -170,7 +166,7 @@ public class Player extends Actor implements AnimationInterface
         }
 
         //gun switching
-        if(animationCount%5==0 && Greenfoot.isKeyDown("e") && listOfGuns.size()>1) changeGun();
+        if(animationCount%8==0 && Greenfoot.isKeyDown("e") && listOfGuns.size()>1) changeGun();
     }   
 
     /**
@@ -268,31 +264,30 @@ public class Player extends Actor implements AnimationInterface
 
     public void changeGun()
     {
-        String x = listOfGuns.get(0);
-        listOfGuns.remove(0);
+        String x = listOfGuns.remove(0);
+        if(gun!=null) ammoInMag.put(x,gun.ammoInMag);
         listOfGuns.add(x);
         if(gun!=null) getWorld().removeObject(gun);
 
-        getWorld().removeObject(reloadBar);
-        getWorld().removeObjects(getWorld().getObjects(Resource.class));
+        if(reloadBar!=null) reloadBar.remove(getWorld());
 
-        if(listOfGuns.get(0)=="Pistol"){
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, 15);
-            gun = new Pistol(itemInfo,this,50,2,100,100,100,15);
-            if(getWorld()!=null) getWorld().addObject(gun,getX()+18, getY()+16);
-            reloadBar = new ResourceBarManager(10, 10, 700, 575, pistolBarImg, (GameWorld) getWorld());
+        if(listOfGuns.get(0).equals("Pistol")){
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, ammoInMag.get("Pistol"));
+            gun = new Pistol(itemInfo,this,50,3,100,100,100,ammoInMag.get("Pistol"));
+            getWorld().addObject(gun,getX()+18, getY()+16);
+            reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Pistol")), 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
         }    
-        else if(listOfGuns.get(0)=="Shotgun"){
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, 8+items.get("Shotgun Bullet")*8, 8);
-            gun = new Shotgun(itemInfo,this,100,4,50,50,100,8);
-            if(getWorld()!=null) getWorld().addObject(gun,getX()+16, getY()+15);
-            reloadBar = new ResourceBarManager(10, 10, 700, 575, shotgunBarImg, (GameWorld) getWorld());
+        else if(listOfGuns.get(0).equals("Shotgun")){
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, ammoInMag.get("Shotgun")+items.get("Shotgun Bullet")*8, ammoInMag.get("Shotgun"));
+            gun = new Shotgun(itemInfo,this,100,4,50,50,100,ammoInMag.get("Shotgun"));
+            getWorld().addObject(gun,getX()+16, getY()+15);
+            reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Shotgun")), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
         }    
         else{
-            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, 30+items.get("Rifle Bullet")*30, 30);
+            if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, ammoInMag.get("Rifle")+items.get("Rifle Bullet")*30, ammoInMag.get("Rifle"));
             gun = new Rifle(itemInfo,this,200,5,50,50,50,30);
-            if(getWorld()!=null) getWorld().addObject(gun,getX()+20, getY()+13);
-            reloadBar = new ResourceBarManager(10, 10, 700, 575, rifleBarImg, (GameWorld) getWorld());
+            getWorld().addObject(gun,getX()+20, getY()+13);
+            reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Rifle")), 6, 700, 575, rifleBarImg, (GameWorld) getWorld());
         } 
     }
 
@@ -300,9 +295,11 @@ public class Player extends Actor implements AnimationInterface
     {
         if(gun.contains("Shotgun")){
             listOfGuns.add("Shotgun");
+            ammoInMag.put("Shotgun",8);
         }
         else{
             listOfGuns.add("Rifle");
+            ammoInMag.put("Rifle",30);
         }
     }
 
@@ -413,7 +410,7 @@ public class Player extends Actor implements AnimationInterface
         if(w instanceof Shotgun){
             if(items.get("Shotgun Bullet")>0 && w.getAmmo()<8){
                 items.put("Shotgun Bullet",items.get("Shotgun Bullet")-1);
-                itemInfo.updateAmmo(8+items.get("Shotgun Bullet")*8, 8);
+                itemInfo.updateAmmo(ammoInMag.get("Shotgun")+items.get("Shotgun Bullet")*8, 8);
                 reloadBar.refillAmmo((GameWorld) getWorld());
                 return true;
             }    
@@ -422,14 +419,14 @@ public class Player extends Actor implements AnimationInterface
         else if(w instanceof Rifle){
             if(items.get("Rifle Bullet")>0 && w.getAmmo()<30){
                 items.put("Rifle Bullet",items.get("Rifle Bullet")-1);
-                itemInfo.updateAmmo(30+items.get("Rifle Bullet")*30, 30);
+                itemInfo.updateAmmo(ammoInMag.get("Rifle")+items.get("Rifle Bullet")*30, 30);
                 reloadBar.refillAmmo((GameWorld) getWorld());
                 return true;
             }    
             else return false;
         }
         else if(w.getAmmo()<15){
-            itemInfo.updateAmmo(-1, 15);
+            itemInfo.updateAmmo(-1, ammoInMag.get("Pistol"));
             reloadBar.refillAmmo((GameWorld) getWorld());
             return true;
         }  
@@ -441,6 +438,7 @@ public class Player extends Actor implements AnimationInterface
      */
     public void saveData() {
         // save data into a text file (haven't tested yet!)
+        ammoInMag.put(getCurrentGun(),gun.ammoInMag);
         try {
             FileWriter fw = new FileWriter(txtFile);
             fw.write(curLevel + "\n");
@@ -449,7 +447,10 @@ public class Player extends Actor implements AnimationInterface
             fw.write(hearts + "\n");
             fw.write(speed + "\n");
             fw.write(listOfGuns.size() + "\n");
-            for(String gun: listOfGuns) fw.write(gun + "\n");
+            for(String gun: listOfGuns){
+                fw.write(gun + "\n");
+                fw.write(ammoInMag.get(gun)+"\n");
+            }    
             fw.write(getCurrentGun() + "\n");
             for(String key: items.keySet()){
                 fw.write(key+"\n");
@@ -492,7 +493,9 @@ public class Player extends Actor implements AnimationInterface
                 break;
                 case 5:
                 for(int j=0;j<val;j++){
-                    listOfGuns.add(s.nextLine());
+                    curgun = s.nextLine();
+                    listOfGuns.add(curgun);
+                    ammoInMag.put(curgun, Integer.parseInt(s.nextLine()));
                 }    
             }
         }
