@@ -72,22 +72,22 @@ public class ItemInfo extends Actor
         if(getWorld()!=null){
             if(currentGun == 0) ammoLabel.updateText(Integer.toString(currentAmmo)+"/infinite");           
             else ammoLabel.updateText(Integer.toString(currentAmmo)+"/"+Integer.toString(totalAmmo));
-            //if(currentGun == 0) world.addObject(ammoLabel,758,628);
-            //else if(currentGun == 1) world.addObject(ammoLabel,790-(ammoLabel.getLength()/2),628);
-            //else if(currentGun == 2) world.addObject(ammoLabel,790-(ammoLabel.getLength()/2),628);            
+            if(currentGun == 0) world.addObject(ammoLabel,758,628);
+            else if(currentGun == 1) world.addObject(ammoLabel,790-(ammoLabel.getLength()/2),628);
+            else if(currentGun == 2) world.addObject(ammoLabel,790-(ammoLabel.getLength()/2),628);            
         }
     }
     private void updateMoneyLabel(){
         moneyLabel.updateText(Integer.toString(money));
-        //if(getWorld()!=null) getWorld().addObject(moneyLabel, 837 + (moneyLabel.getLength()/2), 577);
+        if(getWorld()!=null) getWorld().addObject(moneyLabel, 837 + (moneyLabel.getLength()/2), 577);
     }
     private void updateKillsLabel(){
         killsLabel.updateText(Integer.toString(kills));
-        //if(getWorld()!=null) getWorld().addObject(killsLabel, 837 + (killsLabel.getLength()/2), 599);
+        if(getWorld()!=null) getWorld().addObject(killsLabel, 837 + (killsLabel.getLength()/2), 599);
     }
     private void updateScoreLabel(){
         scoreLabel.updateText(Integer.toString(score));
-        //if(getWorld()!=null) getWorld().addObject(scoreLabel, 813 + (scoreLabel.getLength()/2), 622);
+        if(getWorld()!=null) getWorld().addObject(scoreLabel, 813 + (scoreLabel.getLength()/2), 622);
     }
     private void drawBoard(){
         myImg.setColor(borderColor);
@@ -110,7 +110,7 @@ public class ItemInfo extends Actor
         this.currentGun = currentGun;
         this.totalAmmo = totalAmmo;
         this.currentAmmo = currentAmmo;
-        //getWorld().removeObject(ammoLabel);
+        getWorld().removeObject(ammoLabel);
         updateAmmoLabel();
         drawGun();
     }
@@ -119,7 +119,7 @@ public class ItemInfo extends Actor
      */
     public void incrementKills(){
         kills++;
-        //getWorld().removeObject(killsLabel);
+        getWorld().removeObject(killsLabel);
         updateKillsLabel();
     }
     /**
@@ -128,7 +128,7 @@ public class ItemInfo extends Actor
      */
     public void updateMoney(int increment){
         money+=increment;
-        //getWorld().removeObject(moneyLabel);
+        getWorld().removeObject(moneyLabel);
         updateMoneyLabel();
     }
     /**
@@ -137,7 +137,7 @@ public class ItemInfo extends Actor
      */
     public void updateScore(int increment){
         score+=increment;
-        //getWorld().removeObject(scoreLabel);
+        getWorld().removeObject(scoreLabel);
         updateScoreLabel();
     }
     /**
@@ -148,7 +148,7 @@ public class ItemInfo extends Actor
     public void updateAmmo(int totalAmmo, int currentAmmo){
         this.totalAmmo = totalAmmo;
         this.currentAmmo = currentAmmo;
-        //getWorld().removeObject(ammoLabel);
+        getWorld().removeObject(ammoLabel);
         updateAmmoLabel();
     }
     /**
@@ -156,12 +156,11 @@ public class ItemInfo extends Actor
      */
     public void updateAmmo(){
         currentAmmo--;
-        //getWorld().removeObject(ammoLabel);
         updateAmmoLabel();
     }
     /**
      * Returns the player's score
-     * @return int                  The score
+     * @return int                  The score   
      */
     public int getScore(){
         return score;
