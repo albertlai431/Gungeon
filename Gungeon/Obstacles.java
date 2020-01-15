@@ -38,6 +38,12 @@ public abstract class Obstacles extends Actor
         this.secondInd = secondInd;
     }   
 
+    /**
+     * damage - damages enemies and players
+     * 
+     * @param boolean           whether or not to change the location of the player/enemies
+     * @return boolean          whether or not the obstacle has damaged a player/enemy
+     */
     protected boolean damage(boolean changeLoc){
         boolean hit = false;
         //intersecting vs offset??

@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class StoreItem here.
+ * StoreItem is the class of items found in the store. They can be clicked to be selected. 
  * 
  * @author Albert Lai
  * @version January 2020
@@ -11,9 +11,11 @@ public class StoreItem extends Actor
     private String item;
     private int value;
     private int cost;
+    private static final int itemSize = 80;
+    
+    //Objects
     private Label nameLabel;
     private StoreMenu storeMenu;
-    private static final int itemSize = 80;
     private GreenfootImage storeItemImg = new GreenfootImage(itemSize,itemSize);
     private GreenfootImage selected = new GreenfootImage(itemSize,itemSize);
 

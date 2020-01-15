@@ -42,6 +42,7 @@ public class PauseMenu extends Menu
             world.closeWorld();
         }
         else if(Greenfoot.mouseClicked(exit)){
+            
             Greenfoot.setWorld(new TitleScreen());
         }    
     }    

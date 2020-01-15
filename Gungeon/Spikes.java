@@ -1,14 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Spikes here.
+ * Spikes is an obstacle that inflicts damage on the player/enemies that touch it
  * 
  * @author Albert Lai
  * @version January 2020
  */
 public class Spikes extends Obstacles
 {
-
+    /**
+     * Constructor for Spikes
+     * 
+     * @param firstInd              the first index of the array 
+     * @param secondInd             the second index of the array
+     */
     public Spikes(int firstInd, int secondInd){
         super(100,firstInd,secondInd);
     } 
@@ -26,8 +31,10 @@ public class Spikes extends Obstacles
         }  
     } 
 
+    /**
+     * damage - damges the player/enemy
+     */
     protected void damage(){
         super.damage(true);
     }
-
 }

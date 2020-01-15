@@ -1,15 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Fire here.
+ * Fire is an obstacle that inflicts damage on the player/enemies that touch it
  * 
  * @author Albert Lai
  * @version January 2020
  */
 public class Fire extends Obstacles
 {
-    
-    
+    /**
+     * Constructor for Fire
+     * 
+     * @param firstInd              the first index of the array 
+     * @param secondInd             the second index of the array
+     */
     public Fire(int firstInd, int secondInd){
         super(200,firstInd,secondInd);
     }   
@@ -27,6 +31,9 @@ public class Fire extends Obstacles
         }  
     }    
     
+    /**
+     * damage - damges the player/enemy
+     */
     protected void damage(){
         super.damage(true);
     }

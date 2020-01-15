@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * GameWorld is the world where the game takes place. It holds the player, actors of the 
- * game, 2D array of actors, and game data. 
+ * game, 2D array of actors, and is loaded from a text file. 
  * 
  * @author Albert Lai
  * @version January 2020

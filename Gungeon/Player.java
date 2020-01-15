@@ -1,6 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.HashMap;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,11 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Write a description of class Player here.
+ * Player is the main character in the game. It is loaded from a text file and holds the gun. 
+ * It is controlled by the user with key presses. 
  * 
- * 
- * @author (your name)
- * @version (a version number or a date)
+ * @author Albert Lai, Star Xie, and Clarence Chau
+ * @version January 2020
  */
 public class Player extends Actor implements AnimationInterface
 {
@@ -121,9 +120,9 @@ public class Player extends Actor implements AnimationInterface
             pistolImg.scale(pistolImg.getWidth()*150/100,pistolImg.getHeight()*150/100);
             rifleImg.scale(rifleImg.getWidth()*150/100,rifleImg.getHeight()*150/100);
             shotgunImg.scale(shotgunImg.getWidth()*150/100,shotgunImg.getHeight()*150/100);
-            pistolImgMir.scale(pistolImg.getWidth()*150/100,pistolImg.getHeight()*150/100);
-            rifleImgMir.scale(rifleImg.getWidth()*150/100,rifleImg.getHeight()*150/100);
-            shotgunImgMir.scale(shotgunImg.getWidth()*150/100,shotgunImg.getHeight()*150/100);
+            pistolImgMir.scale(pistolImgMir.getWidth()*150/100,pistolImgMir.getHeight()*150/100);
+            rifleImgMir.scale(rifleImgMir.getWidth()*150/100,rifleImgMir.getHeight()*150/100);
+            shotgunImgMir.scale(shotgunImgMir.getWidth()*150/100,shotgunImgMir.getHeight()*150/100);
             pistolImgMir.mirrorVertically();
             rifleImgMir.mirrorVertically();
             shotgunImgMir.mirrorVertically();
@@ -288,28 +287,24 @@ public class Player extends Actor implements AnimationInterface
         if(gun!=null) getWorld().removeObject(gun);
 
         if(reloadBar!=null) reloadBar.remove(getWorld());
-        //if(reloadBar!=null && reloadBar.getWorld()!=null) getWorld().removeObject(reloadBar);
 
         if(listOfGuns.get(0).equals("Pistol")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, ammoInMag.get("Pistol"));
             gun = new Pistol(itemInfo,this,50,4,100,100,100,15, ammoInMag.get("Pistol"));
             getWorld().addObject(gun,getX()+18, getY()+16);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Pistol")), 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
-            //getWorld().addObject(reloadBar,200,200);
         }    
         else if(listOfGuns.get(0).equals("Shotgun")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, items.get("Shotgun Bullet"), ammoInMag.get("Shotgun"));
             gun = new Shotgun(itemInfo,this,200,5,300,300,300,8,ammoInMag.get("Shotgun"));
             getWorld().addObject(gun,getX()+16, getY()+15);
             reloadBar = new ResourceBarManager(8, ammoInMag.get("Shotgun"), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
-            //getWorld().addObject(reloadBar,200,200);
         }    
         else{
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(1, items.get("Rifle Bullet"), ammoInMag.get("Rifle"));
             gun = new Rifle(itemInfo,this,100,6,50,50,50,30,ammoInMag.get("Rifle"));
             getWorld().addObject(gun,getX()+20, getY()+13);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Rifle")), 6, 700, 575, rifleBarImg, (GameWorld) getWorld());
-            //getWorld().addObject(reloadBar,200,200);
         } 
     }
 
@@ -443,33 +438,53 @@ public class Player extends Actor implements AnimationInterface
      * canReload - checks if there is enough ammo for reload and if there is, update itemInfo and reloadBar
      * 
      * @param w                 current weapon of the player
-     * @return boolean          whether the player can reload or not
+     * @return int              number of bullets in mag
      */
-    public boolean canReload(Weapon w){
+    public int canReload(Weapon w){
         if(w instanceof Shotgun){
             if(items.get("Shotgun Bullet")>0 && w.getAmmo()<8){
-                items.put("Shotgun Bullet",items.get("Shotgun Bullet")-(8-w.getAmmo()));
-                itemInfo.updateAmmo(items.get("Shotgun Bullet"), 8);
                 reloadBar.refillAmmo((GameWorld) getWorld());
-                return true;
+                if(items.get("Shotgun Bullet")+w.getAmmo()>=8){
+                    items.put("Shotgun Bullet",items.get("Shotgun Bullet")-(8-w.getAmmo()));
+                    itemInfo.updateAmmo(items.get("Shotgun Bullet"), 8);
+                    return 8;
+                }    
+                else{
+                    int ammoInMag = items.get("Shotgun Bullet")+w.getAmmo();
+                    itemInfo.updateAmmo(0, ammoInMag);
+                    for(int i=0;i<8-ammoInMag;i++) reloadBar.reduceAmmo((GameWorld) getWorld());
+                    items.put("Shotgun Bullet",0);
+                    return ammoInMag;
+                }    
             }    
-            else return false;
+            else return 0;
         }   
         else if(w instanceof Rifle){
             if(items.get("Rifle Bullet")>0 && w.getAmmo()<30){
-                items.put("Rifle Bullet",items.get("Rifle Bullet")-(30-w.getAmmo()));
-                itemInfo.updateAmmo(items.get("Rifle Bullet"), 30);
                 reloadBar.refillAmmo((GameWorld) getWorld());
-                return true;
+                if(items.get("Rifle Bullet")+w.getAmmo()>=30){
+                    items.put("Rifle Bullet",items.get("Rifle Bullet")-(30-w.getAmmo()));
+                    itemInfo.updateAmmo(items.get("Rifle Bullet"), 30);
+                    return 30;
+                }    
+                else{
+                    int ammoInMag = items.get("Rifle Bullet")+w.getAmmo();
+                    itemInfo.updateAmmo(0, ammoInMag);
+                    if(ammoInMag<10){
+                        for(int i=0;i<10-ammoInMag;i++) reloadBar.reduceAmmo((GameWorld) getWorld());
+                    }
+                    items.put("Rifle Bullet",0);
+                    return ammoInMag;
+                }    
             }    
-            else return false;
+            else return 0;
         }
         else if(w.getAmmo()<15){
             itemInfo.updateAmmo(-1, 15);
             reloadBar.refillAmmo((GameWorld) getWorld());
-            return true;
+            return 15;
         }  
-        return false;
+        return 0;
     }    
 
     /**

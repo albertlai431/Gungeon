@@ -1,7 +1,8 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Arrows here.
+ * Arrows is an obstacle that inflicts damage on any player or enemy that touches it. 
+ * It includes an animation of the arrow hitting its target. 
  * 
  * @author Albert Lai
  * @version January 2020
@@ -14,11 +15,19 @@ public class Arrows extends Obstacles
     private int xEnd;
     private int y;
 
+    /**
+     * Constructor for Arrows
+     */
     public Arrows(){
         super(100);
         getImage().setTransparency(100);
     }    
 
+    /**
+     * addedToWorld - sets coordinates
+     * 
+     * @param w             Current world of the actor
+     */
     public void addedToWorld(World w){
         x = getX();
         xStart = x+50;
@@ -33,6 +42,7 @@ public class Arrows extends Obstacles
     public void act() 
     {
         if(isMoving){
+            //animation
             setLocation(getX()-3,y);
             if(getX()<=xEnd){
                 isMoving = false;
@@ -41,6 +51,7 @@ public class Arrows extends Obstacles
             }    
         }    
         else{
+            //checks for enemy/player
             actCount++;
             if(actCount == actMod){
                 actCount = 0;
@@ -49,6 +60,9 @@ public class Arrows extends Obstacles
         }
     }    
 
+    /**
+     * damage - damages the player/enemy and starts moving
+     */
     public void damage(){
         boolean hit = super.damage(false);
         if(hit){

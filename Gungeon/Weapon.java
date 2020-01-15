@@ -143,10 +143,11 @@ public abstract class Weapon extends Actor
             {
                 this.startTime = 0;
                 reloading = false;
-                if(player.canReload(this))
+                int newMag = player.canReload(this);
+                if(newMag>0)
                 {
                     
-                    this.ammoInMag = magSize;
+                    this.ammoInMag = newMag;
 
                 }
                 return false;

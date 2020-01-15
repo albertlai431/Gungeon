@@ -6,7 +6,7 @@ import java.util.*;
 * straight line path from the angle they are shot at and will do a constant
 * damage to the HP of the Building/Vehicle that it hits.
 *
- * @author Star Xie, Albert Lai, Clarence 
+ * @author Star Xie, Albert Lai, Clarence Chau
 * @version January 2020
 */
 public class PistolBullet extends Ammunition
