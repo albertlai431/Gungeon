@@ -24,6 +24,7 @@ public abstract class Weapon extends Actor
     protected int mouseY;
     protected Player player;
     protected ItemInfo itemInfo;
+    
     /**
      * Constructor - Initializes the variables for the weapon
      * 
@@ -54,7 +55,7 @@ public abstract class Weapon extends Actor
     /**
      * createBullet - abstract class that choses the correct bullet for each type of weapon
      */
-    abstract protected Ammunition createBullet();
+    abstract protected void createBullet(int xcoord, int ycoord);
 
     /**
      * Act - Checks for button presses and mouse clicks
@@ -177,9 +178,8 @@ public abstract class Weapon extends Actor
      */
     private void shoot()
     {
-        Ammunition bullet = createBullet();
+        createBullet(this.getX(), this.getY());
         lastFiredTime = System.currentTimeMillis();
-        getWorld().addObject(bullet, this.getX(), this.getY());
         this.ammoInMag--;
         if(ammoInMag<10) player.reduceAmmo();
         itemInfo.updateAmmo();

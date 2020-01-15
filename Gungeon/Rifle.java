@@ -15,10 +15,10 @@ public class Rifle extends Weapon
         gun.scale(gun.getWidth()*150/100,gun.getHeight()*150/100);
         setImage(gun);
     }
-    protected Ammunition createBullet()
+    protected void createBullet(int xcoord, int ycoord)
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
-        return new RifleBullet(mouseX, mouseY,bulletDamage, bulletSpeed);
+        getWorld().addObject(new RifleBullet(mouseX, mouseY,bulletDamage,bulletSpeed),xcoord,ycoord);
     }
 }

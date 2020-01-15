@@ -290,19 +290,19 @@ public class Player extends Actor implements AnimationInterface
 
         if(listOfGuns.get(0).equals("Pistol")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, ammoInMag.get("Pistol"));
-            gun = new Pistol(itemInfo,this,50,4,100,100,100,15, ammoInMag.get("Pistol"));
+            gun = new Pistol(itemInfo,this,50,4,200,200,600,15, ammoInMag.get("Pistol"));
             getWorld().addObject(gun,getX()+18, getY()+16);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Pistol")), 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
         }    
         else if(listOfGuns.get(0).equals("Shotgun")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, items.get("Shotgun Bullet"), ammoInMag.get("Shotgun"));
-            gun = new Shotgun(itemInfo,this,200,5,300,300,300,8,ammoInMag.get("Shotgun"));
+            gun = new Shotgun(itemInfo,this,200,5,700,700,1000,8,ammoInMag.get("Shotgun"));
             getWorld().addObject(gun,getX()+16, getY()+15);
             reloadBar = new ResourceBarManager(8, ammoInMag.get("Shotgun"), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
         }    
         else{
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(1, items.get("Rifle Bullet"), ammoInMag.get("Rifle"));
-            gun = new Rifle(itemInfo,this,100,6,50,50,50,30,ammoInMag.get("Rifle"));
+            gun = new Rifle(itemInfo,this,100,6,150,150,400,30,ammoInMag.get("Rifle"));
             getWorld().addObject(gun,getX()+20, getY()+13);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Rifle")), 6, 700, 575, rifleBarImg, (GameWorld) getWorld());
         } 
