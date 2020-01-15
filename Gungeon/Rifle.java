@@ -19,6 +19,6 @@ public class Rifle extends Weapon
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
-        return new RifleBullet(mouseX, mouseY,bulletDamage, bulletSpeed);
+        return new RifleBullet(mouseX, mouseY,bulletDamage, bulletSpeed, false);
     }
 }

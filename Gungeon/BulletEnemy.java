@@ -29,12 +29,12 @@ public class BulletEnemy extends Enemy
     
     public void act() 
     {
-        moveTowardsPlayer();        
+        moveTowardsPlayer();  
     }    
      
     public void attack()
     {
-        getWorld().addObject(new PistolBullet(player.getX(), player.getY(), 1, 8), getX(), getY());   
+        getWorld().addObject(new PistolBullet(player.getX(), player.getY(), 1, 8, true), getX(), getY());   
     }  
     
     public void animateMovementUp()

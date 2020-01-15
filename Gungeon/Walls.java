@@ -16,8 +16,8 @@ public class Walls extends Obstacles
     /**
      * Constructor for Walls           the second index of the array
      */                                               
-    public Walls(){
-        super(0);
+    public Walls(int firstInd, int secondInd){
+        super(0, firstInd, secondInd);
     }  
 
     /**

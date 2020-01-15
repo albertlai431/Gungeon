@@ -14,6 +14,7 @@ public abstract class Ammunition extends Actor
     protected int y;
     protected int speed;
     protected int ammo = 0;
+    protected boolean isEnemy;
     //protected GreenfootSound hit = new GreenfootSound("BulletHit.wav");
     //protected GreenfootSound shoot = new GreenfootSound("BulletShot.wav");
     /**
@@ -21,12 +22,13 @@ public abstract class Ammunition extends Actor
      *
      * @param damage            specifies the damage taken for each hit
      */
-    public Ammunition (int xCoord, int yCoord, int damage, int speed)
+    public Ammunition (int xCoord, int yCoord, int damage, int speed, boolean isEnemy)
     {
         x = xCoord;
         y = yCoord;
         this.damage=damage;
         this.speed=speed;
+        this.isEnemy = isEnemy;
     }   
  
     /**
@@ -68,6 +70,8 @@ public abstract class Ammunition extends Actor
         Enemy enemy = (Enemy)getOneObjectAtOffset(0,0,Enemy.class);
         //Gets a vehicle that is intersecting a bullet
         Walls walls = (Walls)getOneObjectAtOffset(0,0,Walls.class);
+        
+        Player player = (Player)getOneObjectAtOffset(0,0,Player.class);
        
         //Checks to see if the bullet is on the opposite team as the objects
         if(walls != null){
@@ -76,14 +80,19 @@ public abstract class Ammunition extends Actor
             //Removes the Bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
         }
-        if(enemy != null){
+        if(enemy != null && isEnemy == false){
             //Deal damage and play sound
             //hit.play();
             //Decreases the damage of the vehicle when hit
             enemy.getDamaged(damage);
             //Removes the bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
-        }   
+        } 
+        if(player!= null && isEnemy == true)
+        {
+            player.loseOneHeart();
+            if(getWorld()!=null) getWorld().removeObject(this);
+        }
     }
    
  

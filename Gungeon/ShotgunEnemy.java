@@ -37,7 +37,7 @@ public class ShotgunEnemy extends Enemy
     {
         for(int i = 0; i < 5; i++)
         {
-            getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60 + (30 * i), 1, 6), getX(), getY());
+            getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60 + (30 * i), 1, 6, true), getX(), getY());
         }
     }  
     

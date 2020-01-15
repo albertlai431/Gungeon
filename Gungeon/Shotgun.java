@@ -19,6 +19,6 @@ public class Shotgun extends Weapon
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
-        return new ShotgunBullet(mouseX, mouseY,bulletDamage,bulletSpeed);
+        return new ShotgunBullet(mouseX, mouseY,bulletDamage,bulletSpeed, false);
     }
 }
