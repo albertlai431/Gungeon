@@ -22,25 +22,24 @@ public class ShotgunEnemy extends Enemy
         fireRate = 60;       
     }
 
-        protected void addedToWorld(World world) 
+    protected void addedToWorld(World world) 
     {
         createImages();
     }
-    
+
     public void act() 
     {
         moveTowardsPlayer();       
     }    
- 
-    
+
     public void attack()
     {
         for(int i = 0; i < 5; i++)
         {
-            getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60 + (30 * i), 1, 6), getX(), getY());
+            getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60 + (30 * i), 1, 6, true), getX(), getY());
         }
     }  
-    
+
     public void animateMovementUp()
     {
         if(animationCount%frameRate == 0)
@@ -49,7 +48,7 @@ public class ShotgunEnemy extends Enemy
             setImage(upMvt[imageNumber]);
         }        
     }
-    
+
     public void animateMovementDown()
     {
         if(animationCount%frameRate == 0)
@@ -58,7 +57,7 @@ public class ShotgunEnemy extends Enemy
             setImage(downMvt[imageNumber]);
         }        
     }
-    
+
     public void animateMovementRight()
     {
         if(animationCount%frameRate == 0)
@@ -67,7 +66,7 @@ public class ShotgunEnemy extends Enemy
             setImage(rightMvt[imageNumber]);
         }
     }
-    
+
     public void animateMovementLeft()
     {
         if(animationCount%frameRate == 0)
@@ -76,7 +75,7 @@ public class ShotgunEnemy extends Enemy
             setImage(leftMvt[imageNumber]);
         }
     }
-    
+
     public static void createImages()
     {
         if(!createdImages)
@@ -86,6 +85,8 @@ public class ShotgunEnemy extends Enemy
             {
                 rightMvt[i] = new GreenfootImage("shotgunEnemyRight"+i+".png");
                 leftMvt[i] = new GreenfootImage("shotgunEnemyRight"+i+".png");
+                rightMvt[i].scale(rightMvt[i].getWidth()*170/100, rightMvt[i].getHeight()*170/100);
+                leftMvt[i].scale(leftMvt[i].getWidth()*170/100, leftMvt[i].getHeight()*170/100);
             }
             for(int i=0; i<leftMvt.length; i++)
             {
@@ -95,6 +96,8 @@ public class ShotgunEnemy extends Enemy
             {
                 upMvt[i] = new GreenfootImage("shotgunEnemyUp"+i+".png");
                 downMvt[i] = new GreenfootImage("shotgunEnemyDown"+i+".png");
+                upMvt[i].scale(upMvt[i].getWidth()*170/100, upMvt[i].getHeight()*170/100);
+                downMvt[i].scale(downMvt[i].getWidth()*170/100, downMvt[i].getHeight()*170/100);
             }
         }
     }

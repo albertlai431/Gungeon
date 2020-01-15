@@ -225,7 +225,7 @@ public class GameWorld extends World
                             a = new Spikes(firstInd, secondInd);
                         }  
                         else if(actor.indexOf("Walls")==0){
-                            a = new Walls();
+                            a = new Walls(firstInd, secondInd);
                         } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;

@@ -18,15 +18,20 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected int bulletWidth;
     protected int healthPoints;
     protected int bulletSpeed;
+    protected int quadrant;
+    protected int counter=0;
     protected int damage = 1;
-    protected int fireRate;
+    protected int fireRate = 5;
     protected long animationCount = 0;
     protected int movementCounter = 30;
     protected GreenfootImage animationImage;
     protected ArrayList<Player> foundPlayers;
     protected Actor player;
-
-    protected abstract void attack();
+    
+    protected Walls wall;
+    protected int yeetx, yeety;
+    protected double slope;
+    protected boolean printed = false;
 
     public void getDamaged(int damage)
     {
@@ -35,34 +40,40 @@ public abstract class Enemy extends Actor implements AnimationInterface
         {           
             die();
         }
+        if(getWorld()!=null && this.isTouching(Player.class)) 
+        {
+            getWorld().getObjects(Player.class).get(0).loseOneHeart();
+            die(); 
+        }
     }
 
     protected void moveTowardsPlayer()
     {
         int[] closestTileCoordinates = findClosestAdjacentTileTowardsPlayer();
-        if(movementCounter == 30)
+        if(checkLineOfSight() == false)
         {
-            animate(closestTileCoordinates);
-            movementCounter = 0;
-        }
-        else
-        {
-            movementCounter++;
-        }
-        while(checkLineOfSight() == true)
-        {
-            int counter = fireRate;
-            if(fireRate == counter)
+            if(movementCounter == 30)
             {
-                attack();
-                counter = 0;
+                animate(closestTileCoordinates);
+                movementCounter = 0;
             }
             else
             {
-                counter++;
+                movementCounter++;
+            }
+        }
+        else
+        {
+
+            counter++;
+            if(counter%80 == 0)
+            {
+                attack();
             }
         }        
     }
+
+    protected abstract void attack();
 
     private double getPointDistance(int enemyX, int enemyY, int playerX, int playerY)
     {
@@ -70,9 +81,9 @@ public abstract class Enemy extends Actor implements AnimationInterface
         return distance;
     }
 
-    private boolean checkForObstacle(int x, int y)
+    private boolean checkForWall(int x, int y)
     {
-        ArrayList <Obstacles> obstacleList = (ArrayList) (getWorld().getObjectsAt(x, y, Obstacles.class));
+        ArrayList <Walls> obstacleList = (ArrayList) (getWorld().getObjectsAt(x, y, Walls.class));
         if(obstacleList.isEmpty())
         {
             return false;
@@ -102,7 +113,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
                 {
                     int[] tileCoordinates = new int[]{coordinateXStart + (x * tileSizeX), coordinateYStart + (y * tileSizeY)};                    
                     double distance = getPointDistance(tileCoordinates[0], tileCoordinates[1], playerX, playerY);
-                    if(checkForObstacle(tileCoordinates[0], tileCoordinates[1])){}                    
+                    if(checkForWall(tileCoordinates[0], tileCoordinates[1])){}                    
                     else
                     {
                         if(distance < shortestDistance)
@@ -119,9 +130,75 @@ public abstract class Enemy extends Actor implements AnimationInterface
         return closestTileCoordinates;
     }
 
-    private boolean checkLineOfSight()
+    public boolean checkLineOfSight()
     {
+        /*line = new LineOfSightRect(bulletWidth, (int)getPointDistance(getX(), getY(), player.getX(), player.getY()) + 5);
+        getWorld().addObject(line, 2, 2);
+        boolean answer = line.playerVisible(this.getBulletRotation(), getX(), getY(), player.getX(), player.getY());
+        System.out.println(answer); */
+        //return answer;
+
+        double dx=0, dy=0;
+        double interval = 8;
+        if(player.getX()!=getX()){
+            slope = (double)(player.getY()-getY())/(double)(player.getX()-getX());
+            dx= Math.sqrt(interval*interval/(1+slope*slope));
+            dy= slope*dx;
+        }    
+        else dy=interval;
+        
+
+        double length = Math.sqrt((player.getX()-getX())*(player.getX()-getX())+(player.getY()-getY())*(player.getY()-getY()));
+        if(player.getX()<getX()){
+            dx*=-1;
+            dy*=-1;
+        }
+
+        double currX=0;
+        double currY=0;
+        double currdis=0;
+
+        while(currdis+interval<length)
+        {
+            currdis+=interval;
+            currX+=dx;
+            currY+=dy;
+            //System.out.println(currX + " " + currY);
+            if(getObjectsAtOffset((int)currX, (int)currY, Walls.class).size()>0)
+            {
+                yeetx = (int)currX;
+                yeety = (int)currY;
+                wall = getObjectsAtOffset((int)currX, (int)currY, Walls.class).get(0);
+                //System.out.println("false");
+                return false;
+            }
+        }
+        //System.out.println("true");
         return true;
+    }
+    private int getBulletRotation()
+    {
+        int Xdisplacement = Math.abs(currentX-playerX);
+        int Ydisplacement = Math.abs(currentY-playerY);
+        int theta = 0;
+        if(Ydisplacement != 0)
+        {
+            theta = (int) Math.atan(Xdisplacement/Ydisplacement);
+        }
+        else theta = 0;
+
+        if(currentY-playerY>=0)
+        {
+            if(currentX-playerX>=0) theta = 180 + theta;
+            else theta = 180 - theta;
+        }
+        else
+        {
+            if(currentX-playerX>=0)theta = 360-theta;
+            else theta = theta;
+        }
+
+        return theta;
     }
 
     protected void die()
@@ -130,7 +207,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         world.updateScore();
         world.removeObject(this);
     }
-    
+
     protected void animate(int[] closestTileCoordinates)
     {
         if(closestTileCoordinates[0] > getX() && closestTileCoordinates[1] == getY())
@@ -200,4 +277,4 @@ public abstract class Enemy extends Actor implements AnimationInterface
         }         
     }
 }    
-    
+

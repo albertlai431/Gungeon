@@ -1,7 +1,10 @@
 #Greenfoot project file
 class.Arrows.image=arrow.png
+class.BulletEnemy.image=bulletEnemyDown0.png
 class.Fire.image=lava.png
 class.GameWorld.image=fullTiledFloor.png
+class.ShotgunEnemy.image=shotgunEnemyDown0.png
+class.SniperEnemy.image=sniperEnemyDown0.png
 class.Spikes.image=spike.png
 class.TitleScreen.image=TitleScreenPlaceHolder.jpg
 class.Walls.image=wall.png
@@ -268,7 +271,7 @@ editor.fx.0.width=1280
 editor.fx.0.x=0
 editor.fx.0.y=23
 height=777
-package.numDependencies=86
+package.numDependencies=
 package.numTargets=36
 project.charset=UTF-8
 publish.hasSource=false

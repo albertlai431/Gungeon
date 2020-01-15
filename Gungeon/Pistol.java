@@ -19,6 +19,6 @@ public class Pistol extends Weapon
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
         this.mouseY = Greenfoot.getMouseInfo().getY();
-        getWorld().addObject(new PistolBullet(mouseX, mouseY,bulletDamage,bulletSpeed),xcoord,ycoord);
+        getWorld().addObject(new PistolBullet(mouseX, mouseY,bulletDamage,bulletSpeed, false),xcoord,ycoord);
     }
 }

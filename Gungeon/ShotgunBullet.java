@@ -21,9 +21,9 @@ public class ShotgunBullet extends Ammunition
      * @param actor             the specific object that is being targetted
      * @param damage            specifies the damage taken for each hit
      */
-    public ShotgunBullet(int x, int y, int damage, int speed)
+    public ShotgunBullet(int x, int y, int damage, int speed, boolean isEnemy)
     {
-        super(x, y,damage, speed);
+        super(x, y,damage, speed, isEnemy);
         setImage(bullet);
         //hit.setVolume(50);
         //shoot.setVolume(75);
