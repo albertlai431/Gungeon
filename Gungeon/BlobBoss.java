@@ -26,6 +26,8 @@ public class BlobBoss extends Actor
     protected void addedToWorld(World world) 
     {
         createImages();
+        foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
+        player = foundPlayers.get(0); 
     }
     
     public void act() 
@@ -33,9 +35,9 @@ public class BlobBoss extends Actor
         animationCount ++;
         animate();
         
-        if(fireRate == 30)
+        if(fireRate == 100)
         {
-            if(bigAttackRate == 60)
+            if(bigAttackRate == 500)
             {
                 bigAttackOne();
                 bigAttackRate = 0;
@@ -47,6 +49,7 @@ public class BlobBoss extends Actor
                 player = foundPlayers.get(0);   
                 int attackNumber = Greenfoot.getRandomNumber(2);
                 pickAttack(attackNumber);
+                fireRate = 0;
             }            
         }
         else
@@ -72,7 +75,7 @@ public class BlobBoss extends Actor
     {
         for(int i = 0; i < 7; i++)
         {
-            //getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 90 + (30 * i), 1, 6), getX(), getY());
+            getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 90 + (30 * i), 1, 6, true), getX(), getY());
         }
     }
     
@@ -80,7 +83,7 @@ public class BlobBoss extends Actor
     {
         for(int i = 0; i < 3; i++)
         {
-            //getWorld().addObject(new SniperBullet(player.getX(), playergetY() - 30 + (30 * i), 1, 10), getX(), getY());
+            getWorld().addObject(new RifleBullet(player.getX(), player.getY() - 30 + (30 * i), 1, 10, true), getX(), getY());
         }
     }
     
@@ -91,13 +94,13 @@ public class BlobBoss extends Actor
             int attack = Greenfoot.getRandomNumber(100);
             if(attack < 25)
             {
-                //getWorld().addObject(new PistolBullet(player.getX(), playergetY(), 1, 10), getX(), getY());
+                getWorld().addObject(new PistolBullet(player.getX(), player.getY(), 1, 10, true), getX(), getY());
             }
             else
             {
                 int attackX = Greenfoot.getRandomNumber(480);
                 int attackY = Greenfoot.getRandomNumber(320);
-                //getWorld().addObject(new PistolBullet(attackX, attackY, 1, 10), getX(), getY());
+                getWorld().addObject(new PistolBullet(attackX, attackY, 1, 10, true), getX(), getY());
             }
         }
     }

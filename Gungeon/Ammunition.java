@@ -68,6 +68,7 @@ public abstract class Ammunition extends Actor
     {
         //Gets a building that is intersecting a bullet
         Enemy enemy = (Enemy)getOneObjectAtOffset(0,0,Enemy.class);
+        BlobBoss boss = (BlobBoss)getOneObjectAtOffset(0,0,BlobBoss.class);
         //Gets a vehicle that is intersecting a bullet
         Walls walls = (Walls)getOneObjectAtOffset(0,0,Walls.class);
         
@@ -85,6 +86,14 @@ public abstract class Ammunition extends Actor
             //hit.play();
             //Decreases the damage of the vehicle when hit
             enemy.getDamaged(damage);
+            //Removes the bullet object from the world
+            if(getWorld()!=null) getWorld().removeObject(this);
+        } 
+        if(boss != null && isEnemy == false){
+            //Deal damage and play sound
+            //hit.play();
+            //Decreases the damage of the vehicle when hit
+            boss.getDamaged(damage);
             //Removes the bullet object from the world
             if(getWorld()!=null) getWorld().removeObject(this);
         } 

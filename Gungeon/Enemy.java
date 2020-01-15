@@ -65,7 +65,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         else
         {
             counter++;
-            if(counter%60 == 0)
+            if(counter%80 == 0)
             {
                 attack();
             }

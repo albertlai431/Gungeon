@@ -82,6 +82,8 @@ public class BulletEnemy extends Enemy
             {
                 rightMvt[i] = new GreenfootImage("bulletEnemyLeft"+i+".png");
                 leftMvt[i] = new GreenfootImage("bulletEnemyLeft"+i+".png");
+                rightMvt[i].scale(rightMvt[i].getWidth()*170/100, rightMvt[i].getHeight()*170/100);
+                leftMvt[i].scale(leftMvt[i].getWidth()*170/100, leftMvt[i].getHeight()*170/100);
             }
             for(int i=0; i<leftMvt.length; i++)
             {
@@ -91,6 +93,8 @@ public class BulletEnemy extends Enemy
             {
                 upMvt[i] = new GreenfootImage("bulletEnemyUp"+i+".png");
                 downMvt[i] = new GreenfootImage("bulletEnemyDown"+i+".png");
+                upMvt[i].scale(upMvt[i].getWidth()*170/100, upMvt[i].getHeight()*170/100);
+                downMvt[i].scale(downMvt[i].getWidth()*170/100, downMvt[i].getHeight()*170/100);
             }
         }
     }
