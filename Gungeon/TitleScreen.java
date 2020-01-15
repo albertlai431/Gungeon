@@ -8,7 +8,7 @@ import java.io.File;
  */
 public class TitleScreen extends World
 {
-    private Button play = new Button("PLAY",35);
+    private Button play = new Button("NEW GAME",35);
     private Button options = new Button("CONTROLS",35);
     private Button load = new Button("LOAD",35);
     private MouseInfo mouse = Greenfoot.getMouseInfo();
@@ -23,12 +23,12 @@ public class TitleScreen extends World
         super(960, 640, 1); 
         playerFile = new File("data" + File.separator + "save" + File.separator + "Player.txt");
         if(playerFile.isFile()){
-            addObject(play,35,560);
+            addObject(play,84,560);
             addObject(load,40,590);
             addObject(options,77,620);
         }
         else{
-            addObject(play,35,590);
+            addObject(play,84,590);
             addObject(options,77,620);
         }
     }
