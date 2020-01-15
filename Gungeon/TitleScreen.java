@@ -1,5 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.io.File;
 /**
  * Write a description of class TitleScreen here.
  * 
@@ -8,10 +8,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class TitleScreen extends World
 {
-    private Button play = new Button("PLAY",35);
+    private Button play = new Button("NEW GAME",35);
     private Button options = new Button("CONTROLS",35);
     private Button load = new Button("LOAD",35);
     private MouseInfo mouse = Greenfoot.getMouseInfo();
+    private File playerFile;
     /**
      * Constructor for objects of class TitleScreen.
      * 
@@ -20,9 +21,16 @@ public class TitleScreen extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(960, 640, 1); 
-        addObject(play,35,560);
-        addObject(load,40,590);
-        addObject(options,77,620);
+        playerFile = new File("data" + File.separator + "save" + File.separator + "Player.txt");
+        if(playerFile.isFile()){
+            addObject(play,84,560);
+            addObject(load,40,590);
+            addObject(options,77,620);
+        }
+        else{
+            addObject(play,84,590);
+            addObject(options,77,620);
+        }
     }
     public void act(){
         if(Greenfoot.mouseClicked(play)){
