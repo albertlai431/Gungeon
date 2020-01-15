@@ -49,7 +49,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         {
             movementCounter++;
         }
-        while(checkLineOfSight(bulletWidth) == true)
+        while(checkLineOfSight() == true)
         {
             int counter = fireRate;
             if(fireRate == counter)
@@ -119,11 +119,9 @@ public abstract class Enemy extends Actor implements AnimationInterface
         return closestTileCoordinates;
     }
 
-    private boolean checkLineOfSight(int bulletWidth)
+    private boolean checkLineOfSight()
     {
-        LineOfSightRect line = new LineOfSightRect(bulletWidth, (int)getPointDistance(getX(), getY(), player.getX(), player.getY()) + 5);
-        getWorld().addObject(line, 2, 2);
-        return line.playerVisible(getRotation(), getX(), getY(), player.getX(), player.getY());
+        return true;
     }
 
     protected void die()
