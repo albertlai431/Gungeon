@@ -12,31 +12,35 @@ import java.io.File;
  */
 public class StoreMenu extends Menu
 {
+    //Buttons, labels and images
     private static GreenfootImage storeMenuImg = new GreenfootImage(600,425);
+    private GreenfootImage moneyIcon = new GreenfootImage("Money.png");
     private Label menuTitle = new Label("Store", 27, true);
-    private Button closeStore = new Button("Close", 18);
     private Label gunsLabel = new Label("Guns", 20, true);
     private Label ammoLabel = new Label("Ammo", 20, true);
     private Label powerupsLabel = new Label("Power Ups", 20, true);
-    private Label quantityLabel = new Label(" a ",20,true);
-    private Label costLabel = new Label(" a ",20,true);
-    private Label moneyLabel = new Label(" a ",20,true);
-    private Button equipButton = new Button("Equip", 18);
-    private Button purchaseButton = new Button("Purchase", 18);
-    private GreenfootImage moneyIcon = new GreenfootImage("Money.png");
+    private Label quantityLabel = new Label(" ",20,true);
+    private Label costLabel = new Label(" ",20,true);
+    private Label moneyLabel = new Label(" ",20,true);
+    private Button closeStore = new Button("Close", 18, 20, 20, 20,  100, 100, 100);
+    private Button equipButton = new Button("Equip",18, 20, 20, 20,  100, 100, 100);
+    private Button purchaseButton = new Button("Purchase", 18, 20, 20, 20,  100, 100, 100);
+    
+    //Objects
     private Player player;
     private ItemInfo itemInfo;
-
     private StoreItem lastItem = null;
     private String lastItemName = null;
     private int lastItemCost;
+    
+    //Data structures
     private static final String[] itemNames = {"Pistol Gun","Rifle Gun","Shotgun Gun","Rifle Bullet","Shotgun Bullet","Half-Heart Refill","Speed Boost"};
     private static final int[] xCoords = {250,350,450,250,350,250,350};
     private static final int[] yCoords = {225,225,225,350,350,475,475};
     private static final int[] costs = {0,500,500,100,100,500,750}; //to be completed
     private static final int numItems = itemNames.length;
-    private static boolean createdImages = false;
     private static GreenfootImage [] itemImages = new GreenfootImage [numItems];
+    private static boolean createdImages = false;
 
     /**
      * Constructor for Store Menu
@@ -78,10 +82,12 @@ public class StoreMenu extends Menu
         world.addObject(powerupsLabel, 240, 420);
         world.addObject(equipButton, 700, 200);
         world.addObject(purchaseButton, 700, 225);
-        world.addObject(quantityLabel,600,300);
-        world.addObject(costLabel,600,325);
+        world.addObject(quantityLabel,650,300);
+        world.addObject(costLabel,650,325);
         moneyLabel = new Label(Integer.toString(player.getMoney()),18, true);
         world.addObject(moneyLabel, 720, 148);
+        purchaseButton.getImage().setTransparency(0);
+        equipButton.getImage().setTransparency(0);
         for(int i=0;i<numItems;i++){
             world.addObject(new StoreItem(itemImages[i], itemNames[i],this,costs[i]),xCoords[i],yCoords[i]);
         }    
@@ -170,7 +176,7 @@ public class StoreMenu extends Menu
      */
     private void setEquipTransparency(){
         if(lastItemName.equals("Half-Heart Refill")){
-            if(player.getHearts()==6 || player.getHearts()==0) equipButton.getImage().setTransparency(0);
+            if((player.getHearts()==6 || player.getHearts()==0) || player.getItemNumber(lastItemName)==0) equipButton.getImage().setTransparency(0);
             else equipButton.getImage().setTransparency(255);
         }    
         else if(lastItemName.contains("Gun")){

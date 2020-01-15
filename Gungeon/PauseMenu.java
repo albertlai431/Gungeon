@@ -10,8 +10,8 @@ public class PauseMenu extends Menu
 {
     private static GreenfootImage pauseMenuImg = new GreenfootImage(200,120);
     private Label menuTitle = new Label("Pause", 27, true);
-    private Button play = new Button("Play", 18);
-    private Button exit = new Button("Exit and Save", 18);
+    private Button play = new Button("Play", 18, 20, 20, 20,  100, 100, 100);
+    private Button exit = new Button("Exit and Save", 18, 20, 20, 20,  100, 100, 100);
 
     /**
      * Constructor for objects of class PauseMenu.

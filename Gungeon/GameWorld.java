@@ -16,23 +16,27 @@ import java.io.IOException;
  */
 public class GameWorld extends World
 {
-    //firstInd = xcoord, secondInd = ycoord
-    private Actor [][] arr;
+    //Objects and data structures
+    private Actor [][] arr;//firstInd = xcoord, secondInd = ycoord
     private Player player;
     private Door door;
     private ItemInfo itemInfo;
+    
+    //Files
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
+    private File playerFile = new File(folderDir + "Player.txt");
     
+    //static variables
     public static final int height = 640;
     public static final int width = 960;
     private static final int totLevels = 5;
     private static final int totVersions = 5;
     public static final int tileSize = 32;
-    private File playerFile = new File(folderDir + "Player.txt");
+    private static final int tileOffset = 16;
+    
     private int fromLevel = -1;
     private int curLevel;
-    private static final int tileOffset = 16;
     private boolean lvlComplete = true;
 
     /**
@@ -57,12 +61,6 @@ public class GameWorld extends World
      */
     public GameWorld(boolean newGame){
         this();
-        //player file
-        if(!playerFile.isFile()){
-            System.out.println("File Not Found");
-            return;
-        }    
-
         //clear data and load from original text files
         if(newGame) transferTextFiles();
 
@@ -109,7 +107,7 @@ public class GameWorld extends World
     public void act(){
         keyboardInput();
         //checks if level is complete
-        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && !lvlComplete){
+        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(BlobBoss.class).size()==0 && !lvlComplete){
             door.completeLevel();
             player.incrementMaxLevel();
             lvlComplete = true;
@@ -142,7 +140,7 @@ public class GameWorld extends World
      * gameOver - checks if player is dead and ends the game, called by player class
      */
     public void gameOver(boolean win){
-        transferTextFiles();
+        deleteTextFiles();
         Greenfoot.setWorld(new PauseWorld(itemInfo.getScore(),win));
     }
 
@@ -260,7 +258,7 @@ public class GameWorld extends World
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){
-                            a = new Boss();
+                            a = new BlobBoss();
                             isEnemy = true;
                         }
                         else{
@@ -292,7 +290,18 @@ public class GameWorld extends World
             int version = Greenfoot.getRandomNumber(totVersions);
             copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
         }
-    }    
+    }  
+    
+    /**
+     * deleteTextFiles - Deletes text files
+     */
+    private void deleteTextFiles(){
+        playerFile.delete();
+        for(int i=1;i<=totLevels;i++){
+            File worldFile = new File(folderDir + "lvl" + Integer.toString(i) + ".txt");
+            worldFile.delete();
+        }
+    } 
 
     //helper classes
     /**

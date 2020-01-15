@@ -2,7 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 
 /**
- * Write a description of class Obstacles here.
+ * Obstacles is the abstract superclass of all obstacles in the world. It contains methods to damage enemies. 
  * 
  * @author Albert Lai
  * @version January 2020
@@ -16,10 +16,22 @@ public abstract class Obstacles extends Actor
     private int firstInd;
     private int secondInd;
 
+    /**
+     * Constructor for obstacles 
+     * 
+     * @param damage            damage inflicted by obstacle
+     */
     public Obstacles(int damage){
         this.damage = damage;
     }    
     
+    /**
+     * Constructor for obstacles
+     * 
+     * @param damage            damage inflicted by obstacle
+     * @param firstInd          first index of array
+     * @param secondInd         second index of array
+     */
     public Obstacles(int damage, int firstInd, int secondInd){
         this(damage);
         this.firstInd = firstInd;

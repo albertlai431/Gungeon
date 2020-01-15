@@ -16,7 +16,7 @@ public class Arrows extends Obstacles
 
     public Arrows(){
         super(100);
-        getImage().setTransparency(0);
+        getImage().setTransparency(100);
     }    
 
     public void addedToWorld(World w){
@@ -36,7 +36,7 @@ public class Arrows extends Obstacles
             setLocation(getX()-3,y);
             if(getX()<=xEnd){
                 isMoving = false;
-                getImage().setTransparency(0);
+                getImage().setTransparency(100);
                 setLocation(x,y);
             }    
         }    

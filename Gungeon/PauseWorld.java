@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class PauseWorld here.
+ * PauseWorld - world that is set when player clicks pause, opens the store, or ends the game. 
  * 
  * @author Albert Lai
  * @version January 2020
@@ -15,7 +15,7 @@ public class PauseWorld extends World
     private Label scoreLabel;
     
     /**
-     * Constructor for objects of class PauseWorld.
+     * Constructor for objects of class PauseWorld, called to create a PauseMenu
      * 
      */
     public PauseWorld(String menuType, GameWorld gameWorld)
@@ -27,14 +27,19 @@ public class PauseWorld extends World
         this.gameWorld = gameWorld;
     }
     
+    /**
+     * Constructor for objects of class PauseWorld, called to create a Store
+     */
     public PauseWorld(GameWorld gameWorld, Player player, ItemInfo itemInfo){
         this("store", gameWorld);
         addObject(new StoreMenu(player,itemInfo),480,320);
     }   
     
+    /**
+     * Constructor for objects of class PauseWorld, called to create a gameOver screen
+     */
     public PauseWorld(int score, boolean isWin){
         super(960, 640, 1); 
-        
         if(isWin){
             setBackground("Victory.png");
             scoreLabel = new Label("Score: " + Integer.toString(score), 35, 230, 230, 230, true);
@@ -49,10 +54,16 @@ public class PauseWorld extends World
         }    
     }    
     
+    /**
+     * act - checks for button clicks
+     */
     public void act(){
         if(returnToTitleScreen.getWorld()!=null && Greenfoot.mouseClicked(returnToTitleScreen)) Greenfoot.setWorld(new TitleScreen());
     }    
     
+    /**
+     * closeWorld - sets the game back to gameWorld
+     */
     public void closeWorld(){
         Greenfoot.setWorld(gameWorld);
     }    
