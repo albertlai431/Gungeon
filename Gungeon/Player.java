@@ -302,7 +302,7 @@ public class Player extends Actor implements AnimationInterface
         }    
         else if(listOfGuns.get(0).equals("Shotgun")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, items.get("Shotgun Bullet"), ammoInMag.get("Shotgun"));
-            gun = new Shotgun(itemInfo,this,200,5,700,700,1000,8,ammoInMag.get("Shotgun"));
+            gun = new Shotgun(itemInfo,this,300,5,700,700,1000,8,ammoInMag.get("Shotgun"));
             getWorld().addObject(gun,getX()+16, getY()+15);
             reloadBar = new ResourceBarManager(8, ammoInMag.get("Shotgun"), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
         }    
