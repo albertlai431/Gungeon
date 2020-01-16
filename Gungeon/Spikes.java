@@ -30,11 +30,4 @@ public class Spikes extends Obstacles
             damage();
         }  
     } 
-
-    /**
-     * damage - damges the player/enemy
-     */
-    protected void damage(){
-        super.damage(true);
-    }
 }

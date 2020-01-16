@@ -9,7 +9,22 @@ import java.io.IOException;
 
 /**
  * GameWorld is the world where the game takes place. It holds the player, actors of the 
- * game, 2D array of actors, and is loaded from a text file. 
+ * game, 2D array of actors, and itemInfo. It is loaded from a text file and has methods 
+ * to create, modify, and delete them. It checks for keyboard presses to open menus 
+ * and contains methods to modify its objects. 
+ * 
+ * <p>
+ * Gungeon is a remake of the classic Gungeon. The player travels through chambers/rooms, 
+ * shooting enemies and avoiding traps to beat the game. It contains a store to allow the
+ * user to buy items like more guns, health refills, and ammo. It can be saved to a text
+ * file so the user can continue playing from a checkpoint. The tutorial shows how the 
+ * game works and its controls. Enter the Gungeon!
+ * </p>
+ * 
+ * <p>
+ * Images credits to
+ * Music credits to
+ * </p>
  * 
  * @author Albert Lai
  * @version January 2020
@@ -17,7 +32,7 @@ import java.io.IOException;
 public class GameWorld extends World
 {
     //Objects and data structures
-    private Actor [][] arr;//firstInd = xcoord, secondInd = ycoord
+    private Actor [][] arr; //firstInd = xcoord, secondInd = ycoord
     private Player player;
     private Door door;
     private ItemInfo itemInfo;
@@ -27,7 +42,7 @@ public class GameWorld extends World
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
     private File playerFile = new File(folderDir + "Player.txt");
 
-    //static variables
+    //Static variables
     public static final int height = 640;
     public static final int width = 960;
     private static final int totLevels = 5;
@@ -46,14 +61,14 @@ public class GameWorld extends World
      * Base Constructor - not to be called directly
      */
     public GameWorld()
-    {    
-        // Create a new world with 960x640 cells with a cell size of 1x1 pixels.
+    {   
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
         //Create Images
         StoreMenu.createImages();
         Player.createImages();
         setPaintOrder(Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        //Music
         String key = Greenfoot.getKey();
         openRoom.setVolume(85);
         openRoom.play();
@@ -135,30 +150,38 @@ public class GameWorld extends World
     private void keyboardInput(){
         String key = Greenfoot.getKey();
         if("escape".equals(key)){
+            //pause menu
             closeWorld(curLevel);
             gamePlay.pause();
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
+            //store menu
             Greenfoot.setWorld(new PauseWorld(this,player,itemInfo));
         }    
     }
 
     /**
      * updateScore - called when enemies die to update the score, money, and kills
+     * 
+     * @param scoreBoost            amount to increase the score by
+     * @param moneyBoost            amount to increase the money by
      */
     public void updateScore(int scoreBoost, int moneyBoost){
+        //itemInfo 
         itemInfo.incrementKills();
         itemInfo.updateScore(scoreBoost);
         itemInfo.updateMoney(moneyBoost);
+        //player
         player.setMoney(moneyBoost);
         player.setKills();
         player.setScore(scoreBoost);
     }    
 
-    //game specific events
     /**
      * gameOver - checks if player is dead and ends the game, called by player class
+     * 
+     * @param win               true if player has won, false if not
      */
     public void gameOver(boolean win){
         gamePlay.stop();
@@ -168,6 +191,8 @@ public class GameWorld extends World
 
     /**
      * closeWorld - closes the current world
+     * 
+     * @param newLevel          level of the world the player is in
      */
     public void closeWorld(int newLevel){
         gamePlay.pause();
@@ -193,7 +218,6 @@ public class GameWorld extends World
         Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player, itemInfo));
     }
 
-    //methods dealing with text files
     /**
      * copyFile - takes contents of one file and copies it into another file
      * 
@@ -227,6 +251,7 @@ public class GameWorld extends World
      * parseTextFile - takes world text file and parses it
      */
     private void parseTextFile(File worldFile){
+        //Scanner
         Scanner s = null;
         try{
             s = new Scanner(worldFile);
@@ -245,6 +270,7 @@ public class GameWorld extends World
                 boolean isEnemy = false;
                 try{
                     if(arr[firstInd][secondInd]==null){
+                        //determine actor
                         Actor a = null;
                         if(actor.indexOf("Arrows")==0){
                             a = new Arrows();
@@ -275,7 +301,6 @@ public class GameWorld extends World
                                 }    
                             }
                         } 
-                        //fix
                         else if(actor.indexOf("BulletEnemy")==0){
                             a = new BulletEnemy();
                             isEnemy = true;
@@ -334,12 +359,11 @@ public class GameWorld extends World
         }
     } 
 
-    //helper classes
     /**
-     * convert - takes the index value and converts to greenfoot X value
+     * convert - takes the index value and converts to greenfoot coordinate value
      * 
-     * param secondIndex            second index of 2D to be converted
-     * @return int                  greenfoot x value
+     * @param index                  index of 2D array to be converted
+     * @return int                   greenfoot coordinate value
      */
     public static int convert(int index){
         return tileOffset + index*tileSize;
@@ -366,6 +390,7 @@ public class GameWorld extends World
      */
     public void createTextFiles(){
         FileWriter fw = null;
+        //amount ofobstacles in levels
         int[] obstacles = {1,2,3,4,5};
         //BulletEnemy, SniperEnemy, ShotgunEnemy
         int[][] enemies = {{2,4,3,3},{1,2,4,3},{0,1,2,5}};
@@ -379,7 +404,7 @@ public class GameWorld extends World
                     int a = 0;
                     fw = new FileWriter(worldFile);
 
-                    //Door
+                    //Doors
                     int xval;
                     if(i!=1){
                         xval = Greenfoot.getRandomNumber(5)+2;
@@ -394,7 +419,7 @@ public class GameWorld extends World
                         for(int l=16;l<=18;l++) curarr[k][l]=true;
                     } 
 
-                    //Walls (horizontal and vertical)
+                    //Walls (horizontal and vertical border)
                     for(int x=0;x<30;x++){
                         if(!curarr[x][0]) fw.write("Walls\n" + x + "\n" + 0 + "\n");
                         if(!curarr[x][19] && x!=0 && x!=29) fw.write("Walls\n" + x + "\n" + 19 + "\n");
@@ -412,9 +437,9 @@ public class GameWorld extends World
                         fw.write("Boss\n" + 15 + "\n" + 10 + "\n"); a++;
                     }    
                     else{
-                        //Obstacles (not passage)
+                        //Obstacles 
                         for(String actor: obstaclesNames){
-                            //walls
+                            //Walls
                             if(actor.equals("Walls")){
                                 for(int k=0;k<6-i+Greenfoot.getRandomNumber(2);k++){
                                     while(true){
@@ -450,6 +475,7 @@ public class GameWorld extends World
                                 }    
                                 continue;
                             }    
+                            //Other obstacles
                             for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i]-obstacles[i-1])+obstacles[i-1];k++){
                                 while(true){
                                     int x = Greenfoot.getRandomNumber(30);

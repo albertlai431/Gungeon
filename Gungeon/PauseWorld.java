@@ -23,7 +23,6 @@ public class PauseWorld extends World
      */
     public PauseWorld(String menuType, GameWorld gameWorld)
     {    
-        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(960, 640, 1); 
         this.menuType=menuType;
         setBackground("pauseWorldImg.png");
@@ -66,6 +65,7 @@ public class PauseWorld extends World
      * act - checks for button clicks
      */
     public void act(){
+        //checks for button press
         if(returnToTitleScreen.getWorld()!=null && Greenfoot.mouseClicked(returnToTitleScreen)){
             if(victorySound.isPlaying()) victorySound.stop();
             Greenfoot.setWorld(new TitleScreen());

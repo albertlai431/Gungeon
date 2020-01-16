@@ -9,6 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Arrows extends Obstacles
 {
+    //instance variables
     private boolean isMoving = false;
     private int x;
     private int xStart;
@@ -55,20 +56,13 @@ public class Arrows extends Obstacles
             actCount++;
             if(actCount == actMod){
                 actCount = 0;
-                damage();
+                boolean hit = super.damage();
+                if(hit){
+                    isMoving = true;
+                    setLocation(xStart,y);
+                    getImage().setTransparency(255);
+                }
             }    
-        }
-    }    
-
-    /**
-     * damage - damages the player/enemy and starts moving
-     */
-    public void damage(){
-        boolean hit = super.damage(false);
-        if(hit){
-            isMoving = true;
-            setLocation(xStart,y);
-            getImage().setTransparency(255);
         }
     }    
 }

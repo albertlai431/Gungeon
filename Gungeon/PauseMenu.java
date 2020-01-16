@@ -39,10 +39,11 @@ public class PauseMenu extends Menu
         PauseWorld world = (PauseWorld) getWorld();
         String key = Greenfoot.getKey();
         if(Greenfoot.mouseClicked(play) || "escape".equals(key)){
+            //resume the game
             world.closeWorld();
         }
         else if(Greenfoot.mouseClicked(exit)){
-            
+            //return to title screen
             Greenfoot.setWorld(new TitleScreen());
         }    
     }    

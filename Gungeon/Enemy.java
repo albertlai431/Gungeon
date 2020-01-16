@@ -97,6 +97,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
 
     private boolean checkLineOfSight()
     {
+        //find dx, dy
         double dx=0, dy=0;
         double interval = 8;
         if(player.getX()!=getX()){
@@ -105,18 +106,17 @@ public abstract class Enemy extends Actor implements AnimationInterface
             dy= slope*dx;
         }    
         else dy=interval;
-        
-
-        double length = Math.sqrt((player.getX()-getX())*(player.getX()-getX())+(player.getY()-getY())*(player.getY()-getY()));
         if(player.getX()<getX()){
             dx*=-1;
             dy*=-1;
         }
 
+        double length = Math.sqrt((player.getX()-getX())*(player.getX()-getX())+(player.getY()-getY())*(player.getY()-getY()));
         double currX=0;
         double currY=0;
         double currdis=0;
 
+        //check points on the line for walls
         while(currdis+interval<length)
         {
             currdis+=interval;
