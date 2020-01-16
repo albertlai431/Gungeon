@@ -101,6 +101,7 @@ public class GameWorld extends World
         this.player = player;
         this.itemInfo = itemInfo;
         addObject(itemInfo,824,601);
+        if(player.getMaxLevel()>=curLevel) lvlComplete = true;
         //create world
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
@@ -252,7 +253,7 @@ public class GameWorld extends World
                         } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
-                            a = new Door(doorLevel,player.getMaxLevel()>=doorLevel);
+                            a = new Door(doorLevel,player.getMaxLevel()>=doorLevel-1);
                             if(fromLevel>curLevel){
                                 if(secondInd==19){
                                     addObject(player,convert(firstInd),convert(secondInd-2));
@@ -281,7 +282,6 @@ public class GameWorld extends World
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){
-                            System.out.println("ok");
                             a = new BlobBoss();
                             isEnemy = true;
                         }
