@@ -528,7 +528,7 @@ public class Player extends Actor implements AnimationInterface
     /**
      * parseData - load data from Player.txt 
      */
-    private void parseData() {
+    public void parseData() {
         Scanner s = null;
         try {
             s = new Scanner(txtFile);

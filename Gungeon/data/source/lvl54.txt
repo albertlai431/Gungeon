@@ -2,7 +2,7 @@ Door4
 2
 0
 Door6
-18
+20
 19
 Walls
 0

@@ -23,7 +23,6 @@ public class Shotgun extends Weapon
         double x2 = xcoord + (mouseX-xcoord)/10;
         double y2 = ycoord + (mouseY-ycoord)/10;
         double dis = Math.sqrt((xcoord-x2)*(xcoord-x2) + (ycoord-y2)*(ycoord-y2))*Math.tan(Math.PI/15); 
-        System.out.println(dis);
         if(Math.abs(ycoord - mouseY)<=9){
             if(dis>=6 && dis<=12){
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+6),bulletDamage,bulletSpeed, false),xcoord,ycoord);

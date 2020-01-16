@@ -36,7 +36,7 @@ public class BulletEnemy extends Enemy
      
     public void attack()
     {
-        getWorld().addObject(new PistolBullet(player.getX(), player.getY(), 1, 8, true), getX(), getY());   
+        getWorld().addObject(new PistolBullet(player.getX(), player.getY(), 1, 4, true), getX(), getY());   
     }  
     
     public void animateMovementUp()

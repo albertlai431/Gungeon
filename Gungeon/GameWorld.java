@@ -34,7 +34,7 @@ public class GameWorld extends World
     private static final int totVersions = 5;
     public static final int tileSize = 32;
     private static final int tileOffset = 16;
-    private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
+    private static GreenfootSound gamePlay = new GreenfootSound("gameplay.wav");
     private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
 
     private int fromLevel = -1;
@@ -99,6 +99,7 @@ public class GameWorld extends World
         this.curLevel = curLevel;
         this.fromLevel = fromLevel;
         this.player = player;
+        this.player.parseData();
         this.itemInfo = itemInfo;
         addObject(itemInfo,824,601);
         if(player.getMaxLevel()>=curLevel) lvlComplete = true;
@@ -117,6 +118,7 @@ public class GameWorld extends World
         if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(BlobBoss.class).size()==0 && !lvlComplete){
             door.completeLevel();
             player.incrementMaxLevel();
+            itemInfo.updateScore(curLevel*100);
             lvlComplete = true;
         }    
 
@@ -472,8 +474,8 @@ public class GameWorld extends World
                                         curarr[x][y] = true;
                                         a++;
                                         if(k==0) fw.write("BulletEnemy\n" + x + "\n" + y + "\n");
-                                        else if(k==1) fw.write("SniperEnemy\n" + x + "\n" + y + "\n");
-                                        else fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
+                                        else if(k==1) fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
+                                        else fw.write("SniperEnemy\n" + x + "\n" + y + "\n");
                                         break;
                                     }   
                                 }
