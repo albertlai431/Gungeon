@@ -27,11 +27,8 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected GreenfootImage animationImage;
     protected ArrayList<Player> foundPlayers;
     protected Actor player;
+    protected boolean animated = false;
     
-    protected Walls wall;
-    protected int yeetx, yeety;
-    protected double slope;
-    protected boolean printed = false;
 
     public void getDamaged(int damage)
     {
@@ -50,8 +47,9 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected void moveTowardsPlayer()
     {
         int[] closestTileCoordinates = findClosestAdjacentTileTowardsPlayer();
-        if(checkLineOfSight() == false)
+        if(checkLineOfSight() == false || animated==false)
         {
+            animated=true;
             if(movementCounter == 30)
             {
                 animate(closestTileCoordinates);
@@ -141,7 +139,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         double dx=0, dy=0;
         double interval = 8;
         if(player.getX()!=getX()){
-            slope = (double)(player.getY()-getY())/(double)(player.getX()-getX());
+            double slope = (double)(player.getY()-getY())/(double)(player.getX()-getX());
             dx= Math.sqrt(interval*interval/(1+slope*slope));
             dy= slope*dx;
         }    
@@ -166,14 +164,9 @@ public abstract class Enemy extends Actor implements AnimationInterface
             //System.out.println(currX + " " + currY);
             if(getObjectsAtOffset((int)currX, (int)currY, Walls.class).size()>0)
             {
-                yeetx = (int)currX;
-                yeety = (int)currY;
-                wall = getObjectsAtOffset((int)currX, (int)currY, Walls.class).get(0);
-                //System.out.println("false");
                 return false;
             }
         }
-        //System.out.println("true");
         return true;
     }
     private int getBulletRotation()

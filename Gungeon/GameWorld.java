@@ -21,12 +21,12 @@ public class GameWorld extends World
     private Player player;
     private Door door;
     private ItemInfo itemInfo;
-    
+
     //Files
     private static final String folderDir = "data" + File.separator + "save" + File.separator;
     private static final String sourceDir = "data" + File.separator + "source" + File.separator;
     private File playerFile = new File(folderDir + "Player.txt");
-    
+
     //static variables
     public static final int height = 640;
     public static final int width = 960;
@@ -36,10 +36,10 @@ public class GameWorld extends World
     private static final int tileOffset = 16;
     private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
     private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
-    
+
     private int fromLevel = -1;
     private int curLevel;
-    private boolean lvlComplete = true;
+    private boolean lvlComplete = false;
     private boolean startSound = false;
 
     /**
@@ -118,7 +118,7 @@ public class GameWorld extends World
             player.incrementMaxLevel();
             lvlComplete = true;
         }    
-        
+
         //checks if openRoom sound is done playing
         if(!openRoom.isPlaying() && !startSound){
             startSound=true;
@@ -140,7 +140,7 @@ public class GameWorld extends World
             Greenfoot.setWorld(new PauseWorld(this,player,itemInfo));
         }    
     }
-    
+
     /**
      * updateScore - called when enemies die to update the score
      */
@@ -166,7 +166,7 @@ public class GameWorld extends World
         player.changeCurLevel(newLevel);
         player.saveData();
     }    
-    
+
     /**
      * resumeWorld - resumes music playing
      */
@@ -226,10 +226,11 @@ public class GameWorld extends World
         catch(FileNotFoundException e){
             System.out.println("File Not Found");
         }    
-
+        
         while(true){
             try{
                 String actor = s.nextLine();
+                System.out.println(actor);
                 int firstInd = Integer.parseInt(s.nextLine());
                 int secondInd = Integer.parseInt(s.nextLine());
                 int xcoord = convert(firstInd);
@@ -281,6 +282,7 @@ public class GameWorld extends World
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){
+                            System.out.println("ok");
                             a = new BlobBoss();
                             isEnemy = true;
                         }
@@ -314,7 +316,7 @@ public class GameWorld extends World
             copyFile(sourceDir + "lvl" + Integer.toString(i) + Integer.toString(version) + ".txt", new File(folderDir + "lvl" + Integer.toString(i) + ".txt"));
         }
     }  
-    
+
     /**
      * deleteTextFiles - Deletes text files
      */
@@ -358,9 +360,9 @@ public class GameWorld extends World
      */
     public void createTextFiles(){
         FileWriter fw = null;
-        int[] obstacles = {1,2,5,8,9,10};
-        //ShotgunEnemy, RifleEnemy, RocketEnemy, Boss
-        int[][] enemies = {{3,4,3,3,4},{2,3,5,4,3},{0,1,2,5,3}};
+        int[] obstacles = {1,2,3,4,5};
+        //BulletEnemy, SniperEnemy, ShotgunEnemy
+        int[][] enemies = {{2,4,3,3},{1,2,4,3},{0,1,2,5}};
         String[] obstaclesNames = {"Walls", "Arrows", "Fire", "Spikes"};
 
         for(int i=1;i<=totLevels;i++){
@@ -376,9 +378,15 @@ public class GameWorld extends World
                     if(i!=1){
                         xval = Greenfoot.getRandomNumber(5)+2;
                         fw.write("Door" + (i-1) + "\n" + xval + "\n" + 0 + "\n");
+                        for(int k=xval-1;k<=xval+1;k++){
+                            for(int l=1;l<=3;l++) curarr[k][l]=true;
+                        }    
                     }
                     xval = 20 - Greenfoot.getRandomNumber(5);
                     fw.write("Door" + (i+1) + "\n" + xval + "\n" + 19 + "\n");
+                    for(int k=xval-1;k<=xval+1;k++){
+                        for(int l=16;l<=18;l++) curarr[k][l]=true;
+                    } 
 
                     //Walls (horizontal and vertical)
                     for(int x=0;x<30;x++){
@@ -395,79 +403,79 @@ public class GameWorld extends World
                     //Boss
                     if(i==5){
                         curarr[27][16]=true;
-                        fw.write("Boss\n" + 27 + "\n" + 16 + "\n"); a++;
+                        fw.write("Boss\n" + 15 + "\n" + 10 + "\n"); a++;
                     }    
+                    else{
+                        //Obstacles (not passage)
+                        for(String actor: obstaclesNames){
+                            //walls
+                            if(actor.equals("Walls")){
+                                for(int k=0;k<6-i+Greenfoot.getRandomNumber(2);k++){
+                                    while(true){
+                                        boolean works = true;
+                                        int x = Greenfoot.getRandomNumber(30);
+                                        int y = Greenfoot.getRandomNumber(20);
+                                        int xSize = 3 + Greenfoot.getRandomNumber(5);
+                                        int ySize = 3 + Greenfoot.getRandomNumber(5);
+                                        try{
+                                            for(int X=x; X<x+xSize; X++){
+                                                for(int Y=y; Y<y+ySize; Y++){
+                                                    if(curarr[X][Y] || X<=2 || X>=27 || Y<=2 || Y>=17 || (X==3 && Y==3)){
+                                                        works=false;
+                                                    }    
+                                                }   
+                                            }    
+                                        }
+                                        catch(IndexOutOfBoundsException e){
+                                            works = false;
+                                        }
 
-                    //Obstacles (not passage)
-                    for(String actor: obstaclesNames){
-                        //walls
-                        if(actor.equals("Walls")){
-                            for(int k=0;k<6-i+Greenfoot.getRandomNumber(2);k++){
-                                while(true){
-                                    boolean works = true;
-                                    int x = Greenfoot.getRandomNumber(30);
-                                    int y = Greenfoot.getRandomNumber(20);
-                                    int xSize = 3 + Greenfoot.getRandomNumber(5);
-                                    int ySize = 3 + Greenfoot.getRandomNumber(5);
-                                    try{
-                                        for(int X=x; X<x+xSize; X++){
-                                            for(int Y=y; Y<y+ySize; Y++){
-                                                if(curarr[X][Y] || X<=2 || X>=27 || Y<=2 || Y>=17 || (X==3 && Y==3)){
-                                                    works=false;
-                                                }    
-                                            }   
+                                        if(works){
+                                            for(int X=x; X<x+xSize; X++){
+                                                for(int Y=y; Y<y+ySize; Y++){
+                                                    fw.write(actor + "\n" + X + "\n" + Y + "\n");
+                                                    curarr[X][Y] = true;
+                                                    a++;
+                                                }   
+                                            }
+                                            break;
                                         }    
                                     }
-                                    catch(IndexOutOfBoundsException e){
-                                        works = false;
-                                    }
-
-                                    if(works){
-                                        for(int X=x; X<x+xSize; X++){
-                                            for(int Y=y; Y<y+ySize; Y++){
-                                                fw.write(actor + "\n" + X + "\n" + Y + "\n");
-                                                curarr[X][Y] = true;
-                                                a++;
-                                            }   
-                                        }
-                                        break;
-                                    }    
-                                }
+                                }    
+                                continue;
                             }    
-                            continue;
-                        }    
-                        for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i]-obstacles[i-1])+obstacles[i-1];k++){
-                            while(true){
-                                int x = Greenfoot.getRandomNumber(30);
-                                int y = Greenfoot.getRandomNumber(20);
-                                if(!curarr[x][y]){
-                                    fw.write(actor + "\n" + x + "\n" + y + "\n");
-                                    curarr[x][y] = true;
-                                    a++;
-                                    break;
-                                }   
+                            for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i]-obstacles[i-1])+obstacles[i-1];k++){
+                                while(true){
+                                    int x = Greenfoot.getRandomNumber(30);
+                                    int y = Greenfoot.getRandomNumber(20);
+                                    if(!curarr[x][y]){
+                                        fw.write(actor + "\n" + x + "\n" + y + "\n");
+                                        curarr[x][y] = true;
+                                        a++;
+                                        break;
+                                    }   
+                                }
+                            }
+                        }
+
+                        //Enemies (BulletEnemy, SniperEnemy, ShotgunEnemy, Boss)
+                        for(int k=0;k<3;k++){
+                            for(int l=0;l<enemies[k][i-1];l++){
+                                while(true){
+                                    int x = 10 + Greenfoot.getRandomNumber(20);
+                                    int y = 7 + Greenfoot.getRandomNumber(13);
+                                    if(!curarr[x][y]){
+                                        curarr[x][y] = true;
+                                        a++;
+                                        if(k==0) fw.write("BulletEnemy\n" + x + "\n" + y + "\n");
+                                        else if(k==1) fw.write("SniperEnemy\n" + x + "\n" + y + "\n");
+                                        else fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
+                                        break;
+                                    }   
+                                }
                             }
                         }
                     }
-
-                    //Enemies (BulletEnemy, SniperEnemy, ShotgunEnemy, Boss)
-                    for(int k=0;k<3;k++){
-                        for(int l=0;l<enemies[0][i-1];l++){
-                            while(true){
-                                int x = Greenfoot.getRandomNumber(30);
-                                int y = Greenfoot.getRandomNumber(20);
-                                if(!curarr[x][y]){
-                                    curarr[x][y] = true;
-                                    a++;
-                                    if(k==0) fw.write("BulletEnemy\n" + x + "\n" + y + "\n");
-                                    else if(k==1) fw.write("SniperEnemy\n" + x + "\n" + y + "\n");
-                                    else fw.write("ShotgunEnemy\n" + x + "\n" + y + "\n");
-                                    break;
-                                }   
-                            }
-                        }
-                    }
-
                     fw.close();
                 }
                 catch(IOException e){
