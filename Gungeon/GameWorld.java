@@ -230,7 +230,6 @@ public class GameWorld extends World
         while(true){
             try{
                 String actor = s.nextLine();
-                System.out.println(actor);
                 int firstInd = Integer.parseInt(s.nextLine());
                 int secondInd = Integer.parseInt(s.nextLine());
                 int xcoord = convert(firstInd);
