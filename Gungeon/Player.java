@@ -33,6 +33,7 @@ public class Player extends Actor implements AnimationInterface
     private static GreenfootImage shotgunBarImg = new GreenfootImage("shotgunShell.png");
     private static GreenfootImage halfHeart = new GreenfootImage("halfHeart.png");
     private static GreenfootImage fullHeart = new GreenfootImage("fullHeart.png");
+    private static GreenfootSound loseHeart = new GreenfootSound("loseHeart.mp3");
 
     //ResourceBarManagers
     private ResourceBarManager healthBar;
@@ -126,6 +127,9 @@ public class Player extends Actor implements AnimationInterface
             pistolImgMir.mirrorVertically();
             rifleImgMir.mirrorVertically();
             shotgunImgMir.mirrorVertically();
+            
+            //sounds
+            loseHeart.setVolume(70);
         }
     }    
 
@@ -330,6 +334,7 @@ public class Player extends Actor implements AnimationInterface
      */
     public void loseOneHeart()
     {
+        loseHeart.play();
         hearts--;
         healthBar.reduceHealth(1,(GameWorld) getWorld());
         if(hearts == 0){

@@ -34,10 +34,13 @@ public class GameWorld extends World
     private static final int totVersions = 5;
     public static final int tileSize = 32;
     private static final int tileOffset = 16;
+    private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
+    private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
     
     private int fromLevel = -1;
     private int curLevel;
     private boolean lvlComplete = true;
+    private boolean startSound = false;
 
     /**
      * Base Constructor - not to be called directly
@@ -52,6 +55,9 @@ public class GameWorld extends World
         Player.createImages();
         setPaintOrder(Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
         String key = Greenfoot.getKey();
+        openRoom.setVolume(85);
+        openRoom.play();
+        gamePlay.setVolume(60);
     }
 
     /**
@@ -112,6 +118,12 @@ public class GameWorld extends World
             player.incrementMaxLevel();
             lvlComplete = true;
         }    
+        
+        //checks if openRoom sound is done playing
+        if(!openRoom.isPlaying() && !startSound){
+            startSound=true;
+            gamePlay.playLoop();
+        }    
     }
 
     /**
@@ -121,6 +133,7 @@ public class GameWorld extends World
         String key = Greenfoot.getKey();
         if("escape".equals(key)){
             closeWorld(curLevel);
+            gamePlay.pause();
             Greenfoot.setWorld(new PauseWorld("pause",this));
         }    
         else if("z".equals(key)){
@@ -140,6 +153,7 @@ public class GameWorld extends World
      * gameOver - checks if player is dead and ends the game, called by player class
      */
     public void gameOver(boolean win){
+        gamePlay.stop();
         deleteTextFiles();
         Greenfoot.setWorld(new PauseWorld(itemInfo.getScore(),win));
     }
@@ -148,8 +162,16 @@ public class GameWorld extends World
      * closeWorld - closes the current world
      */
     public void closeWorld(int newLevel){
+        gamePlay.pause();
         player.changeCurLevel(newLevel);
         player.saveData();
+    }    
+    
+    /**
+     * resumeWorld - resumes music playing
+     */
+    public void resumeWorld(){
+        gamePlay.playLoop();
     }    
 
     /**
@@ -158,6 +180,7 @@ public class GameWorld extends World
      * @param newLevel              new level to switch to
      */
     public void switchWorld(int newLevel){
+        gamePlay.pause();
         closeWorld(newLevel);
         Greenfoot.setWorld(new GameWorld(newLevel, curLevel, player, itemInfo));
     }

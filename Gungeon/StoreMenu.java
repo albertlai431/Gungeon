@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class StoreMenu extends Menu
 {
-    //Buttons, labels and images
+    //Buttons, labels, images, and sounds
     private static GreenfootImage storeMenuImg = new GreenfootImage(600,425);
     private GreenfootImage moneyIcon = new GreenfootImage("Money.png");
     private Label menuTitle = new Label("Store", 27, true);
@@ -25,6 +25,7 @@ public class StoreMenu extends Menu
     private Button closeStore = new Button("Close", 18, 20, 20, 20,  100, 100, 100);
     private Button equipButton = new Button("Equip",18, 20, 20, 20,  100, 100, 100);
     private Button purchaseButton = new Button("Purchase", 18, 20, 20, 20,  100, 100, 100);
+    private static GreenfootSound purchaseSound = new GreenfootSound("purchase.mp3");
     
     //Objects
     private Player player;
@@ -55,6 +56,7 @@ public class StoreMenu extends Menu
         setImage(storeMenuImg);
         this.player = player;
         this.itemInfo = itemInfo;
+        purchaseSound.setVolume(75);
     }    
 
     /**
@@ -133,6 +135,7 @@ public class StoreMenu extends Menu
         else{
             player.changeItemNumber(lastItemName,1);
         }    
+        purchaseSound.play();
         player.setMoney(-lastItemCost);
         itemInfo.updateMoney(-lastItemCost);
         setPurchaseTransparency();

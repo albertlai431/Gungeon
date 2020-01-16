@@ -13,6 +13,8 @@ public class TitleScreen extends World
     private Button load = new Button("LOAD",35);
     private MouseInfo mouse = Greenfoot.getMouseInfo();
     private File playerFile;
+    private GreenfootSound titleScreenSound = new GreenfootSound("titlePage.mp3");
+    private boolean startedPlaying = false;
     /**
      * Constructor for objects of class TitleScreen.
      * 
@@ -31,13 +33,16 @@ public class TitleScreen extends World
             addObject(play,84,590);
             addObject(options,77,620);
         }
+        titleScreenSound.setVolume(70);
     }
     public void act(){
         if(Greenfoot.mouseClicked(play)){
+            titleScreenSound.stop();
             GameWorld gameWorld = new GameWorld(true);
             Greenfoot.setWorld(gameWorld);
         }
         else if(Greenfoot.mouseClicked(load)){
+            titleScreenSound.stop();
             GameWorld gameWorld = new GameWorld(false);
             Greenfoot.setWorld(gameWorld);
         }
@@ -45,5 +50,9 @@ public class TitleScreen extends World
             Options optionWorld = new Options();
             Greenfoot.setWorld(optionWorld);
         }
+        if(!startedPlaying){
+            titleScreenSound.playLoop();
+            startedPlaying = true;
+        }    
     }
 }

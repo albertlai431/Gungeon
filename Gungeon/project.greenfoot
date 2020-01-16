@@ -1,6 +1,6 @@
 #Greenfoot project file
 class.Arrows.image=arrow.png
-class.Fire.image=lava.pngd
+class.Fire.image=lava.png
 class.GameWorld.image=fullTiledFloor.png
 class.Spikes.image=spike.png
 class.TitleScreen.image=TitleScreenPlaceHolder.jpg
@@ -278,10 +278,10 @@ dependency90.type=UsesDependency
 dependency91.from=StoreItem
 dependency91.to=PauseWorld
 dependency91.type=UsesDependency
-editor.fx.0.height=0
-editor.fx.0.width=0
-editor.fx.0.x=0
-editor.fx.0.y=0
+editor.fx.0.height=1096
+editor.fx.0.width=1936
+editor.fx.0.x=-8
+editor.fx.0.y=-8
 height=1096
 package.numDependencies=91
 package.numTargets=36

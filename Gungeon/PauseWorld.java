@@ -11,8 +11,11 @@ public class PauseWorld extends World
     private GameWorld gameWorld;
     public static int height = 640;
     public static int width = 960;
+    private String menuType;
     private Button returnToTitleScreen = new Button("Return to Title Screen", 22);
     private Label scoreLabel;
+    private static GreenfootSound victorySound = new GreenfootSound("victory.mp3");
+    private static GreenfootSound gameOverSound = new GreenfootSound("lostAllHeart.mp3");
     
     /**
      * Constructor for objects of class PauseWorld, called to create a PauseMenu
@@ -22,6 +25,7 @@ public class PauseWorld extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(960, 640, 1); 
+        this.menuType=menuType;
         setBackground("pauseWorldImg.png");
         if(menuType.equals("pause")) addObject(new PauseMenu(),480,320);
         this.gameWorld = gameWorld;
@@ -45,12 +49,16 @@ public class PauseWorld extends World
             scoreLabel = new Label("Score: " + Integer.toString(score), 35, 230, 230, 230, true);
             addObject(scoreLabel,120,575);
             addObject(returnToTitleScreen, 830, 575);
+            victorySound.setVolume(60);
+            victorySound.playLoop();
         }    
         else{
             setBackground("gameOver.png");
             scoreLabel = new Label("Score: " + Integer.toString(score), 35, 230, 230, 230, true);
             addObject(scoreLabel,480,550);
             addObject(returnToTitleScreen, 480, 585);
+            gameOverSound.setVolume(70);
+            gameOverSound.play();
         }    
     }    
     
@@ -58,13 +66,17 @@ public class PauseWorld extends World
      * act - checks for button clicks
      */
     public void act(){
-        if(returnToTitleScreen.getWorld()!=null && Greenfoot.mouseClicked(returnToTitleScreen)) Greenfoot.setWorld(new TitleScreen());
+        if(returnToTitleScreen.getWorld()!=null && Greenfoot.mouseClicked(returnToTitleScreen)){
+            if(victorySound.isPlaying()) victorySound.stop();
+            Greenfoot.setWorld(new TitleScreen());
+        }    
     }    
     
     /**
      * closeWorld - sets the game back to gameWorld
      */
     public void closeWorld(){
+        if(menuType.equals("pause")) gameWorld.resumeWorld();
         Greenfoot.setWorld(gameWorld);
     }    
 }
