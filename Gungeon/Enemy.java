@@ -88,46 +88,14 @@ public abstract class Enemy extends Actor implements AnimationInterface
         return true;
     }
 
-    private int[] findClosestAdjacentTileTowardsPlayer()
+    public int[] findClosestAdjacentTileTowardsPlayer()
     {        
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
-        player = foundPlayers.get(0);    
-        currentX = getX();
-        currentY = getY();        
-        playerX = player.getX();
-        playerY = player.getY();
-        double shortestDistance = 10000;
-        int coordinateXStart = currentX - tileSizeX;
-        int coordinateYStart = currentY - tileSizeY;
-        int closestTileX = 0;
-        int closestTileY = 0;        
-        for(int x = 0; x < 3; x ++)
-        {
-            for(int y = 0; y < 3; y ++)
-            {
-                if(x == 1 && y == 1){}         
-                else
-                {
-                    int[] tileCoordinates = new int[]{coordinateXStart + (x * tileSizeX), coordinateYStart + (y * tileSizeY)};                    
-                    double distance = getPointDistance(tileCoordinates[0], tileCoordinates[1], playerX, playerY);
-                    if(checkForWall(tileCoordinates[0], tileCoordinates[1])){}                    
-                    else
-                    {
-                        if(distance < shortestDistance)
-                        {
-                            shortestDistance = distance;
-                            closestTileX = tileCoordinates[0];
-                            closestTileY = tileCoordinates[1];
-                        }
-                    }
-                }
-            }
-        }      
-        int[] closestTileCoordinates = new int[]{closestTileX, closestTileY};
-        return closestTileCoordinates;
+        player = foundPlayers.get(0); 
+        return Pathfinding.nextCoord(getX(),getY(), (GameWorld) getWorld(), (Player) player);
     }
 
-    public boolean checkLineOfSight()
+    private boolean checkLineOfSight()
     {
         double dx=0, dy=0;
         double interval = 8;
@@ -154,7 +122,6 @@ public abstract class Enemy extends Actor implements AnimationInterface
             currdis+=interval;
             currX+=dx;
             currY+=dy;
-            //System.out.println(currX + " " + currY);
             if(getObjectsAtOffset((int)currX, (int)currY, Walls.class).size()>0)
             {
                 return false;

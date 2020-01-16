@@ -339,7 +339,7 @@ public class GameWorld extends World
      * param secondIndex            second index of 2D to be converted
      * @return int                  greenfoot x value
      */
-    public int convert(int index){
+    public static int convert(int index){
         return tileOffset + index*tileSize;
     }    
 
