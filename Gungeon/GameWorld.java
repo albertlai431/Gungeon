@@ -143,10 +143,15 @@ public class GameWorld extends World
     }
 
     /**
-     * updateScore - called when enemies die to update the score
+     * updateScore - called when enemies die to update the score, money, and kills
      */
-    public void updateScore(){
+    public void updateScore(int scoreBoost, int moneyBoost){
         itemInfo.incrementKills();
+        itemInfo.updateScore(scoreBoost);
+        itemInfo.updateMoney(moneyBoost);
+        player.setMoney(moneyBoost);
+        player.setKills();
+        player.setScore(scoreBoost);
     }    
 
     //game specific events

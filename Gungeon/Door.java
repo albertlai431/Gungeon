@@ -50,16 +50,7 @@ public class Door extends Obstacles
     public void completeLevel(){
         setImage(doorImg[1]);
         isComplete = true;
-    }    
-    
-    /**
-     * getLevel - returns the level of the door
-     * 
-     * @return int              level of the door
-     */
-    private int getLevel(){
-        return curLevel;
-    }    
+    }     
     
     /**
      * getLevel - returns the level of the door

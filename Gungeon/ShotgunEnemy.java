@@ -17,6 +17,8 @@ public class ShotgunEnemy extends Enemy
     private int imageNumber = 0;
     public ShotgunEnemy()
     {        
+        scoreBoost = 10;
+        moneyBoost = 200;
         healthPoints = 700;    
         this.bulletWidth = 5;
         fireRate = 60;       

@@ -61,6 +61,8 @@ public class Player extends Actor implements AnimationInterface
     private int money;
     private int hearts;
     private int speed;
+    private int kills;
+    private int score;
     private int weapon = 0; // 0 = pistol, 1 = shotgun, 2 = rifle
     private int XCoord;
     private int YCoord;
@@ -505,6 +507,8 @@ public class Player extends Actor implements AnimationInterface
             fw.write(money + "\n");
             fw.write(hearts + "\n");
             fw.write(speed + "\n");
+            fw.write(kills + "\n");
+            fw.write(score + "\n");
             fw.write(listOfGuns.size() + "\n");
             for(String gun: listOfGuns){
                 fw.write(gun + "\n");
@@ -532,7 +536,7 @@ public class Player extends Actor implements AnimationInterface
             System.out.println("File Not Found");
         }
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             int val = Integer.parseInt(s.nextLine());
             switch (i) {
                 case 0:
@@ -552,6 +556,14 @@ public class Player extends Actor implements AnimationInterface
                 speed = val;
                 break;
                 case 5:
+                kills = val;
+                for(int j=0;j<kills;j++) itemInfo.incrementKills();
+                break;
+                case 6:
+                score = val;
+                itemInfo.updateScore(score);
+                break;
+                case 7:
                 for(int j=0;j<val;j++){
                     curgun = s.nextLine();
                     listOfGuns.add(curgun);
@@ -579,12 +591,28 @@ public class Player extends Actor implements AnimationInterface
     }
 
     /**
-     * getMoney - get the amount of money
+     * setMoney - set the money
      * 
      * @param amount      the amount of money to add/remove
      */
     public void setMoney(int amount){
         money+=amount;
+    }
+    
+    /**
+     * setScore - set the score
+     * 
+     * @param amount        score to add        
+     */
+    public void setScore(int amount){
+        score+=amount;
+    }
+    
+    /**
+     * incrementKills - increment kills by one      
+     */
+    public void setKills(){
+        kills++;
     }
 
     /**

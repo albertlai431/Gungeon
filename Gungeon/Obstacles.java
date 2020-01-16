@@ -9,9 +9,8 @@ import java.util.ArrayList;
  */
 public abstract class Obstacles extends Actor
 {
-    private static GreenfootImage img; 
     protected int actCount = 0;
-    protected int actMod = 60;
+    protected int actMod = 30;
     protected int damage;
     private int firstInd;
     private int secondInd;

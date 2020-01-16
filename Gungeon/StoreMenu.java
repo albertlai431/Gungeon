@@ -135,6 +135,7 @@ public class StoreMenu extends Menu
         else{
             player.changeItemNumber(lastItemName,1);
         }    
+        if(purchaseSound.isPlaying()) purchaseSound.stop();
         purchaseSound.play();
         player.setMoney(-lastItemCost);
         itemInfo.updateMoney(-lastItemCost);

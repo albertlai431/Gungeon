@@ -17,9 +17,11 @@ public class SniperEnemy extends Enemy
     private int imageNumber = 0;    
     public SniperEnemy()
     {      
+        scoreBoost = 15;
+        moneyBoost = 300;
         healthPoints = 500;     
         this.bulletWidth = 15;
-        fireRate = 90;    
+        fireRate = 45;    
     }
 
     protected void addedToWorld(World world) 

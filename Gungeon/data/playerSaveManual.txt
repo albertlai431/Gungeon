@@ -10,6 +10,9 @@ curLevel
 maxLevel
 money
 hearts
+speed
+kills
+score
 
 Weapons
 

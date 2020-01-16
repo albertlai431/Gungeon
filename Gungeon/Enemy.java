@@ -1,4 +1,3 @@
-
 import greenfoot.*; 
 import java.util.ArrayList;
 /**
@@ -21,15 +20,16 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected int quadrant;
     protected int counter=0;
     protected int damage = 1;
-    protected int fireRate = 5;
+    protected int fireRate;
     protected long animationCount = 0;
     protected int movementCounter = 30;
     protected GreenfootImage animationImage;
     protected ArrayList<Player> foundPlayers;
     protected Actor player;
     protected boolean animated = false;
+    protected int scoreBoost;
+    protected int moneyBoost;
     
-
     public void getDamaged(int damage)
     {
         healthPoints -= damage;
@@ -62,9 +62,8 @@ public abstract class Enemy extends Actor implements AnimationInterface
         }
         else
         {
-
             counter++;
-            if(counter%80 == 0)
+            if(counter%fireRate == 0)
             {
                 attack();
             }
@@ -130,12 +129,6 @@ public abstract class Enemy extends Actor implements AnimationInterface
 
     public boolean checkLineOfSight()
     {
-        /*line = new LineOfSightRect(bulletWidth, (int)getPointDistance(getX(), getY(), player.getX(), player.getY()) + 5);
-        getWorld().addObject(line, 2, 2);
-        boolean answer = line.playerVisible(this.getBulletRotation(), getX(), getY(), player.getX(), player.getY());
-        System.out.println(answer); */
-        //return answer;
-
         double dx=0, dy=0;
         double interval = 8;
         if(player.getX()!=getX()){
@@ -169,6 +162,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         }
         return true;
     }
+    /*
     private int getBulletRotation()
     {
         int Xdisplacement = Math.abs(currentX-playerX);
@@ -193,11 +187,12 @@ public abstract class Enemy extends Actor implements AnimationInterface
 
         return theta;
     }
+    */
 
     protected void die()
     {
         GameWorld world = (GameWorld) getWorld();
-        world.updateScore();
+        world.updateScore(scoreBoost,moneyBoost);
         world.removeObject(this);
     }
 
