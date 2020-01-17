@@ -12,6 +12,7 @@ public class TitleScreen extends World
     private Button play = new Button("NEW GAME",35);
     private Button options = new Button("CONTROLS",35);
     private Button load = new Button("LOAD",35);
+    private Label credits = new Label("BY: Albert, Alex, Aristos, Clarence, Henry, and Star ",16,98,98,98,true);
     private MouseInfo mouse = Greenfoot.getMouseInfo();
     private File playerFile;
     private GreenfootSound titleScreenSound = new GreenfootSound("titlePage.mp3");
@@ -31,11 +32,13 @@ public class TitleScreen extends World
             addObject(play,84,560);
             addObject(load,40,590);
             addObject(options,77,620);
+            addObject(credits,790,630);
         }
         //if there is not, do not give the user an option to load
         else{
             addObject(play,84,590);
             addObject(options,77,620);
+            addObject(credits,790,630);
         }
         titleScreenSound.setVolume(70);
     }
