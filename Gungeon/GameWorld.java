@@ -51,6 +51,7 @@ public class GameWorld extends World
     private static final int tileOffset = 16;
     private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
     private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
+    private static GreenfootSound lvlUp = new GreenfootSound("levelUp.mp3");
 
     private int fromLevel = -1;
     private int curLevel;
@@ -73,7 +74,8 @@ public class GameWorld extends World
         String key = Greenfoot.getKey();
         openRoom.setVolume(85);
         openRoom.play();
-        gamePlay.setVolume(60);
+        gamePlay.setVolume(70);
+        lvlUp.setVolume(80);
     }
 
     /**
@@ -136,6 +138,7 @@ public class GameWorld extends World
             player.incrementMaxLevel();
             itemInfo.updateScore(curLevel*100);
             lvlComplete = true;
+            lvlUp.play();
         }    
 
         //checks if openRoom sound is done playing
@@ -158,6 +161,7 @@ public class GameWorld extends World
         }    
         else if("z".equals(key)){
             //store menu
+            gamePlay.pause();
             Greenfoot.setWorld(new PauseWorld(this,player,itemInfo));
         }    
     }

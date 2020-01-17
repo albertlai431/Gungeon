@@ -53,6 +53,7 @@ public class Player extends Actor implements AnimationInterface
     private ArrayList<String> listOfGuns = new ArrayList<String>(); //Pistol, Shotgun, Rifle
     private HashMap <String, Integer> ammoInMag = new HashMap <String,Integer>();
     private String curgun; //only for constructor purposes
+    private SimpleTimer timer = new SimpleTimer();
 
     //Instance variables
     private long animationCount = 0;
@@ -68,6 +69,7 @@ public class Player extends Actor implements AnimationInterface
     private int weapon = 0; // 0 = pistol, 1 = shotgun, 2 = rifle
     private int XCoord;
     private int YCoord;
+    private boolean loadedItemInfo = false;
 
     /**
      * Constructor for Player Class
@@ -81,6 +83,7 @@ public class Player extends Actor implements AnimationInterface
         this.txtFile = txtFile;
         this.itemInfo = itemInfo;
         parseData();
+        timer.mark();
     }
 
     /**
@@ -136,7 +139,7 @@ public class Player extends Actor implements AnimationInterface
             pistolImgMir.mirrorVertically();
             rifleImgMir.mirrorVertically();
             shotgunImgMir.mirrorVertically();
-            
+
             //sounds
             loseHeart.setVolume(70);
         }
@@ -340,17 +343,24 @@ public class Player extends Actor implements AnimationInterface
 
     /**
      * loseOneHeart - takes one half-heart away from the player
+     * 
+     * @return boolean              true if the player was damaged
      */
-    public void loseOneHeart()
+    public boolean loseOneHeart()
     {
-        if(loseHeart.isPlaying()) loseHeart.stop();
-        loseHeart.play();
-        hearts--;
-        healthBar.reduceHealth(1,(GameWorld) getWorld());
-        if(hearts == 0){
-            GameWorld world = (GameWorld) getWorld();
-            world.gameOver(false); 
-        }   
+        if(timer.millisElapsed()>1500){
+            timer.mark();
+            if(loseHeart.isPlaying()) loseHeart.stop();
+            loseHeart.play();
+            hearts--;
+            healthBar.reduceHealth(1,(GameWorld) getWorld());
+            if(hearts == 0){
+                GameWorld world = (GameWorld) getWorld();
+                world.gameOver(false); 
+            }   
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -570,7 +580,7 @@ public class Player extends Actor implements AnimationInterface
                 break;
                 case 2:
                 money = val;
-                itemInfo.updateMoney(money);
+                if(!loadedItemInfo) itemInfo.updateMoney(money);
                 break;
                 case 3:
                 hearts = val;
@@ -580,11 +590,13 @@ public class Player extends Actor implements AnimationInterface
                 break;
                 case 5:
                 kills = val;
-                for(int j=0;j<kills;j++) itemInfo.incrementKills();
+                if(!loadedItemInfo){
+                    for(int j=0;j<kills;j++) itemInfo.incrementKills();
+                }
                 break;
                 case 6:
                 score = val;
-                itemInfo.updateScore(score);
+                if(!loadedItemInfo) itemInfo.updateScore(score);
                 break;
                 case 7:
                 for(int j=0;j<val;j++){
@@ -602,6 +614,8 @@ public class Player extends Actor implements AnimationInterface
             int val = Integer.parseInt(s.nextLine());
             items.put(item,val);
         }
+
+        loadedItemInfo = true;
     }
 
     /**
@@ -621,7 +635,7 @@ public class Player extends Actor implements AnimationInterface
     public void setMoney(int amount){
         money+=amount;
     }
-    
+
     /**
      * setScore - set the score
      * 
@@ -630,7 +644,7 @@ public class Player extends Actor implements AnimationInterface
     public void setScore(int amount){
         score+=amount;
     }
-    
+
     /**
      * incrementKills - increment kills by one      
      */

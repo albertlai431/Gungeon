@@ -15,6 +15,7 @@ public class Arrows extends Obstacles
     private int xStart;
     private int xEnd;
     private int y;
+    private GreenfootSound arrowSound = new GreenfootSound("arrow.mp3");
 
     /**
      * Constructor for Arrows
@@ -22,6 +23,7 @@ public class Arrows extends Obstacles
     public Arrows(){
         super(100);
         getImage().setTransparency(100);
+        arrowSound.setVolume(100);
     }    
 
     /**
@@ -58,6 +60,8 @@ public class Arrows extends Obstacles
                 actCount = 0;
                 boolean hit = super.damage();
                 if(hit){
+                    if(arrowSound.isPlaying()) arrowSound.stop();
+                    arrowSound.play();
                     isMoving = true;
                     setLocation(xStart,y);
                     getImage().setTransparency(255);

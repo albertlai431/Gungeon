@@ -8,6 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Fire extends Obstacles
 {
+    private GreenfootSound fireSound = new GreenfootSound("lavaSizzle.mp3");
+    
     /**
      * Constructor for Fire
      * 
@@ -16,6 +18,7 @@ public class Fire extends Obstacles
      */
     public Fire(int firstInd, int secondInd){
         super(200,firstInd,secondInd);
+        fireSound.setVolume(55);
     }   
     
     /**
@@ -27,7 +30,10 @@ public class Fire extends Obstacles
         actCount++;
         if(actCount == actMod){
             actCount = 0;
-            damage();
+            if(damage()){
+                if(fireSound.isPlaying()) fireSound.stop();
+                fireSound.play();
+            }    
         }  
     }    
 }

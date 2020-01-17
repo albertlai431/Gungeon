@@ -16,6 +16,7 @@ public class PauseWorld extends World
     private Label scoreLabel;
     private static GreenfootSound victorySound = new GreenfootSound("victory.mp3");
     private static GreenfootSound gameOverSound = new GreenfootSound("lostAllHeart.mp3");
+    private static GreenfootSound storeSound = new GreenfootSound("storeMusic.mp3");
     private Label credits = new Label("Image credits to Star Xie and Enter the Gungeon. Music credits to to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.",10,230, 230, 230,true);
     
     /**
@@ -44,6 +45,7 @@ public class PauseWorld extends World
     public PauseWorld(GameWorld gameWorld, Player player, ItemInfo itemInfo){
         this("store", gameWorld);
         addObject(new StoreMenu(player,itemInfo),480,320);
+        storeSound.playLoop();
     }   
     
     /**
@@ -89,7 +91,8 @@ public class PauseWorld extends World
      * closeWorld - sets the game back to gameWorld
      */
     public void closeWorld(){
-        if(menuType.equals("pause")) gameWorld.resumeWorld();
+        if(menuType.equals("store")) storeSound.stop();
+        gameWorld.resumeWorld();
         Greenfoot.setWorld(gameWorld);
     }    
 }

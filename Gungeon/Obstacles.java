@@ -48,8 +48,7 @@ public abstract class Obstacles extends Actor
         //intersecting vs offset??
         Player player = (Player) getOneIntersectingObject​(Player.class);
         if(player!=null){
-            player.loseOneHeart();
-            hit=true;
+            hit = player.loseOneHeart();
         }    
 
         ArrayList <Enemy> enemiesArrayList = (ArrayList) getIntersectingObjects​(Enemy.class);
