@@ -173,17 +173,17 @@ public abstract class Weapon extends Actor
     }
 
     /**
-     * startReload - Starts the reloading process and the reload timer
+     * startReload - Starts the reloading process
      */
     private void startReload()
     {
         if(!isReloading()){
             long now = System.currentTimeMillis();
             reloading = true;
-            if(this.reloadTimer){
-                this.t = new Timer(reloadTime);
-                getWorld().addObject(t, this.getX(), this.getY());
-            }
+                if(this.reloadTimer){
+                    this.t = new Timer(reloadTime);
+                    getWorld().addObject(t, this.getX(), this.getY());
+                }
             this.startTime = now + reloadTime;
         }
     }
