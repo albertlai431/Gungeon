@@ -1,39 +1,54 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * Write a description of class RocketEnemy here.
+ * This enemy attacks by firing a spread of bullets.
+ * creates difficulty through the increase in amount of bullets
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Henry Ma
+ * @version January 16, 2020
  */
 public class ShotgunEnemy extends Enemy
 {
+    //Initialize variables and objects
+    //Array of greenfoot images to hold the different animations    
     private static GreenfootImage[] rightMvt = new GreenfootImage[4];
     private static GreenfootImage[] leftMvt = new GreenfootImage[4];
     private static GreenfootImage[] upMvt = new GreenfootImage[9];
     private static GreenfootImage[] downMvt = new GreenfootImage[9];
+    //Variable to help determine if images have been created or not
     private static boolean createdImages = false;
+    //Variable to help indicate when to change images for animation
     private int frameRate = 8;
+    //Tracts the current image number
     private int imageNumber = 0;
+    /**
+     * Constructor for shotgun enemies that sets the initial values
+     */    
     public ShotgunEnemy()
     {        
         scoreBoost = 10;
         moneyBoost = 200;
         healthPoints = 700;    
-        this.bulletWidth = 5;
         fireRate = 60;       
     }
-
+    /**
+     * Greenfoot method, called when this object is added to the world
+     */
     protected void addedToWorld(World world) 
     {
         createImages();
     }
-
+    /**
+     * Act - Move towards the player and check for line of sight before attempting to shoot
+     */
     public void act() 
     {
         moveTowardsPlayer();       
     }    
-
+    /**
+     * Creates bullets of a given type depending on the enemy that calls it
+     * attacks differ from enemy to enemy
+     */
     public void attack()
     {
         for(int i = 0; i < 5; i++)
@@ -41,7 +56,9 @@ public class ShotgunEnemy extends Enemy
             getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60 + (30 * i), 1, 5, true), getX(), getY());
         }
     }  
-
+    /**
+     * Changes the image for animation of up movement
+     */  
     public void animateMovementUp()
     {
         if(animationCount%frameRate == 0)
@@ -50,7 +67,9 @@ public class ShotgunEnemy extends Enemy
             setImage(upMvt[imageNumber]);
         }        
     }
-
+    /**
+     * Changes the image for animation of down movement
+     */  
     public void animateMovementDown()
     {
         if(animationCount%frameRate == 0)
@@ -59,7 +78,9 @@ public class ShotgunEnemy extends Enemy
             setImage(downMvt[imageNumber]);
         }        
     }
-
+    /**
+     * Changes the image for animation of right movement
+     */  
     public void animateMovementRight()
     {
         if(animationCount%frameRate == 0)
@@ -68,7 +89,9 @@ public class ShotgunEnemy extends Enemy
             setImage(rightMvt[imageNumber]);
         }
     }
-
+    /**
+     * Changes the image for animation of left movement
+     */ 
     public void animateMovementLeft()
     {
         if(animationCount%frameRate == 0)
@@ -77,11 +100,14 @@ public class ShotgunEnemy extends Enemy
             setImage(leftMvt[imageNumber]);
         }
     }
-
+    /**
+     * Create images for the class to use during animations
+     */
     public static void createImages()
     {
         if(!createdImages)
         {
+            //Do if not done before
             createdImages = true;
             for(int i=0; i<rightMvt.length; i++)
             {
