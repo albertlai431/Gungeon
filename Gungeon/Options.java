@@ -96,7 +96,7 @@ public class Options extends World
                 getBackground().drawImage(Pause,300,600);
                 tutorialCount--;
             }
-            else if(tutorialCount == 2){
+            else if(tutorialCount == 2 || tutorialCount == 3){
                 tutorialCount--;
                 List objects = getObjects(null);
                 removeObjects(objects);
@@ -104,8 +104,7 @@ public class Options extends World
                 addObject(next,911,620);
                 addObject(back,50,620);
                 //instead of adding labels, we saved this page as an image  
-                getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);
-                tutorialCount--;
+                getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);               
             }
         }
         //if the user clicks the next button
@@ -113,7 +112,7 @@ public class Options extends World
             //increase the page count
             tutorialCount++;
             //move on to the next page of the tutorial 
-            if(tutorialCount == 1){
+            if(tutorialCount == 1 || tutorialCount == 2){
                 List objects = getObjects(null);
                 removeObjects(objects);
                 getBackground().fill();
@@ -121,7 +120,7 @@ public class Options extends World
                 addObject(back,50,620);
                 getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);
             }
-            else if(tutorialCount == 2){
+            else if(tutorialCount == 3){
                 List objects = getObjects(null);
                 removeObjects(objects);
                 getBackground().fill();
