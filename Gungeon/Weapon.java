@@ -85,7 +85,7 @@ public abstract class Weapon extends Actor
             
             startReload();
         }
-        if(isReloading()&&mi.getButton()==1){
+        if(isReloading()){
             stopFiring();
         }
         //check for mouse press

@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Shotgun Class - This class creates a shotgun with set characteristics and a shotgun bullet that shoots 3 pellets in different directions.
+ * Shotgun Class - This class creates a shotgun with set characteristics and a shotgun bullet that shoots 5 pellets in different directions.
  * 
  * @author Aristos Theocharoulas 
  * @version Jan 2020
@@ -59,7 +59,7 @@ public class Shotgun extends Weapon
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2-20),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             }
             else{
-                getWorld().addObject(new ShotgunBullet((int)Math.round(x2+3),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2+6),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2+3), (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2-3),  (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);

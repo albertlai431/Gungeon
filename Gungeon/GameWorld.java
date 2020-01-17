@@ -22,8 +22,8 @@ import java.io.IOException;
  * </p>
  * 
  * <p>
- * Images credits to
- * Music credits to
+ * Image credits to Star Xie and Enter the Gungeon.
+ * Music credits to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.
  * </p>
  * 
  * @author Albert Lai

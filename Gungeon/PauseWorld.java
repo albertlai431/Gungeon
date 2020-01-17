@@ -16,6 +16,7 @@ public class PauseWorld extends World
     private Label scoreLabel;
     private static GreenfootSound victorySound = new GreenfootSound("victory.mp3");
     private static GreenfootSound gameOverSound = new GreenfootSound("lostAllHeart.mp3");
+    private Label credits = new Label("Image credits to Star Xie and Enter the Gungeon. Music credits to to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.",10,230, 230, 230,true);
     
     /**
      * Constructor for objects of class PauseWorld, called to create a PauseMenu
@@ -60,6 +61,7 @@ public class PauseWorld extends World
             addObject(returnToTitleScreen, 830, 575);
             victorySound.setVolume(60);
             victorySound.playLoop();
+            addObject(credits, 480, 630);
         }    
         else{
             setBackground("gameOver.png");
@@ -68,6 +70,7 @@ public class PauseWorld extends World
             addObject(returnToTitleScreen, 480, 585);
             gameOverSound.setVolume(70);
             gameOverSound.play();
+            addObject(credits, 480, 630);
         }    
     }    
     
