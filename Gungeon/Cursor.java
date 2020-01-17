@@ -16,7 +16,7 @@ public class Cursor extends Actor
      */
     public Cursor()
     {
-        GreenfootImage image = new GreenfootImage("crusor.png");
+        GreenfootImage image = new GreenfootImage("cursor.png");
         //Scales and sets image
         image.scale(image.getWidth()*150/100, image.getHeight()*150/100);
         setImage(image);
