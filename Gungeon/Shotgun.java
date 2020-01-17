@@ -1,21 +1,25 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Shotgun here.
+ * Shotgun Class - This class creates a shotgun with set characteristics and a shotgun bullet that shoots 3 pellets in different directions.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Aristos Theocharoulas 
+ * @version Jan 2020
  */
 public class Shotgun extends Weapon
 {
     private GreenfootImage gun = new GreenfootImage("Shotgun.png");
-    public Shotgun(ItemInfo itemInfo, Player player,int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize, int ammoInMag)
+    public Shotgun(ItemInfo itemInfo, Player player,int bulletDamage, int bulletSpeed, long fireRate, long bulletReadyTime, long reloadTime, int magSize, int ammoInMag, boolean reloadTimer)
     {
-        super(itemInfo,player, bulletDamage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize, ammoInMag);
+        super(itemInfo,player, bulletDamage, bulletSpeed, fireRate, bulletReadyTime, reloadTime, magSize, ammoInMag, reloadTimer);
         gun.scale(gun.getWidth()*150/100,gun.getHeight()*150/100);
         setImage(gun);
     }
-
+    /**
+     * createBullet - Creates a shotgun bullet that shoots 3 pellets in a different direction
+     * 
+     * @author Albert Lai
+     */
     protected void createBullet(int xcoord, int ycoord)
     {
         this.mouseX = Greenfoot.getMouseInfo().getX();
