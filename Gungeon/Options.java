@@ -2,19 +2,21 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 
 /**
- * Write a description of class Options here.
+ * Options is the world where the user is told how to play the game. It displays all the controls and game features
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Alex
+ * @version 0.3
  */
 public class Options extends World
 {
+    //instance variables
     private GreenfootImage wasd = new GreenfootImage("wasd.png");
     private GreenfootImage shop = new GreenfootImage("z.png");
     private GreenfootImage mouse = new GreenfootImage("mouse.png");
     private GreenfootImage reload = new GreenfootImage("R.png");
     private GreenfootImage switchGun = new GreenfootImage("E.png");
     private GreenfootImage Pause = new GreenfootImage("Esc.png");
+    //text to be added to the world
     private Label title = new Label("CONTROLS",40,true);
     private Label subTitle1 = new Label("MOVEMENT",25,true);
     private Label subTitle2 = new Label("AIMING",25,true);
@@ -28,9 +30,10 @@ public class Options extends World
     private Button back = new Button("BACK",35);
     private Button next = new Button("NEXT",35);
     private Button done = new Button("DONE",35);
+    //int to track what page of the tutorial you are on
     private int tutorialCount = 0;
     /**
-     * Constructor for objects of class Options.
+     * Constructor for objects of class Options. Adds all the text and images to the world for the first tutorial page
      * 
      */
     public Options()
@@ -56,12 +59,19 @@ public class Options extends World
         getBackground().drawImage(switchGun,300,550);
         getBackground().drawImage(Pause,300,600);
     }
+    /**
+     * Act - do whatever Options wants to do. This method is called whenever the 'Act' or 'Run' button gets pressed in the environment.
+     * Checks for mouse input from the user and acts accordingly.
+     */
     public void act(){
+        //if the user presses the back button...
         if(Greenfoot.mouseClicked(back)){
+            //if there are no previous "pages" in the options world, take the user back to the title screen
             if(tutorialCount==0){
                 TitleScreen titleWorld = new TitleScreen();
                 Greenfoot.setWorld(titleWorld);
             }
+            //if there are previous pages in the options world, taken them to the previous page
             else if(tutorialCount == 1){
                 List objects = getObjects(null);
                 removeObjects(objects);
@@ -93,12 +103,16 @@ public class Options extends World
                 getBackground().fill();
                 addObject(next,911,620);
                 addObject(back,50,620);
+                //instead of adding labels, we saved this page as an image  
                 getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);
                 tutorialCount--;
             }
         }
+        //if the user clicks the next button
         if(Greenfoot.mouseClicked(next)){
+            //increase the page count
             tutorialCount++;
+            //move on to the next page of the tutorial 
             if(tutorialCount == 1){
                 List objects = getObjects(null);
                 removeObjects(objects);
@@ -112,10 +126,12 @@ public class Options extends World
                 removeObjects(objects);
                 getBackground().fill();
                 addObject(back,50,620);
+                //replaces the next button with the done button
                 addObject(done,910,620);
                 getBackground().drawImage(new GreenfootImage("tutorial"+tutorialCount+".png"),0,0);
             }
         }
+        //if the user is on the last page of the tutorial and they click done, it will take them back to the title screen
         if(Greenfoot.mouseClicked(done)){
             TitleScreen titleWorld = new TitleScreen();
             Greenfoot.setWorld(titleWorld);
