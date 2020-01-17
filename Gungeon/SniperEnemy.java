@@ -1,44 +1,61 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * Write a description of class RifleEnemy here.
+ * This enemy attacks similar to bullet enemies but their attacks are slower with there bullets being faster
+ * creates difficulty through the speed of the bullet
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Henry Ma
+ * @version January 16, 2020
  */
 public class SniperEnemy extends Enemy
 {
+    //Initialize variables and objects
+    //Array of greenfoot images to hold the different animations
     private static GreenfootImage[] rightMvt = new GreenfootImage[5];
     private static GreenfootImage[] leftMvt = new GreenfootImage[5];
     private static GreenfootImage[] upMvt = new GreenfootImage[8];
     private static GreenfootImage[] downMvt = new GreenfootImage[8];
+    //Variable to help determine if images have been created or not
     private static boolean createdImages = false;
+    //Variable to help indicate when to change images for animation
     private int frameRate = 8;
+    //Tracts the current image number
     private int imageNumber = 0;    
+    /**
+     * Constructor for sniper enemies that sets the initial values
+     */
     public SniperEnemy()
     {      
         scoreBoost = 15;
         moneyBoost = 300;
         healthPoints = 500;     
-        this.bulletWidth = 15;
         fireRate = 45;    
     }
-
+    /**
+     * Greenfoot method, called when this object is added to the world
+     */
     protected void addedToWorld(World world) 
     {
         createImages();
     }
-    
+    /**
+     * Act - Move towards the player and check for line of sight before attempting to shoot
+     */
     public void act() 
     {
         moveTowardsPlayer();       
     }    
-    
+    /**
+     * Creates bullets of a given type depending on the enemy that calls it
+     * attacks differ from enemy to enemy
+     */
     public void attack()
     {
         getWorld().addObject(new RifleBullet(player.getX(), player.getY(), 1, 6, true), getX(), getY());          
     }
-      
+    /**
+     * Changes the image for animation of up movement
+     */  
     public void animateMovementUp()
     {
         if(animationCount%frameRate == 0)
@@ -47,7 +64,9 @@ public class SniperEnemy extends Enemy
             setImage(upMvt[imageNumber]);
         }        
     }
-    
+    /**
+     * Changes the image for animation of down movement
+     */      
     public void animateMovementDown()
     {
         if(animationCount%frameRate == 0)
@@ -56,7 +75,9 @@ public class SniperEnemy extends Enemy
             setImage(downMvt[imageNumber]);
         }        
     }
-    
+    /**
+     * Changes the image for animation of right movement
+     */      
     public void animateMovementRight()
     {
         if(animationCount%frameRate == 0)
@@ -65,7 +86,9 @@ public class SniperEnemy extends Enemy
             setImage(rightMvt[imageNumber]);
         }
     }
-    
+    /**
+     * Changes the image for animation of left movement
+     */      
     public void animateMovementLeft()
     {
         if(animationCount%frameRate == 0)
@@ -74,9 +97,12 @@ public class SniperEnemy extends Enemy
             setImage(leftMvt[imageNumber]);
         }
     }
-    
+    /**
+     * Create images for the class to use during animations
+     */
     public static void createImages()
     {
+        //Do if not done before
         if(!createdImages)
         {
             createdImages = true;
