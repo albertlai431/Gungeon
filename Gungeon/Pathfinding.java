@@ -19,7 +19,7 @@ public class Pathfinding
      * 
      * @param startX                        X coordinate of enemy
      * @param secondY                       Y coordinate of enemy
-     * @param world                         world of the the enemy
+     * @param world                         world of the enemy
      * @param player                        player in the world
      * @return int[]                        new coordinates to move to
      */

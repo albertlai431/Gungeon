@@ -182,7 +182,7 @@ public abstract class Weapon extends Actor
             reloading = true;
             if(this.reloadTimer){
                 this.t = new Timer(reloadTime);
-                getWorld().addObject(t, this.getX(), this.getY());
+                getWorld().addObject(t, 750, 605);
             }
             this.startTime = now + reloadTime;
         }

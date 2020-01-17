@@ -74,6 +74,8 @@ public class StoreMenu extends Menu
 
     /**
      * addedToWorld - add buttons, labels, and StoreItems to the world
+     * 
+     * @param w             current world of the StoreMenu
      */
     public void addedToWorld(World w){
         PauseWorld world = (PauseWorld) getWorld();
@@ -99,7 +101,7 @@ public class StoreMenu extends Menu
      * getLastPressed - get the properties of the last item pressed
      * 
      * @param item              reference to StoreItem object
-     * @parem itemName          item name of store object
+     * @param itemName          item name of store object
      * @param itemCost          item cost of store object
      */
     public void getLastPressed(StoreItem item,String itemName, int itemCost){

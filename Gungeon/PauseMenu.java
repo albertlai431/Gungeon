@@ -24,6 +24,8 @@ public class PauseMenu extends Menu
 
     /**
      * addedtoWorld - adds labels and buttons to the world
+     * 
+     * @param w             current world of the menu
      */
     public void addedToWorld(World w){
         PauseWorld world = (PauseWorld) getWorld();

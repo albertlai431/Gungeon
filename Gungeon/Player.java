@@ -9,8 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Player is the main character in the game. It is loaded from a text file and holds the gun. 
- * It is controlled by the user with key presses. 
+ * Player is the main character in the game. It is saved and loaded from a text file and holds the gun. 
+ * It is controlled by the user with key presses, allowing it to move around and shoot. It has
+ * stats like level, health, speed, and money. It implements the animation interface to move
+ * smoothly in the 4 different directions. 
  * 
  * @author Albert Lai, Star Xie, and Clarence Chau
  * @version January 2020
@@ -69,6 +71,9 @@ public class Player extends Actor implements AnimationInterface
 
     /**
      * Constructor for Player Class
+     * 
+     * @param txtFile           txtFile storing the player
+     * @param itemInfo          itemInfo of the world
      */
     public Player(File txtFile, ItemInfo itemInfo)
     {
@@ -80,6 +85,8 @@ public class Player extends Actor implements AnimationInterface
 
     /**
      * addedToWorld - adds guns and resource bars to the world
+     * 
+     * @param w             current world of the player
      */
     public void addedToWorld(World w){
         changeGun(); 
@@ -149,10 +156,8 @@ public class Player extends Actor implements AnimationInterface
             XCoord = Greenfoot.getMouseInfo().getX();
             YCoord = Greenfoot.getMouseInfo().getY();
         }
-
         int x = this.getX();
         int y = this.getY();
-
         if(x-XCoord<0)
         {
             if(y-YCoord>x-XCoord && y-YCoord<-1*(x-XCoord)) animateMovementRight();
@@ -177,7 +182,7 @@ public class Player extends Actor implements AnimationInterface
     /**
      * move - moves the player depending on keyboard input along with wall/door detection
      */
-    public void move()
+    private void move()
     {
         int dx = 0, dy = 0;
         if(Greenfoot.isKeyDown("a"))//runs if "a" is pressed and the player is past the starting location
@@ -227,8 +232,10 @@ public class Player extends Actor implements AnimationInterface
 
         setLocation(getX()+dx,getY()+dy);
 
+        //checks for invalid move
         if(invalidMove()) setLocation(getX()-dx,getY()-dy);
         else{
+            //set gun location
             if(this.getCurrentGun().equals("Pistol"))
             {
                 gun.setLocation(getX()+18, getY()+16);
@@ -247,7 +254,7 @@ public class Player extends Actor implements AnimationInterface
      * 
      * @return boolean              true if the move was invalid and false if not
      */
-    public boolean invalidMove(){
+    private boolean invalidMove(){
         for(int i =-1; i<=1;i++){
             for(int j =-1;j<=1;j++){
                 Door door = (Door) getOneObjectAtOffset​(i*20, j*30, Door.class);
@@ -296,19 +303,19 @@ public class Player extends Actor implements AnimationInterface
 
         if(listOfGuns.get(0).equals("Pistol")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(0, -1, ammoInMag.get("Pistol"));
-            gun = new Pistol(itemInfo,this,50,4,200,200,600,15, ammoInMag.get("Pistol"));
+            gun = new Pistol(itemInfo,this,50,4,200,200,600,15, ammoInMag.get("Pistol"),true);
             getWorld().addObject(gun,getX()+18, getY()+16);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Pistol")), 6, 700, 575, pistolBarImg, (GameWorld) getWorld());
         }    
         else if(listOfGuns.get(0).equals("Shotgun")){
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(2, items.get("Shotgun Bullet"), ammoInMag.get("Shotgun"));
-            gun = new Shotgun(itemInfo,this,300,5,700,700,1000,8,ammoInMag.get("Shotgun"));
+            gun = new Shotgun(itemInfo,this,300,5,700,700,1000,8,ammoInMag.get("Shotgun"),true);
             getWorld().addObject(gun,getX()+16, getY()+15);
             reloadBar = new ResourceBarManager(8, ammoInMag.get("Shotgun"), 7, 700, 575, shotgunBarImg, (GameWorld) getWorld());
         }    
         else{
             if(itemInfo!=null && itemInfo.getWorld()!=null) itemInfo.updateGun(1, items.get("Rifle Bullet"), ammoInMag.get("Rifle"));
-            gun = new Rifle(itemInfo,this,100,6,150,150,400,30,ammoInMag.get("Rifle"));
+            gun = new Rifle(itemInfo,this,100,6,150,150,400,30,ammoInMag.get("Rifle"),true);
             getWorld().addObject(gun,getX()+20, getY()+13);
             reloadBar = new ResourceBarManager(10, Math.min(10, ammoInMag.get("Rifle")), 6, 700, 575, rifleBarImg, (GameWorld) getWorld());
         } 
@@ -354,6 +361,9 @@ public class Player extends Actor implements AnimationInterface
         healthBar.refillHealth(1, (GameWorld) getWorld());
     }
 
+    /**
+     * animateMovementUp - animation when player moves up. 
+     */
     public void animateMovementUp()
     {
         if(animationCount%frameRate == 0)
@@ -379,6 +389,9 @@ public class Player extends Actor implements AnimationInterface
         gun.getImage().setTransparency(0);
     }
 
+    /**
+     * animateMovementDown - animation when player moves down. 
+     */
     public void animateMovementDown()
     {
         if(animationCount%frameRate == 0)
@@ -389,6 +402,9 @@ public class Player extends Actor implements AnimationInterface
         gun.getImage().setTransparency(255);
     }
 
+    /**
+     * animateMovementRight - animation when player moves right. 
+     */
     public void animateMovementRight()
     {
         if(animationCount%frameRate == 0)
@@ -413,6 +429,9 @@ public class Player extends Actor implements AnimationInterface
         }
     }
 
+    /**
+     * animateMovementLeft - animation when player moves left. 
+     */
     public void animateMovementLeft()
     {
         if(animationCount%frameRate == 0)
@@ -448,6 +467,7 @@ public class Player extends Actor implements AnimationInterface
      * @return int              number of bullets in mag
      */
     public int canReload(Weapon w){
+        //shotgun
         if(w instanceof Shotgun){
             if(items.get("Shotgun Bullet")>0 && w.getAmmo()<8){
                 reloadBar.refillAmmo((GameWorld) getWorld());
@@ -466,6 +486,7 @@ public class Player extends Actor implements AnimationInterface
             }    
             else return 0;
         }   
+        //rifle
         else if(w instanceof Rifle){
             if(items.get("Rifle Bullet")>0 && w.getAmmo()<30){
                 reloadBar.refillAmmo((GameWorld) getWorld());
@@ -486,6 +507,7 @@ public class Player extends Actor implements AnimationInterface
             }    
             else return 0;
         }
+        //pistol
         else if(w.getAmmo()<15){
             itemInfo.updateAmmo(-1, 15);
             reloadBar.refillAmmo((GameWorld) getWorld());
@@ -498,7 +520,6 @@ public class Player extends Actor implements AnimationInterface
      * saveData - save data from player into text file
      */
     public void saveData() {
-        // save data into a text file (haven't tested yet!)
         ammoInMag.put(getCurrentGun(),gun.ammoInMag);
         try {
             FileWriter fw = new FileWriter(txtFile);
@@ -529,6 +550,7 @@ public class Player extends Actor implements AnimationInterface
      * parseData - load data from Player.txt 
      */
     public void parseData() {
+        //create scanner
         Scanner s = null;
         try {
             s = new Scanner(txtFile);

@@ -20,6 +20,8 @@ public class PauseWorld extends World
     /**
      * Constructor for objects of class PauseWorld, called to create a PauseMenu
      * 
+     * @param menuType              Type of the menu
+     * @param gameWorld             gameWorld of the player
      */
     public PauseWorld(String menuType, GameWorld gameWorld)
     {    
@@ -32,6 +34,11 @@ public class PauseWorld extends World
     
     /**
      * Constructor for objects of class PauseWorld, called to create a Store
+     * 
+     * @param gameWorld             gameWorld of the player
+     * @param menuType              Type of the menu
+     * @param player                player in the world
+     * @param itemInfo              itemInfo in the world
      */
     public PauseWorld(GameWorld gameWorld, Player player, ItemInfo itemInfo){
         this("store", gameWorld);
@@ -40,6 +47,9 @@ public class PauseWorld extends World
     
     /**
      * Constructor for objects of class PauseWorld, called to create a gameOver screen
+     * 
+     * @param score                 score of the player
+     * @param isWin                 true if the player won, false if not
      */
     public PauseWorld(int score, boolean isWin){
         super(960, 640, 1); 

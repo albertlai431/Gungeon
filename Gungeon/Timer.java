@@ -41,7 +41,7 @@ public class Timer extends Actor
         //Setting default values for instance variables
         timerIsRunning = true;
         transparency = 255;
-        radiusSize = 15;
+        radiusSize = 10;
         textSize = 20;
 
         circleColor = Color.RED;

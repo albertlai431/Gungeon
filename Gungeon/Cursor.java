@@ -12,7 +12,7 @@ public class Cursor extends Actor
     private int YCoord;
     public Cursor()
     {
-        GreenfootImage image = new GreenfootImage("crusor.png");
+        GreenfootImage image = new GreenfootImage("cursor.png");
         setImage(image);
         image.scale(image.getWidth()*150/100, image.getHeight()*150/100);
         

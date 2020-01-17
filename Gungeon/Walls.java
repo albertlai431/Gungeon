@@ -14,7 +14,10 @@ public class Walls extends Obstacles
                                                    new GreenfootImage(path+"wallRight.png"),new GreenfootImage(path+"wallLeft.png")};
                                                    
     /**
-     * Constructor for Walls           the second index of the array
+     * Constructor for Walls           
+     * 
+     * @param firstInd             the first index of the array
+     * @param secondInd            the second index of the array
      */                                               
     public Walls(int firstInd, int secondInd){
         super(0, firstInd, secondInd);

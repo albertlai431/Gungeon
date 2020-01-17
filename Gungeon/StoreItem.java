@@ -50,6 +50,8 @@ public class StoreItem extends Actor
 
     /**
      * addedToWorld - adds the label to the world
+     * 
+     * @param w             world of the StoreItem
      */
     public void addedToWorld(World w){
         PauseWorld world = (PauseWorld) w;

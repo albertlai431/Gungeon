@@ -64,10 +64,11 @@ public class GameWorld extends World
     {   
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
+        //addObject(new Cursor(),100,100);
         //Create Images
         StoreMenu.createImages();
         Player.createImages();
-        setPaintOrder(Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        setPaintOrder(Timer.class,Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
         //Music
         String key = Greenfoot.getKey();
         openRoom.setVolume(85);
@@ -374,7 +375,7 @@ public class GameWorld extends World
      * 
      * @param firstInd              first index of 2D array
      * @param secondInd             second index of 2D array
-     * @return boolean              whether of not there's a wall
+     * @return boolean              whether or not there's a wall
      */
     public boolean isWall(int firstInd, int secondInd){
         try{
