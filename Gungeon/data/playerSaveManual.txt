@@ -1,0 +1,19 @@
+This text file explains how players are saved.
+
+Every line contains the value.
+For weapons, first value is the number of guns. Second value is the name of the guns.
+For items, 2 values are given: the item name and value. 
+
+
+Format:
+curLevel 
+maxLevel
+money
+hearts
+speed
+kills
+score
+
+Weapons
+
+Items

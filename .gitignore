@@ -26,6 +26,9 @@ hs_err_pid*
 # VS Code
 *.vscode
 
+#doc
+Gungeon/doc/*
+
 
 # MacOSX
 .DS_Store

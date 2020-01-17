@@ -1,19 +1,37 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.io.File;
 
 /**
- * Write a description of class Walls here.
+ * Walls are obstacles that the player cannot pass through. 
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Albert Lai
+ * @version January 2020
  */
 public class Walls extends Obstacles
 {
+    private static final String path = "Walls" + File.separator;
+    private static final GreenfootImage [] imgs = {new GreenfootImage(path+"wallUp.png"),new GreenfootImage(path+"wallDown.png"),
+                                                   new GreenfootImage(path+"wallRight.png"),new GreenfootImage(path+"wallLeft.png")};
+                                                   
     /**
-     * Act - do whatever the Walls wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Constructor for Walls           
+     * 
+     * @param firstInd             the first index of the array
+     * @param secondInd            the second index of the array
+     */                                               
+    public Walls(int firstInd, int secondInd){
+        super(0, firstInd, secondInd);
+    }  
+
+    /**
+     * addedToWorld - sets the image
+     * 
+     * @param w             the current world 
      */
-    public void act() 
-    {
-        // Add your action code here.
+    public void addedToWorld(World w){
+        GameWorld world = (GameWorld) w;
+        if(world.width-getX()<25) setImage(imgs[2]);
+        else if(getX()<25) setImage(imgs[3]);
+        else if(world.height-getY()<25) setImage(imgs[1]);
     }    
 }

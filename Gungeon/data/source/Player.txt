@@ -1,0 +1,19 @@
+1
+0
+250
+6
+2
+0
+0
+1
+Pistol
+15
+Pistol
+Rifle Bullet
+0
+Shotgun Bullet
+0
+Half-Heart Refill
+0
+Speed Boost
+0
