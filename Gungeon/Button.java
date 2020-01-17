@@ -145,9 +145,12 @@ public class Button extends Actor
      * Highlights the button if the mouse is hoving over a button
      */
     private void hoverOver(){
+        //clears the image to prevent the images from overlapping 
         img.clear();
+        //changes the text colour to its highlighted colour
         img.setColor(highlightColour);
         img.setFont(TextFont);
+        //draws the text, but with the highlighted colour
         img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
         setImage(img);
     }
@@ -156,9 +159,12 @@ public class Button extends Actor
      */
     private void reset()
     {
+        //clears the image to prevent the images from overlapping 
         img.clear();
+        //changes the text colour back to normal
         img.setColor(textColour);
         img.setFont(TextFont);
+        //redraws the text
         img.drawString(text,0,img.getHeight() - (img.getHeight()/3));
         setImage(img);
     }
