@@ -165,10 +165,6 @@ public abstract class Weapon extends Actor
                 return false;
             }
             else{
-                if(this.reloadTimer){
-                    this.t = new Timer(reloadTime, reloadTime);
-                    getWorld().addObject(t, this.getX(), this.getY());
-                }
                 return true;
             }
 
@@ -177,13 +173,17 @@ public abstract class Weapon extends Actor
     }
 
     /**
-     * startReload - Starts the reloading process
+     * startReload - Starts the reloading process and the reload timer
      */
     private void startReload()
     {
         if(!isReloading()){
             long now = System.currentTimeMillis();
             reloading = true;
+            if(this.reloadTimer){
+                this.t = new Timer(reloadTime);
+                getWorld().addObject(t, this.getX(), this.getY());
+            }
             this.startTime = now + reloadTime;
         }
     }
