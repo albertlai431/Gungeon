@@ -34,7 +34,7 @@ public class BlobBoss extends Actor
      */
     public BlobBoss()
     {
-        healthPoints = 3000;
+        healthPoints = 5000;
         setImage(animation[0]);
     }
     /**
