@@ -49,7 +49,7 @@ public class GameWorld extends World
     private static final int totVersions = 5;
     public static final int tileSize = 32;
     private static final int tileOffset = 16;
-    private static GreenfootSound gamePlay = new GreenfootSound("gameplay.wav");
+    private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
     private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
 
     private int fromLevel = -1;
@@ -64,11 +64,11 @@ public class GameWorld extends World
     {   
         super(width, height, 1,false); 
         arr = new Actor [width/tileSize][height/tileSize];
-        //addObject(new Cursor(),100,100);
+        addObject(new Cursor(),100,100);
         //Create Images
         StoreMenu.createImages();
         Player.createImages();
-        setPaintOrder(Timer.class,Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
+        setPaintOrder(Cursor.class,Timer.class,Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
         //Music
         String key = Greenfoot.getKey();
         openRoom.setVolume(85);

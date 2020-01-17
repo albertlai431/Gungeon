@@ -39,7 +39,7 @@ public abstract class Weapon extends Actor
      * @param   bulletSpeed      the speed that the bullet will have
      * @param   fireRate         the time between each bullet when user is holding down the left click in milliseconds
      * @param   bulletReadyTime  the time bet each bullet when user is clicking the left click in milliseconds
-     * @param   reloadTime       the times it takes for the weapon to reload
+     * @param   reloadTime       the time it takes for the weapon to reload in milliseconds
      * @param   magSize          the number of magazines the user has
      * @param   ammoInMag        the current ammo in the magazine
      * @param   reloadTimer      true to enable the timer when reloading, false to not
@@ -209,7 +209,7 @@ public abstract class Weapon extends Actor
         return ammoInMag;
     }
     /**
-     * getAmmo - gets the fire rate of the current weapon
+     * getFireRate - gets the fire rate of the current weapon
      * 
      * @return  long     the fire rate of the weapon
      */
@@ -219,7 +219,7 @@ public abstract class Weapon extends Actor
         return fireRate;
     }
     /**
-     * getAmmo - gets the magazine size of the weapon
+     * getMagSize - gets the magazine size of the weapon
      * 
      * @return  int     the magazine size of the weapon
      */
@@ -229,7 +229,7 @@ public abstract class Weapon extends Actor
         return magSize;
     }
     /**
-     * getAmmo - gets the reload time of the weapon
+     * getReloadTime - gets the reload time of the weapon
      * 
      * @return  long     the reload time of the weapon
      */
@@ -239,7 +239,7 @@ public abstract class Weapon extends Actor
         return reloadTime;
     }
     /**
-     * getAmmo - gets the time that the bullet is ready to shoot
+     * getBulletReadyTime - gets the time that the bullet is ready to shoot
      * 
      * @return  long     the time that the bullet is ready to shoot
      */
@@ -250,9 +250,9 @@ public abstract class Weapon extends Actor
     }
 
     /**
-     * getAmmo - gets the current ammo in the magazine
+     * getBulletDamage - gets the damage of the bullet
      * 
-     * @return  int     the current ammo in the magazine
+     * @return  int     the damage of the bullet  
      */
     public int getBulletDamage()
     {
@@ -260,9 +260,9 @@ public abstract class Weapon extends Actor
     }
 
     /**
-     * getBulletSpeed - gets the current ammo in the magazine
+     * getBulletSpeed - gets the speed of the bullet
      * 
-     * @return  int     the current ammo in the magazine
+     * @return  int     the spped of the bullet
      */
     public int getBulletSpeed()
     {
