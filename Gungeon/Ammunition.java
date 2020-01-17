@@ -3,7 +3,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Abstract class of all dynamic and moving objects used to deal damage.
  *
- * @author Star Xie
+ * @author Star Xie, Clarence Chau
  * @version November 2019
  */
 public abstract class Ammunition extends Actor
