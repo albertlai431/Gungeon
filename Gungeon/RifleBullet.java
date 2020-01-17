@@ -2,12 +2,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Bullet- a subclass of Ammunition where bullets are made. Bullets follow a
+ * RifleBullet- a subclass of Ammunition where bullets are made. Bullets follow a
  * straight line path from the angle they are shot at and will do a constant
- * damage to the HP of the Building/Vehicle that it hits.
+ * damage to the HP of the player/enemy that it hits.
  *
  * @author Star Xie, Clarence Chau
- * @version November 2019
+ * @version January 2020
  */
 public class RifleBullet extends Ammunition
 {
