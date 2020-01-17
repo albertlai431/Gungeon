@@ -1,25 +1,27 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
- 
+
 /**
-* Bullet- a subclass of Ammunition where bullets are made. Bullets follow a
-* straight line path from the angle they are shot at and will do a constant
-* damage to the HP of the Building/Vehicle that it hits.
-*
-* @author Star Xie, Albert Lai, Clarence Chau
-* @version November 2019
-*/
+ * Bullet- a subclass of Ammunition where bullets are made. Bullets follow a
+ * straight line path from the angle they are shot at and will do a constant
+ * damage to the HP of the Building/Vehicle that it hits.
+ *
+ * @author Star Xie, Clarence Chau
+ * @version November 2019
+ */
 public class RifleBullet extends Ammunition
 {
-    //declare greenfoot sounds
+    //declare greenfoot images and sounds
     private GreenfootImage bullet = new GreenfootImage("rifleBullet.png");
- 
+
     /**
-     * Constructor - creates a Bullet, sets the team, targets an Actor, and specifies damage dealt
+     * Constructor - creates a RifleBullet, sets the team, targets specified coordinates, and specifies damage dealt
      *
-     * @param red               specifies the team (true for red, false for blue)
-     * @param actor             the specific object that is being targetted
+     * @param xCoord            the targetted X coordinate
+     * @param yCoord            the targetted Y coordinate
      * @param damage            specifies the damage taken for each hit
+     * @param speed             speed the bullet travels at
+     * @param isEnemy           true if the bullet is firing from an enemy, otherwise false
      */
     public RifleBullet(int x, int y, int damage, int speed, boolean isEnemy)
     {
@@ -29,11 +31,17 @@ public class RifleBullet extends Ammunition
         //shoot.setVolume(75);
     }
 
+    /**
+     * reloadAmmo - Sets the ammunition to it's full amount. To be implemented in subclasses
+     */
     public void reloadAmmo()
     {
         ammo = 50;
     }
-   
+
+    /**
+     * checkAmmo - Returns the specific ammo number. To be implemented in subclasses
+     */
     public int checkAmmo()
     {
         return ammo;
