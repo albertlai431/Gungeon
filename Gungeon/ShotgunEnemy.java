@@ -29,7 +29,9 @@ public class ShotgunEnemy extends Enemy
         scoreBoost = 10;
         moneyBoost = 200;
         healthPoints = 700;    
-        fireRate = 60;       
+        fireRate = 60;    
+        movementCounter = 25;
+        movementMod = 25;
     }
     /**
      * Greenfoot method, called when this object is added to the world
@@ -51,10 +53,49 @@ public class ShotgunEnemy extends Enemy
      */
     public void attack()
     {
-        for(int i = 0; i < 5; i++)
-        {
-            getWorld().addObject(new ShotgunBullet(player.getX(), player.getY() - 60 + (30 * i), 1, 5, true), getX(), getY());
+        int bulletDamage = 1;
+        int bulletSpeed = 5;
+        double x2 = getX() + (player.getX()-getX())/10;
+        double y2 = getY() + (player.getY()-getY())/10;
+        double dis = Math.sqrt((getX()-x2)*(getX()-x2) + (getY()-y2)*(getY()-y2))*Math.tan(Math.PI/15); 
+        if(Math.abs(getY() - player.getY())<=9){
+            if(dis>=6 && dis<=12){
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+6),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-6),bulletDamage,bulletSpeed, true),getX(),getY());
+            }
+            else if(dis>=12){
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+9),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-9),bulletDamage,bulletSpeed, true),getX(),getY());
+            }
+            else{
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+3),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-3),bulletDamage,bulletSpeed, true),getX(),getY());
+            }
+        }    
+        else if(Math.abs(getX() - player.getX())<=9){
+            if(dis>=6 && dis<=12){
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2+6), (int)Math.ceil(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2-6),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+            }
+            else{
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2+3), (int)Math.round(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.round(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2-3),  (int)Math.round(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+            }
         }
+        else{
+            double slopeperp = -(getX()-x2)/(getY()-y2);
+            double dx = Math.sqrt(dis*dis/(1+slopeperp*slopeperp));
+            double dy = slopeperp*dx;
+
+            getWorld().addObject(new ShotgunBullet((int)Math.round(x2+dx), (int)Math.round(y2+dy),bulletDamage,bulletSpeed, true),getX(),getY());
+            getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.round(y2),bulletDamage,bulletSpeed, true),getX(),getY());
+            getWorld().addObject(new ShotgunBullet((int)Math.round(x2-dx),  (int)Math.round(y2-dy),bulletDamage,bulletSpeed, true),getX(),getY());
+        }  
     }  
     /**
      * Changes the image for animation of up movement

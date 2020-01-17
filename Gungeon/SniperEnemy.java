@@ -30,6 +30,8 @@ public class SniperEnemy extends Enemy
         moneyBoost = 300;
         healthPoints = 500;     
         fireRate = 45;    
+        movementCounter = 20;
+        movementMod = 20;
     }
     /**
      * Greenfoot method, called when this object is added to the world

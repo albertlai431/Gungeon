@@ -343,6 +343,7 @@ public class Player extends Actor implements AnimationInterface
      */
     public void loseOneHeart()
     {
+        if(loseHeart.isPlaying()) loseHeart.stop();
         loseHeart.play();
         hearts--;
         healthBar.reduceHealth(1,(GameWorld) getWorld());

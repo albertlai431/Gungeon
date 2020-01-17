@@ -29,31 +29,41 @@ public class Shotgun extends Weapon
         double dis = Math.sqrt((xcoord-x2)*(xcoord-x2) + (ycoord-y2)*(ycoord-y2))*Math.tan(Math.PI/15); 
         if(Math.abs(ycoord - mouseY)<=9){
             if(dis>=6 && dis<=12){
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+20),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+6),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-6),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-20),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             }
             else if(dis>=12){
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+30),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+9),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-9),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-30),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             }
             else{
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+6),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2+3),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-3),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2),  (int)Math.ceil(y2-6),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             }
         }    
         else if(Math.abs(xcoord - mouseX)<=9){
             if(dis>=6 && dis<=12){
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2+20), (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2+6), (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2-6),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2-20),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             }
             else{
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2+3),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2+3), (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
                 getWorld().addObject(new ShotgunBullet((int)Math.round(x2-3),  (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+                getWorld().addObject(new ShotgunBullet((int)Math.round(x2-6),  (int)Math.ceil(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             }
         }
         else{
@@ -61,9 +71,11 @@ public class Shotgun extends Weapon
             double dx = Math.sqrt(dis*dis/(1+slopeperp*slopeperp));
             double dy = slopeperp*dx;
 
+            getWorld().addObject(new ShotgunBullet((int)Math.round(x2+2*dx), (int)Math.round(y2+2*dy),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             getWorld().addObject(new ShotgunBullet((int)Math.round(x2+dx), (int)Math.round(y2+dy),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             getWorld().addObject(new ShotgunBullet((int)Math.round(x2), (int)Math.round(y2),bulletDamage,bulletSpeed, false),xcoord,ycoord);
             getWorld().addObject(new ShotgunBullet((int)Math.round(x2-dx),  (int)Math.round(y2-dy),bulletDamage,bulletSpeed, false),xcoord,ycoord);
+            getWorld().addObject(new ShotgunBullet((int)Math.round(x2-2*dx),  (int)Math.round(y2-2*dy),bulletDamage,bulletSpeed, false),xcoord,ycoord);
         }  
     }
 }

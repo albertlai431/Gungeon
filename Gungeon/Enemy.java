@@ -19,7 +19,8 @@ public abstract class Enemy extends Actor implements AnimationInterface
     protected int fireRate;
     //Used for animation
     protected long animationCount = 0;
-    protected int movementCounter = 30;
+    protected int movementCounter;
+    protected int movementMod;
     //Used to find player
     protected ArrayList<Player> foundPlayers;
     protected Actor player;
@@ -60,7 +61,7 @@ public abstract class Enemy extends Actor implements AnimationInterface
         if(checkLineOfSight() == false || animated==false)
         {
             animated=true;
-            if(movementCounter == 30)
+            if(movementCounter == movementMod)
             {
                 animate(closestTileCoordinates);
                 movementCounter = 0;

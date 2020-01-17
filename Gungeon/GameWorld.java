@@ -385,6 +385,22 @@ public class GameWorld extends World
             return true;
         }    
     }   
+    
+    /**
+     * isObstacle - takes position in 2D array and returns whether or not a obstacle exists
+     * 
+     * @param firstInd              first index of 2D array
+     * @param secondInd             second index of 2D array
+     * @return boolean              whether or not there's a wall
+     */
+    public boolean isObstacle(int firstInd, int secondInd){
+        try{
+            return arr[firstInd][secondInd] instanceof Obstacles;
+        }    
+        catch (ArrayIndexOutOfBoundsException e){
+            return true;
+        }    
+    }
 
     /**
      * createTextFiles - create new text files for the game (not to be called during gameplay)

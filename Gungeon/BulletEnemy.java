@@ -29,6 +29,8 @@ public class BulletEnemy extends Enemy
         moneyBoost = 100;
         healthPoints = 300;     
         fireRate = 50;
+        movementCounter = 30;
+        movementMod = 30;
     }
     /**
      * Greenfoot method, called when this object is added to the world

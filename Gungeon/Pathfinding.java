@@ -44,8 +44,17 @@ public class Pathfinding
             for(int i=0;i<4;i++){
                 int newFirstInd = curFirstInd + dir[i][0], newSecondInd = curSecondInd + dir[i][1];
                 if(!world.isWall(newFirstInd,newSecondInd) && newSecondInd!=0 && newSecondInd!=19 && dis[newFirstInd][newSecondInd]==-1){
-                    dis[newFirstInd][newSecondInd] = dis[curFirstInd][curSecondInd]+1;
-                    queue.add(new Pair<>(newFirstInd,newSecondInd));
+                    //avoid obstacles
+                    if(player.getCurLevel()>=1){
+                        if(!world.isObstacle(newFirstInd,newSecondInd)){
+                            dis[newFirstInd][newSecondInd] = dis[curFirstInd][curSecondInd]+1;
+                            queue.add(new Pair<>(newFirstInd,newSecondInd));
+                        }    
+                    }
+                    else{
+                        dis[newFirstInd][newSecondInd] = dis[curFirstInd][curSecondInd]+1;
+                        queue.add(new Pair<>(newFirstInd,newSecondInd));
+                    }
                 }   
             }    
         }  
@@ -64,6 +73,16 @@ public class Pathfinding
             }  
         }    
 
+        //If can't find player, move to a random tile
+        if(curFirstInd == endFirstInd && curSecondInd == endSecondInd){
+            for(int j=0;j<4;j++){
+                int newFirstInd = startFirstInd + dir[j][0];
+                int newSecondInd = startSecondInd + dir[j][1];
+                if(dis[newFirstInd][newSecondInd]==1){
+                    return new int[]{GameWorld.convert(newFirstInd), GameWorld.convert(newSecondInd)};
+                }    
+            }
+        }    
         return new int[]{GameWorld.convert(curFirstInd), GameWorld.convert(curSecondInd)};
     }    
 }
