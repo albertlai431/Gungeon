@@ -9,10 +9,8 @@ Gungeon is a remake of the classic Gungeon. The player travels through chambers/
 
 ## How to Run
 1. Download [Greenfoot](https://www.greenfoot.org/download)
-2. `git clone link_of_this_repository`	
-3. `cd SpaceWars`
-4. Open *project.greenfoot*
-5. Click *Run* to begin the simulation! 
+2. Download *Gungeon.gfar* and open it
+3. Click *Run* to begin the simulation! 
 
 ## How the Game Works
 Check out the [Flowchart](Flowchart.pdf), [API](API.pdf), and [Class diagram](ClassDiagram.pdf) to learn more!
