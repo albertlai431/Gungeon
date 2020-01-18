@@ -45,13 +45,14 @@ public abstract class Obstacles extends Actor
      */
     protected boolean damage(){
         boolean hit = false;
-        //intersecting vs offset??
-        Player player = (Player) getOneIntersectingObject​(Player.class);
+        
+        Player player = (Player) getOneObjectAtOffset​(0,-16,Player.class);
         if(player!=null){
             hit = player.loseOneHeart();
         }    
+        
 
-        ArrayList <Enemy> enemiesArrayList = (ArrayList) getIntersectingObjects​(Enemy.class);
+        ArrayList <Enemy> enemiesArrayList = (ArrayList) getObjectsAtOffset​(0,0,Enemy.class);
         for(Enemy enemy: enemiesArrayList){
             enemy.getDamaged(damage);
             hit=true;

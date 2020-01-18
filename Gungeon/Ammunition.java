@@ -79,7 +79,7 @@ public abstract class Ammunition extends Actor
     {
         //Gets intersecting classes with Ammunition object
         Enemy enemy = (Enemy)getOneObjectAtOffset(0,0,Enemy.class);
-        BlobBoss boss = (BlobBoss)getOneObjectAtOffset(0,0,BlobBoss.class);
+        Boss boss = (Boss)getOneObjectAtOffset(0,0,Boss.class);
         Walls walls = (Walls)getOneObjectAtOffset(0,0,Walls.class);
         Player player = (Player)getOneObjectAtOffset(0,0,Player.class);
 

@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.lang.ArrayIndexOutOfBoundsException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * GameWorld is the world where the game takes place. It holds the player, actors of the 
@@ -22,7 +23,7 @@ import java.io.IOException;
  * </p>
  * 
  * <p>
- * Image credits to Star Xie and Enter the Gungeon.
+ * Image credits to Star Xie, free4kwallpapers.com, and Enter the Gungeon.
  * Music credits to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.
  * </p>
  * 
@@ -34,7 +35,6 @@ public class GameWorld extends World
     //Objects and data structures
     private Actor [][] arr; //firstInd = xcoord, secondInd = ycoord
     private Player player;
-    private Door door;
     private ItemInfo itemInfo;
 
     //Files
@@ -45,13 +45,14 @@ public class GameWorld extends World
     //Static variables
     public static final int height = 640;
     public static final int width = 960;
-    private static final int totLevels = 5;
-    private static final int totVersions = 5;
+    private static final int totLevels = 8;
+    private static final int totVersions = 8;
     public static final int tileSize = 32;
     private static final int tileOffset = 16;
     private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
     private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
     private static GreenfootSound lvlUp = new GreenfootSound("levelUp.mp3");
+    private static GreenfootImage [] bkg = new GreenfootImage[9];
 
     private int fromLevel = -1;
     private int curLevel;
@@ -69,6 +70,9 @@ public class GameWorld extends World
         //Create Images
         StoreMenu.createImages();
         Player.createImages();
+        if(bkg[7]==null){
+            for(int i=1;i<=totLevels;i++) bkg[i] = new GreenfootImage("Worlds" + File.separator +"bkg"+i+".jpg");
+        }    
         setPaintOrder(Cursor.class,Timer.class,Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
         //Music
         String key = Greenfoot.getKey();
@@ -76,6 +80,9 @@ public class GameWorld extends World
         openRoom.play();
         gamePlay.setVolume(70);
         lvlUp.setVolume(80);
+        
+        //add tiles
+        addObject(new Walls("wallblack"),16,height-16);
     }
 
     /**
@@ -93,6 +100,7 @@ public class GameWorld extends World
         addObject(itemInfo,824,601);
         player = new Player(playerFile, itemInfo);
         curLevel = player.getCurLevel();
+        setBackground(bkg[curLevel]);
         if(curLevel == 1){
             addObject(player,convert(2),convert(2));
             arr[2][2] = player;
@@ -115,6 +123,7 @@ public class GameWorld extends World
     public GameWorld(int curLevel,int fromLevel,Player player, ItemInfo itemInfo){
         this();
         this.curLevel = curLevel;
+        setBackground(bkg[curLevel]);
         this.fromLevel = fromLevel;
         this.player = player;
         this.player.parseData();
@@ -133,8 +142,9 @@ public class GameWorld extends World
     public void act(){
         keyboardInput();
         //checks if level is complete
-        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(BlobBoss.class).size()==0 && !lvlComplete){
-            door.completeLevel();
+        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(Boss.class).size()==0 && !lvlComplete){
+            ArrayList <Door> doors = (ArrayList) getObjects(Door.class);
+            for(Door door: doors) door.completeLevel();
             player.incrementMaxLevel();
             itemInfo.updateScore(curLevel*100);
             lvlComplete = true;
@@ -264,7 +274,7 @@ public class GameWorld extends World
         catch(FileNotFoundException e){
             System.out.println("File Not Found");
         }    
-        
+
         while(true){
             try{
                 String actor = s.nextLine();
@@ -289,21 +299,21 @@ public class GameWorld extends World
                         else if(actor.indexOf("Walls")==0){
                             a = new Walls(firstInd, secondInd);
                         } 
+                        else if(actor.indexOf("wall")==0){
+                            a = new Walls(actor);
+                        } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
-                            a = new Door(doorLevel,player.getMaxLevel()>=doorLevel-1);
+                            a = new Door(doorLevel,player.getMaxLevel()>=curLevel);
                             if(fromLevel>curLevel){
                                 if(secondInd==19){
                                     addObject(player,convert(firstInd),convert(secondInd-2));
                                     arr[firstInd][secondInd-2] = player;
                                 }    
                             }    
-                            else{
-                                if(secondInd==19) door = (Door) a;
-                                else{
-                                    addObject(player,convert(firstInd),convert(secondInd+2));
-                                    arr[firstInd][secondInd+2] = player;
-                                }    
+                            else if(secondInd!=19){
+                                addObject(player,convert(firstInd),convert(secondInd+2));
+                                arr[firstInd][secondInd+2] = player;
                             }
                         } 
                         else if(actor.indexOf("BulletEnemy")==0){
@@ -319,7 +329,8 @@ public class GameWorld extends World
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){
-                            a = new BlobBoss();
+                            if(actor.contains("1")) a = new BlobBoss();
+                            else a = new BeholsterBoss();
                             isEnemy = true;
                         }
                         else{
@@ -339,7 +350,8 @@ public class GameWorld extends World
             catch(NoSuchElementException e){
                 break;
             }    
-        }    
+        } 
+        s.close();
     }
 
     /**
@@ -389,7 +401,7 @@ public class GameWorld extends World
             return true;
         }    
     }   
-    
+
     /**
      * isObstacle - takes position in 2D array and returns whether or not a obstacle exists
      * 
@@ -412,9 +424,9 @@ public class GameWorld extends World
     public void createTextFiles(){
         FileWriter fw = null;
         //amount ofobstacles in levels
-        int[] obstacles = {1,2,3,4,5};
+        int[] obstacles = {1,2,3,0,3,3,4,0};
         //BulletEnemy, SniperEnemy, ShotgunEnemy
-        int[][] enemies = {{2,4,3,3},{1,2,4,3},{0,1,2,5}};
+        int[][] enemies = {{3,2,2,0,5,4,3,0},{0,2,2,0,2,5,3,0},{0,0,2,0,2,2,5,0}};
         String[] obstaclesNames = {"Walls", "Arrows", "Fire", "Spikes"};
 
         for(int i=1;i<=totLevels;i++){
@@ -434,6 +446,11 @@ public class GameWorld extends World
                             for(int l=1;l<=3;l++) curarr[k][l]=true;
                         }    
                     }
+                    else{
+                        for(int k=1;k<=3;k++){
+                            for(int l=1;l<=3;l++) curarr[k][l]=true;
+                        }
+                    }    
                     xval = 20 - Greenfoot.getRandomNumber(5);
                     fw.write("Door" + (i+1) + "\n" + xval + "\n" + 19 + "\n");
                     for(int k=xval-1;k<=xval+1;k++){
@@ -453,16 +470,20 @@ public class GameWorld extends World
                     }    
 
                     //Boss
-                    if(i==5){
-                        curarr[27][16]=true;
-                        fw.write("Boss\n" + 15 + "\n" + 10 + "\n"); a++;
+                    if(i==4){
+                        curarr[15][10]=true;
+                        fw.write("Boss1\n" + 15 + "\n" + 10 + "\n"); a++;
+                    }    
+                    else if(i==8){
+                        curarr[25][10]=true;
+                        fw.write("Boss2\n" + 25 + "\n" + 10 + "\n"); a++;
                     }    
                     else{
                         //Obstacles 
                         for(String actor: obstaclesNames){
                             //Walls
                             if(actor.equals("Walls")){
-                                for(int k=0;k<6-i+Greenfoot.getRandomNumber(2);k++){
+                                for(int k=0;k<5+Greenfoot.getRandomNumber(3);k++){
                                     while(true){
                                         boolean works = true;
                                         int x = Greenfoot.getRandomNumber(30);
@@ -485,7 +506,16 @@ public class GameWorld extends World
                                         if(works){
                                             for(int X=x; X<x+xSize; X++){
                                                 for(int Y=y; Y<y+ySize; Y++){
-                                                    fw.write(actor + "\n" + X + "\n" + Y + "\n");
+                                                    if(X==x+xSize-1 && Y==y+ySize-1) fw.write("walla\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x && Y==y+ySize-1) fw.write("wallb\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x && Y!=y) fw.write("wallc\n" + X + "\n" + Y + "\n");
+                                                    else if(Y==y+ySize-1) fw.write("walld\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x+xSize-1 && Y!=y) fw.write("walle\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x && Y==y) fw.write("wallf\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x+xSize-1 && Y==y) fw.write("wallg\n" + X + "\n" + Y + "\n");
+                                                    else if(Y==y) fw.write("wall\n" + X + "\n" + Y + "\n");
+                                                    else fw.write("wallblack\n" + X + "\n" + Y + "\n");
+
                                                     curarr[X][Y] = true;
                                                     a++;
                                                 }   
@@ -497,7 +527,7 @@ public class GameWorld extends World
                                 continue;
                             }    
                             //Other obstacles
-                            for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i]-obstacles[i-1])+obstacles[i-1];k++){
+                            for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i-1])+Greenfoot.getRandomNumber(2);k++){
                                 while(true){
                                     int x = Greenfoot.getRandomNumber(30);
                                     int y = Greenfoot.getRandomNumber(20);
@@ -537,6 +567,6 @@ public class GameWorld extends World
             }
             System.out.println(i);
         }  
-        System.out.println("done");
+        System.out.println("done"); 
     }    
 }

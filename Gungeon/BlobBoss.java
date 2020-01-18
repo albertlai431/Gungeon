@@ -1,41 +1,21 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * Boss of the game, has multiple different attacks, stronger attacks happen
- * less, stronger attacks become harder to dodge
+ * Blob Boss of the game, has multiple different attacks, stronger attacks happen
+ * less, stronger attacks become harder to dodge (first boss)
  * 
  * @author Henry Ma
  * @version January 16, 2020
  */
-public class BlobBoss extends Actor
+public class BlobBoss extends Boss
 {
-    //Initialize variables and objects
-    //Health of boss
-    private int healthPoints;
-    //Animation for boss
-    private static GreenfootImage[] animation = new GreenfootImage[4];
-    //Keeps track if images for animation were created
-    private static boolean createdImages = false;
-    //Frames/acts before next image switch
-    private int frameRate = 8;
-    //Keeps track of image currently on
-    private int imageNumber = 0;
-    //Acts before firing
-    private int fireRate = 20;
-    //Acts before big attack
-    private int bigAttackRate = 60;
-    //Counter for number of acts gone by
-    private long animationCount = 0;
-    //Used to find player
-    private ArrayList<Player> foundPlayers;
-    private Actor player;
     /**
      * Constructor for blob boss, set and initialize values for boss
      */
     public BlobBoss()
     {
         healthPoints = 5000;
-        setImage(animation[0]);
+        healthBar = new HealthBar(300, 25, 5000 , green);
     }
     /**
      * Greenfoot method, called when object is added to world
@@ -45,25 +25,25 @@ public class BlobBoss extends Actor
         createImages();
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
         player = foundPlayers.get(0); 
+        setImage(animation[0]); 
+        getWorld().addObject(healthBar, 480, 590);
     }
     /**
      * Act - Blob stays still while charging up for attacks/attacking
      */
     public void act() 
-    {
+    {        
         animationCount ++;
-        animate();
-        
-        if(fireRate == 100)
+        animate();        
+        if(fireRate >= 100)
         {
-            if(bigAttackRate == 500)
+            if(bigAttackRate >= 800)
             {
                 bigAttackOne();
                 bigAttackRate = 0;
             }
             else
             {
-                bigAttackRate++;
                 foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
                 player = foundPlayers.get(0);   
                 int attackNumber = Greenfoot.getRandomNumber(2);
@@ -74,9 +54,10 @@ public class BlobBoss extends Actor
         else
         {
             fireRate++;
+            bigAttackRate++;
         }
         
-    }    
+    }  
     /**
      * Calls on an attack method determined by the parameters given
      * 
@@ -147,7 +128,7 @@ public class BlobBoss extends Actor
     /**
      * Create the images for the animation of this object
      */
-    private void createImages()
+    public void createImages()
     {
         if(!createdImages)
         {
@@ -157,25 +138,5 @@ public class BlobBoss extends Actor
                 animation[i] = new GreenfootImage("blobBoss"+i+".png");
             }
         }
-    }
-    /**
-     * Inflict damage dependent on the parameters given, also checks for death
-     * 
-     * @param damage    Amount of damage to deal
-     */
-    public void getDamaged(int damage)
-    {
-        healthPoints -= damage;
-        if(healthPoints <= 0)
-        {           
-            die();
-        }
-    }
-    /**
-     * Remove this object from the world
-     */
-    private void die()
-    {
-        getWorld().removeObject(this);
     }
 }

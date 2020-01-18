@@ -601,9 +601,12 @@ public class Player extends Actor implements AnimationInterface
                 case 7:
                 for(int j=0;j<val;j++){
                     curgun = s.nextLine();
-                    listOfGuns.add(curgun);
-                    ammoInMag.put(curgun, Integer.parseInt(s.nextLine()));
-                }    
+                    int ammo = Integer.parseInt(s.nextLine());
+                    if(!loadedItemInfo){
+                        listOfGuns.add(curgun);
+                        ammoInMag.put(curgun, ammo);
+                    }    
+                }
             }
         }
 
@@ -615,6 +618,7 @@ public class Player extends Actor implements AnimationInterface
             items.put(item,val);
         }
 
+        s.close();
         loadedItemInfo = true;
     }
 

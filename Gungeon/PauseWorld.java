@@ -17,7 +17,7 @@ public class PauseWorld extends World
     private static GreenfootSound victorySound = new GreenfootSound("victory.mp3");
     private static GreenfootSound gameOverSound = new GreenfootSound("lostAllHeart.mp3");
     private static GreenfootSound storeSound = new GreenfootSound("storeMusic.mp3");
-    private Label credits = new Label("Image credits to Star Xie and Enter the Gungeon. Music credits to to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.",10,230, 230, 230,true);
+    private Label credits = new Label("Image credits to Star Xie, free4kwallpapers.com, and Enter the Gungeon. Music credits to to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.",10,230, 230, 230,true);
     
     /**
      * Constructor for objects of class PauseWorld, called to create a PauseMenu
