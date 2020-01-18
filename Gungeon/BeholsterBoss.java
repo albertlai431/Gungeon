@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BeholsterBoss extends Boss
 {
     /**
-     * Constructor for blob boss, set and initialize values for boss
+     * Constructor for beholster boss, set and initialize values for boss
      */
     public BeholsterBoss()
     {
@@ -29,8 +29,7 @@ public class BeholsterBoss extends Boss
     }    
 
     /**
-     * Act - do whatever the Beholster wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Act - Beholster stays still while charging up for attacks/attacking
      */
     public void act() 
     {
