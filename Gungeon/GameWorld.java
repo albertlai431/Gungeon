@@ -96,7 +96,7 @@ public class GameWorld extends World
         itemInfo = new ItemInfo(0,-1,15,0);
         addObject(itemInfo,824,601);
         player = new Player(playerFile, itemInfo);
-        curLevel = 8;//player.getCurLevel();
+        curLevel = player.getCurLevel();
         setBackground(bkg[curLevel]);
         if(curLevel == 1){
             addObject(player,convert(2),convert(2));
