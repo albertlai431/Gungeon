@@ -14,7 +14,7 @@ public class BlobBoss extends Boss
      */
     public BlobBoss()
     {
-        healthPoints = 6000;
+        healthPoints = 5000;
     }
     /**
      * Greenfoot method, called when object is added to world
@@ -34,16 +34,15 @@ public class BlobBoss extends Boss
         animationCount ++;
         animate();
         
-        if(fireRate == 100)
+        if(fireRate >= 100)
         {
-            if(bigAttackRate == 500)
+            if(bigAttackRate >= 800)
             {
                 bigAttackOne();
                 bigAttackRate = 0;
             }
             else
             {
-                bigAttackRate++;
                 foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
                 player = foundPlayers.get(0);   
                 int attackNumber = Greenfoot.getRandomNumber(2);
@@ -54,6 +53,7 @@ public class BlobBoss extends Boss
         else
         {
             fireRate++;
+            bigAttackRate++;
         }
         
     }    
@@ -98,6 +98,7 @@ public class BlobBoss extends Boss
      */
     private void bigAttackOne()
     {
+        System.out.println("ok");
         for(int i = 0; i < 100; i++)
         {
             int attack = Greenfoot.getRandomNumber(100);

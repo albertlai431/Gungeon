@@ -35,16 +35,16 @@ public class BeholsterBoss extends Boss
     {
         animationCount ++;
         animate();
-        if(fireRate == 100)
+        if(fireRate >= 100)
         {
-            if(bigAttackRate == 500)
+            if(bigAttackRate >= 600)
             {
-                bigAttackOne();
+                int attackNumber = Greenfoot.getRandomNumber(2);
+                pickAttack(attackNumber, true);
                 bigAttackRate = 0;
             }
             else
             {
-                bigAttackRate++;
                 foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
                 player = foundPlayers.get(0);   
                 int attackNumber = Greenfoot.getRandomNumber(2);
@@ -55,6 +55,7 @@ public class BeholsterBoss extends Boss
         else
         {
             fireRate++;
+            bigAttackRate++;
         }
     }
 
