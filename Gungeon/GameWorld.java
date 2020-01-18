@@ -52,6 +52,7 @@ public class GameWorld extends World
     private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
     private static GreenfootSound openRoom = new GreenfootSound("doorClosingNew.mp3");
     private static GreenfootSound lvlUp = new GreenfootSound("levelUp.mp3");
+    private static GreenfootImage [] bkg = new GreenfootImage[9];
 
     private int fromLevel = -1;
     private int curLevel;
@@ -69,6 +70,9 @@ public class GameWorld extends World
         //Create Images
         StoreMenu.createImages();
         Player.createImages();
+        if(bkg[7]==null){
+            for(int i=1;i<=totLevels;i++) bkg[i] = new GreenfootImage("Worlds" + File.separator +"bkg"+i+".jpg");
+        }    
         setPaintOrder(Cursor.class,Timer.class,Resource.class,ResourceBarManager.class,Label.class,ItemInfo.class,Weapon.class,Ammunition.class,Player.class);
         //Music
         String key = Greenfoot.getKey();
@@ -92,7 +96,8 @@ public class GameWorld extends World
         itemInfo = new ItemInfo(0,-1,15,0);
         addObject(itemInfo,824,601);
         player = new Player(playerFile, itemInfo);
-        curLevel = player.getCurLevel();
+        curLevel = 8;//player.getCurLevel();
+        setBackground(bkg[curLevel]);
         if(curLevel == 1){
             addObject(player,convert(2),convert(2));
             arr[2][2] = player;
@@ -115,6 +120,7 @@ public class GameWorld extends World
     public GameWorld(int curLevel,int fromLevel,Player player, ItemInfo itemInfo){
         this();
         this.curLevel = curLevel;
+        setBackground(bkg[curLevel]);
         this.fromLevel = fromLevel;
         this.player = player;
         this.player.parseData();
@@ -133,7 +139,7 @@ public class GameWorld extends World
     public void act(){
         keyboardInput();
         //checks if level is complete
-        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(BlobBoss.class).size()==0 && !lvlComplete){
+        if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(Boss.class).size()==0 && !lvlComplete){
             door.completeLevel();
             player.incrementMaxLevel();
             itemInfo.updateScore(curLevel*100);
@@ -319,7 +325,8 @@ public class GameWorld extends World
                             isEnemy = true;
                         }
                         else if(actor.indexOf("Boss")==0){
-                            a = new BlobBoss();
+                            if(actor.contains("1")) a = new BlobBoss();
+                            else a = new BeholsterBoss();
                             isEnemy = true;
                         }
                         else{
@@ -413,9 +420,9 @@ public class GameWorld extends World
     public void createTextFiles(){
         FileWriter fw = null;
         //amount ofobstacles in levels
-        int[] obstacles = {1,2,3,4,5};
+        int[] obstacles = {1,2,3,0,3,3,4,0};
         //BulletEnemy, SniperEnemy, ShotgunEnemy
-        int[][] enemies = {{2,4,3,3},{1,2,4,3},{0,1,2,5}};
+        int[][] enemies = {{3,2,2,0,5,4,3,0},{0,2,2,0,2,5,3,0},{0,0,2,0,2,2,5,0}};
         String[] obstaclesNames = {"Walls", "Arrows", "Fire", "Spikes"};
 
         for(int i=1;i<=totLevels;i++){
@@ -454,16 +461,20 @@ public class GameWorld extends World
                     }    
 
                     //Boss
-                    if(i==5){
-                        curarr[27][16]=true;
-                        fw.write("Boss\n" + 15 + "\n" + 10 + "\n"); a++;
+                    if(i==4){
+                        curarr[15][10]=true;
+                        fw.write("Boss1\n" + 15 + "\n" + 10 + "\n"); a++;
+                    }    
+                    else if(i==8){
+                        curarr[25][10]=true;
+                        fw.write("Boss2\n" + 25 + "\n" + 10 + "\n"); a++;
                     }    
                     else{
                         //Obstacles 
                         for(String actor: obstaclesNames){
                             //Walls
                             if(actor.equals("Walls")){
-                                for(int k=0;k<6-i+Greenfoot.getRandomNumber(2);k++){
+                                for(int k=0;k<5+Greenfoot.getRandomNumber(3);k++){
                                     while(true){
                                         boolean works = true;
                                         int x = Greenfoot.getRandomNumber(30);
@@ -498,7 +509,7 @@ public class GameWorld extends World
                                 continue;
                             }    
                             //Other obstacles
-                            for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i]-obstacles[i-1])+obstacles[i-1];k++){
+                            for(int k=0;k<Greenfoot.getRandomNumber(obstacles[i-1])+Greenfoot.getRandomNumber(2);k++){
                                 while(true){
                                     int x = Greenfoot.getRandomNumber(30);
                                     int y = Greenfoot.getRandomNumber(20);

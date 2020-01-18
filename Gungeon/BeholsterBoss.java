@@ -155,7 +155,7 @@ public class BeholsterBoss extends Boss
             createdImages = true;
             for(int i=0; i<animation.length; i++)
             {
-                animation[i] = new GreenfootImage("BeholsterBoss"+i+".png");
+                animation[i] = new GreenfootImage("newBoss"+i+".png");
             }
         }
     }
