@@ -11,7 +11,7 @@ public class Door extends Obstacles
 {
     private int curLevel;
     private boolean isComplete = false;
-    private static final GreenfootImage [] doorImg = {new GreenfootImage("lockedDoor.png"),new GreenfootImage("passage.jpg")};
+    private static final GreenfootImage [] doorImg = {new GreenfootImage("lockedDoorUp.png"),new GreenfootImage("lockedDoorDown.png"),new GreenfootImage("passage.jpg")};
     
     /**
      * Constructor for Door
@@ -23,9 +23,18 @@ public class Door extends Obstacles
         super(0);
         this.curLevel = curLevel;
         this.isComplete = isComplete;
-        if(this.isComplete) setImage(doorImg[1]);
-        else setImage(doorImg[0]);
+        if(this.isComplete) setImage(doorImg[2]);
     }   
+    
+    /**
+     * addedToWorld - sets the image
+     * 
+     * @param w             the current world 
+     */
+    public void addedToWorld(World w){
+        if(getY()<25) setImage(doorImg[0]);
+        else setImage(doorImg[1]);
+    }    
     
     /**
      * Act - do whatever the Door wants to do. This method is called whenever

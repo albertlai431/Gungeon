@@ -27,7 +27,7 @@ public class BeholsterBoss extends Boss
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
         player = foundPlayers.get(0); 
         setImage(animation[0]);
-        getWorld().addObject(healthBar, 350, 600);
+        getWorld().addObject(healthBar, 350, 590);
     }    
 
     /**

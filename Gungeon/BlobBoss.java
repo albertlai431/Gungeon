@@ -26,7 +26,7 @@ public class BlobBoss extends Boss
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
         player = foundPlayers.get(0); 
         setImage(animation[0]); 
-        getWorld().addObject(healthBar, 480, 600);
+        getWorld().addObject(healthBar, 480, 590);
     }
     /**
      * Act - Blob stays still while charging up for attacks/attacking
@@ -99,7 +99,6 @@ public class BlobBoss extends Boss
      */
     private void bigAttackOne()
     {
-        System.out.println("ok");
         for(int i = 0; i < 100; i++)
         {
             int attack = Greenfoot.getRandomNumber(100);

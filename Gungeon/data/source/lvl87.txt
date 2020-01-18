@@ -1,8 +1,8 @@
 Door7
-4
+2
 0
 Door9
-17
+16
 19
 Walls
 0

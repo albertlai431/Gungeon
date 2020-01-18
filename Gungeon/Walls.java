@@ -11,10 +11,11 @@ public class Walls extends Obstacles
 {
     private static final String path = "Walls" + File.separator;
     private static final GreenfootImage [] imgs = {new GreenfootImage(path+"wallUp.png"),new GreenfootImage(path+"wallDown.png"),
-                                                   new GreenfootImage(path+"wallRight.png"),new GreenfootImage(path+"wallLeft.png")};
-                                                   
+            new GreenfootImage(path+"wallRight.png"),new GreenfootImage(path+"wallLeft.png")};
+    private String name = "";
+
     /**
-     * Constructor for Walls           
+     * Constructor for Walls at the borders        
      * 
      * @param firstInd             the first index of the array
      * @param secondInd            the second index of the array
@@ -24,14 +25,27 @@ public class Walls extends Obstacles
     }  
 
     /**
+     * Constructor for Walls in the center of the screen          
+     * 
+     * @param String                name of the file
+     */                                               
+    public Walls(String name){
+        super(0);
+        this.name = name;
+        setImage(name+".png");
+    }  
+
+    /**
      * addedToWorld - sets the image
      * 
      * @param w             the current world 
      */
     public void addedToWorld(World w){
-        GameWorld world = (GameWorld) w;
-        if(world.width-getX()<25) setImage(imgs[2]);
-        else if(getX()<25) setImage(imgs[3]);
-        else if(world.height-getY()<25) setImage(imgs[1]);
+        if(name.equals("")){
+            GameWorld world = (GameWorld) w;
+            if(world.width-getX()<25) setImage(imgs[2]);
+            else if(getX()<25) setImage(imgs[3]);
+            else if(world.height-getY()<25) setImage(imgs[1]);
+        }
     }    
 }

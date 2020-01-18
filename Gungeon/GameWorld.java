@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.lang.ArrayIndexOutOfBoundsException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * GameWorld is the world where the game takes place. It holds the player, actors of the 
@@ -34,7 +35,6 @@ public class GameWorld extends World
     //Objects and data structures
     private Actor [][] arr; //firstInd = xcoord, secondInd = ycoord
     private Player player;
-    private Door door;
     private ItemInfo itemInfo;
 
     //Files
@@ -107,6 +107,9 @@ public class GameWorld extends World
         //Create World
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
+        
+        //add tiles
+        addObject(new Walls("wallblack"),16,height-16);
     }    
 
     /**
@@ -140,7 +143,8 @@ public class GameWorld extends World
         keyboardInput();
         //checks if level is complete
         if(fromLevel<curLevel && getObjects(Enemy.class).size()==0 && getObjects(Boss.class).size()==0 && !lvlComplete){
-            door.completeLevel();
+            ArrayList <Door> doors = (ArrayList) getObjects(Door.class);
+            for(Door door: doors) door.completeLevel();
             player.incrementMaxLevel();
             itemInfo.updateScore(curLevel*100);
             lvlComplete = true;
@@ -270,7 +274,7 @@ public class GameWorld extends World
         catch(FileNotFoundException e){
             System.out.println("File Not Found");
         }    
-        
+
         while(true){
             try{
                 String actor = s.nextLine();
@@ -295,21 +299,21 @@ public class GameWorld extends World
                         else if(actor.indexOf("Walls")==0){
                             a = new Walls(firstInd, secondInd);
                         } 
+                        else if(actor.indexOf("wall")==0){
+                            a = new Walls(actor);
+                        } 
                         else if(actor.indexOf("Door")==0){
                             int doorLevel = (int)(actor.charAt(actor.length()-1))-48;
-                            a = new Door(doorLevel,player.getMaxLevel()>=doorLevel-1);
+                            a = new Door(doorLevel,player.getMaxLevel()>=curLevel);
                             if(fromLevel>curLevel){
                                 if(secondInd==19){
                                     addObject(player,convert(firstInd),convert(secondInd-2));
                                     arr[firstInd][secondInd-2] = player;
                                 }    
                             }    
-                            else{
-                                if(secondInd==19) door = (Door) a;
-                                else{
-                                    addObject(player,convert(firstInd),convert(secondInd+2));
-                                    arr[firstInd][secondInd+2] = player;
-                                }    
+                            else if(secondInd!=19){
+                                addObject(player,convert(firstInd),convert(secondInd+2));
+                                arr[firstInd][secondInd+2] = player;
                             }
                         } 
                         else if(actor.indexOf("BulletEnemy")==0){
@@ -397,7 +401,7 @@ public class GameWorld extends World
             return true;
         }    
     }   
-    
+
     /**
      * isObstacle - takes position in 2D array and returns whether or not a obstacle exists
      * 
@@ -502,7 +506,16 @@ public class GameWorld extends World
                                         if(works){
                                             for(int X=x; X<x+xSize; X++){
                                                 for(int Y=y; Y<y+ySize; Y++){
-                                                    fw.write(actor + "\n" + X + "\n" + Y + "\n");
+                                                    if(X==x+xSize-1 && Y==y+ySize-1) fw.write("walla\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x && Y==y+ySize-1) fw.write("wallb\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x && Y!=y) fw.write("wallc\n" + X + "\n" + Y + "\n");
+                                                    else if(Y==y+ySize-1) fw.write("walld\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x+xSize-1 && Y!=y) fw.write("walle\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x && Y==y) fw.write("wallf\n" + X + "\n" + Y + "\n");
+                                                    else if(X==x+xSize-1 && Y==y) fw.write("wallg\n" + X + "\n" + Y + "\n");
+                                                    else if(Y==y) fw.write("wall\n" + X + "\n" + Y + "\n");
+                                                    else fw.write("wallblack\n" + X + "\n" + Y + "\n");
+
                                                     curarr[X][Y] = true;
                                                     a++;
                                                 }   
