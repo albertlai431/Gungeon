@@ -39,7 +39,7 @@ public class Door extends Obstacles
                 world.closeWorld(curLevel);
                 Greenfoot.setWorld(new TitleScreen());
             }    
-            else if(curLevel == 6) world.gameOver(true);
+            else if(curLevel == 9) world.gameOver(true);
             else world.switchWorld(curLevel);
         }    
     }    

@@ -22,7 +22,7 @@ import java.io.IOException;
  * </p>
  * 
  * <p>
- * Image credits to Star Xie and Enter the Gungeon.
+ * Image credits to Star Xie, free4kwallpapers.com, and Enter the Gungeon.
  * Music credits to ZapSplat, soundcloud.com, Super Mario, and Enter the Gungeon.
  * </p>
  * 
@@ -442,6 +442,11 @@ public class GameWorld extends World
                             for(int l=1;l<=3;l++) curarr[k][l]=true;
                         }    
                     }
+                    else{
+                        for(int k=1;k<=3;k++){
+                            for(int l=1;l<=3;l++) curarr[k][l]=true;
+                        }
+                    }    
                     xval = 20 - Greenfoot.getRandomNumber(5);
                     fw.write("Door" + (i+1) + "\n" + xval + "\n" + 19 + "\n");
                     for(int k=xval-1;k<=xval+1;k++){
