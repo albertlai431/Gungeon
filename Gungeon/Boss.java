@@ -67,6 +67,8 @@ public abstract class Boss extends Actor
      */
     private void die()
     {
+        GameWorld world = (GameWorld) getWorld();
+        world.updateScore(1000,1000);
         getWorld().removeObject(this);
     }
 }

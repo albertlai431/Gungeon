@@ -80,6 +80,9 @@ public class GameWorld extends World
         openRoom.play();
         gamePlay.setVolume(70);
         lvlUp.setVolume(80);
+        
+        //add tiles
+        addObject(new Walls("wallblack"),16,height-16);
     }
 
     /**
@@ -107,9 +110,6 @@ public class GameWorld extends World
         //Create World
         File worldFile = new File(folderDir + File.separator + "lvl" + Integer.toString(curLevel) + ".txt");
         parseTextFile(worldFile);
-        
-        //add tiles
-        addObject(new Walls("wallblack"),16,height-16);
     }    
 
     /**
