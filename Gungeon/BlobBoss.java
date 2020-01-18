@@ -15,6 +15,7 @@ public class BlobBoss extends Boss
     public BlobBoss()
     {
         healthPoints = 5000;
+        healthBar = new HealthBar(300, 25, 5000 , green);
     }
     /**
      * Greenfoot method, called when object is added to world
@@ -24,16 +25,16 @@ public class BlobBoss extends Boss
         createImages();
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
         player = foundPlayers.get(0); 
-        setImage(animation[0]);        
+        setImage(animation[0]); 
+        getWorld().addObject(healthBar, 480, 600);
     }
     /**
      * Act - Blob stays still while charging up for attacks/attacking
      */
     public void act() 
-    {
+    {        
         animationCount ++;
-        animate();
-        
+        animate();        
         if(fireRate >= 100)
         {
             if(bigAttackRate >= 800)
@@ -56,7 +57,7 @@ public class BlobBoss extends Boss
             bigAttackRate++;
         }
         
-    }    
+    }  
     /**
      * Calls on an attack method determined by the parameters given
      * 
