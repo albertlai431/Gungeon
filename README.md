@@ -11,7 +11,9 @@ Gungeon is a remake of the classic Gungeon. The player travels through chambers/
 1. Download [Greenfoot](https://www.greenfoot.org/download)
 2. Download *Gungeon.gfar* and open it
 3. Click *Run* to play the game! 
+
 **OR**
+
 1. Download *Gungeon.jar* and open it (may not always work!) 
 
 ## How the Game Works
