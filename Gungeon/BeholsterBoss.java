@@ -23,8 +23,8 @@ public class BeholsterBoss extends Boss
     protected void addedToWorld(World world) 
     {
         createImages();
-        //foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
-        //player = foundPlayers.get(0); 
+        foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
+        player = foundPlayers.get(0); 
         setImage(animation[0]);
     }    
 
