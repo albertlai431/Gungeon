@@ -15,6 +15,7 @@ public class BeholsterBoss extends Boss
     public BeholsterBoss()
     {
         healthPoints = 10000;
+        healthBar = new HealthBar(600, 25, 10000 , green);
     }
 
     /**
@@ -26,6 +27,7 @@ public class BeholsterBoss extends Boss
         foundPlayers = new ArrayList<Player>(getWorld().getObjects(Player.class));
         player = foundPlayers.get(0); 
         setImage(animation[0]);
+        getWorld().addObject(healthBar, 350, 600);
     }    
 
     /**
