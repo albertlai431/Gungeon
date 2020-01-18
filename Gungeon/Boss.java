@@ -28,6 +28,10 @@ public abstract class Boss extends Actor
     //Used to find player
     protected ArrayList<Player> foundPlayers;
     protected Actor player;   
+    //Health bar of the boss
+    protected HealthBar healthBar;
+    //Color of health bar
+    protected Color green = new Color(0, 100, 0);
     /**
      * Animate by switching images
      */
@@ -51,10 +55,12 @@ public abstract class Boss extends Actor
     protected void getDamaged(int damage)
     {
         healthPoints -= damage;
+        healthBar.update(healthPoints, green);
         if(healthPoints <= 0)
-        {           
+        {    
+            getWorld().removeObject(healthBar);
             die();
-        }
+        } 
     }
     /**
      * Remove this object from the world
