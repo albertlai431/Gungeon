@@ -26,14 +26,14 @@ public class StoreMenu extends Menu
     private Button equipButton = new Button("Equip",18, 20, 20, 20,  100, 100, 100);
     private Button purchaseButton = new Button("Purchase", 18, 20, 20, 20,  100, 100, 100);
     private static GreenfootSound purchaseSound = new GreenfootSound("purchase.mp3");
-    
+
     //Objects
     private Player player;
     private ItemInfo itemInfo;
     private StoreItem lastItem = null;
     private String lastItemName = null;
     private int lastItemCost;
-    
+
     //Data structures
     private static final String[] itemNames = {"Pistol Gun","Rifle Gun","Shotgun Gun","Rifle Bullet","Shotgun Bullet","Half-Heart Refill","Speed Boost"};
     private static final int[] xCoords = {250,350,450,250,350,250,350};
@@ -112,10 +112,11 @@ public class StoreMenu extends Menu
         lastItem = item;
         lastItemName = itemName;
         lastItemCost = itemCost;
-        
+
         //quantity and cost labels
         setQuantityLabel();
-        if(lastItemName.contains("Bullet")) costLabel.updateText("Cost (100 pack): $" + Integer.toString(itemCost));
+        if(lastItemName.equals("Rifle Bullet")) costLabel.updateText("Cost (100 pack): $" + Integer.toString(itemCost));
+        else if (lastItemName.equals("Shotgun Bullet")) costLabel.updateText("Cost (50 pack): $" + Integer.toString(itemCost));
         else costLabel.updateText("Cost: $" + Integer.toString(itemCost));
 
         //make buttons transparent accordingly
@@ -131,9 +132,12 @@ public class StoreMenu extends Menu
         if(lastItemName.contains("Gun")){
             player.newGun(lastItemName);
         }    
-        else if(lastItemName.contains("Bullet")){
+        else if(lastItemName.equals("Rifle Bullet")){
             player.changeItemNumber(lastItemName,100);
-        }    
+        }   
+        else if(lastItemName.equals("Shotgun Bullet")){
+            player.changeItemNumber(lastItemName,50);
+        } 
         else{
             player.changeItemNumber(lastItemName,1);
         }    
@@ -162,7 +166,7 @@ public class StoreMenu extends Menu
             player.addOneHeart();
             player.changeItemNumber("Half-Heart Refill", -1);
         } 
-        
+
         setEquipTransparency();
         setQuantityLabel();
     }
@@ -194,9 +198,9 @@ public class StoreMenu extends Menu
             if(player.getItemNumber(lastItemName)==0) equipButton.getImage().setTransparency(0);
             else equipButton.getImage().setTransparency(255);
         }    
-        
+
     }  
-    
+
     /**
      * setQuantityLabel - sets the text of quantityLabel
      */
@@ -208,7 +212,7 @@ public class StoreMenu extends Menu
             quantityLabel.updateText("Quantity: " + Integer.toString(player.getItemNumber(lastItemName)));
         }
     }    
-    
+
     /**
      * checkButtonClicks - checks for button clicks
      */

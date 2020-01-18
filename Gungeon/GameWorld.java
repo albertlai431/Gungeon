@@ -45,8 +45,8 @@ public class GameWorld extends World
     //Static variables
     public static final int height = 640;
     public static final int width = 960;
-    private static final int totLevels = 5;
-    private static final int totVersions = 5;
+    private static final int totLevels = 8;
+    private static final int totVersions = 8;
     public static final int tileSize = 32;
     private static final int tileOffset = 16;
     private static GreenfootSound gamePlay = new GreenfootSound("gameplay.mp3");
@@ -339,7 +339,8 @@ public class GameWorld extends World
             catch(NoSuchElementException e){
                 break;
             }    
-        }    
+        } 
+        s.close();
     }
 
     /**
@@ -537,6 +538,6 @@ public class GameWorld extends World
             }
             System.out.println(i);
         }  
-        System.out.println("done");
+        System.out.println("done"); 
     }    
 }
