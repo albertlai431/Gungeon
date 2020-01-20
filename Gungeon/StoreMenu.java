@@ -38,7 +38,7 @@ public class StoreMenu extends Menu
     private static final String[] itemNames = {"Pistol Gun","Rifle Gun","Shotgun Gun","Rifle Bullet","Shotgun Bullet","Half-Heart Refill","Speed Boost"};
     private static final int[] xCoords = {250,350,450,250,350,250,350};
     private static final int[] yCoords = {225,225,225,350,350,475,475};
-    private static final int[] costs = {0,500,500,100,100,500,750}; //to be completed
+    private static final int[] costs = {0,500,750,100,100,500,750}; //to be completed
     private static final int numItems = itemNames.length;
     private static GreenfootImage [] itemImages = new GreenfootImage [numItems];
     private static boolean createdImages = false;
